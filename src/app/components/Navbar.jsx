@@ -70,18 +70,21 @@ export default function Navbar() {
             </Link>
           </div>
           <div className="sidebar-link avatar-container">
-            <Image
-              src="/Generic avatar.svg"
-              width={62}
-              height={0}
-              alt="Avatar logo"
-              className="avatar-logo"
-            />
-            <div className="avatar-name">
-              huge burger
-              {/* <div>
+            <div className="avatar-logo">
+              <Image
+                src="/Generic avatar.svg"
+                width={44}
+                height={0}
+                alt="Avatar logo"
+              />
+            </div>
+            <div className="avatar-name-container">
+              <div className="avatar-name">
+                huge burger
+              </div>
+              <div className="avatar-handle">
                 @hugeburger
-              </div> */}
+              </div>
             </div>
           </div>
         </div>

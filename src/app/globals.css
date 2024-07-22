@@ -40,7 +40,7 @@ body {
 
 .sidebar-link-image {
   @apply
-    mr-5;
+    mr-3;
 }
 
 .sidebar-lower-section {
@@ -58,10 +58,18 @@ body {
 .avatar-logo {
   @apply
     flex
-    mr-5;
+    mr-3;
 }
 
-/* .avatar-name {
+.avatar-name {
   @apply
-    flex;
-} */
+    text-nowrap
+    text-base;
+}
+
+.avatar-handle {
+  @apply
+    mt-1
+    text-slate-400
+    text-xs;
+}
