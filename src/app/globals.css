@@ -2,3 +2,6 @@
 @tailwind components;
 @tailwind utilities;
 
+input:focus {
+  @apply outline-none ring-0 border-none;
+}
