@@ -3,20 +3,15 @@ import Image from "next/image";
 
 export default function Navbar() {
 
-  const imageStyle = {
-    borderRadius: '50',
-    border: '1px solid #fff',
-  }
-
   return (
     <nav className="sidebar">
       <div className="sidebar-link">
         <Image 
           src="/Home.svg"
-          width={200}
-          height={200}
-          style={imageStyle}
+          width={44}
+          height={0}
           alt="Home logo"
+          className="sidebar-link-image"
         />
         <Link href="/">
           Home

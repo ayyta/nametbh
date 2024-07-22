@@ -2,6 +2,10 @@
 @tailwind components;
 @tailwind utilities;
 
+body {
+  margin: 0px;
+}
+
 /* Navbar Styles */
 .sidebar {
   @apply 
@@ -21,6 +25,17 @@
     px-10
     py-4
 
-    text-lg
+    text-xl
+    items-center
+    justify-center
+
+    flex
+    ;
+}
+
+.sidebar-link-image {
+  @apply
+    mr-5
+    ml-20
     ;
 }
