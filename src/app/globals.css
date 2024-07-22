@@ -22,19 +22,13 @@ body {
 
 .sidebar-container {
   @apply
-    flex
-    justify-end
-    flex-col
-    ;
+    float-right;
 }
 
 .sidebar-link {
   @apply
     px-10
-    py-4
-    flex
-    flex-col
-    justify-end;
+    py-4;
 }
 
 .sidebar-link-title {
@@ -48,3 +42,26 @@ body {
   @apply
     mr-5;
 }
+
+.sidebar-lower-section {
+  @apply
+    absolute
+    bottom-0
+    mb-8;
+}
+
+.avatar-container {
+  @apply
+    flex;
+}
+
+.avatar-logo {
+  @apply
+    flex
+    mr-5;
+}
+
+/* .avatar-name {
+  @apply
+    flex;
+} */
