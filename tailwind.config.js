@@ -24,7 +24,9 @@ module.exports = {
       },
       textColor: {
         projectGrey: "#66757F",
-        projectBlue: "#55ACEE",
+        projectBlue: "#0894DB",
+        projectHoverBlue: "#244C61",
+        projectWhite: "#CCD6DD",
       },
     },
   },
