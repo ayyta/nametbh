@@ -16,6 +16,7 @@ module.exports = {
         login: "#292F33",
         loginPopup: "#CCD6DD",
         loginButton: "#55ACEE",
+        projectLightGrey: "#373f45",
       },
       width: {
         138: "34.5rem",
