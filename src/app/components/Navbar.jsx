@@ -7,69 +7,84 @@ export default function Navbar() {
     <nav className="sidebar">
       <div className="sidebar-container">
         <div className="sidebar-upper-section">
-          <div className="sidebar-link">
-            <Link href="/" className="sidebar-link-title">
-              <Image 
-                src="/Home.svg"
-                width={44}
-                height={0}
-                alt="Home logo"
-                className="sidebar-link-image"
-              />
-              Home
+          <div className="sidebar-link-container">
+            <Link href="/" className="sidebar-link">
+              <div className="sidebar-link-image">
+                <Image 
+                  src="/Home.svg"
+                  width={44}
+                  height={0}
+                  alt="Home logo"
+                />
+              </div>
+              <div className="sidebar-link-title">
+                Home
+              </div>
             </Link>
           </div>
-          <div className="sidebar-link">
-            <Link href="/following" className="sidebar-link-title">
-              <Image
-                src="/favorite.svg"
-                width={44}
-                height={0}
-                alt="Following logo"
-                className="sidebar-link-image"
-              />
-              Following
+          <div className="sidebar-link-container">
+            <Link href="/" className="sidebar-link">
+              <div className="sidebar-link-image">
+                <Image 
+                  src="/favorite.svg"
+                  width={44}
+                  height={0}
+                  alt="Following logo"
+                />
+              </div>
+              <div className="sidebar-link-title">
+                Following
+              </div>
             </Link>
           </div>
-          <div className="sidebar-link">
-            <Link href="/friends" className="sidebar-link-title">
-              <Image
-                src="/Friends Icon.svg"
-                width={44}
-                height={0}
-                alt="Friends logo"
-                className="sidebar-link-image"
-              />
-              Friends
+          <div className="sidebar-link-container">
+            <Link href="/" className="sidebar-link">
+              <div className="sidebar-link-image">
+                <Image 
+                  src="/Friends Icon.svg"
+                  width={44}
+                  height={0}
+                  alt="Friends logo"
+                />
+              </div>
+              <div className="sidebar-link-title">
+                Friends
+              </div>
             </Link>
           </div>
-          <div className="sidebar-link">
-            <Link href="/inbox" className="sidebar-link-title">
-              <Image
-                src="/Inbox.svg"
-                width={44}
-                height={0}
-                alt="Inbox logo"
-                className="sidebar-link-image"
-              />
-              Inbox
+          <div className="sidebar-link-container">
+            <Link href="/" className="sidebar-link">
+              <div className="sidebar-link-image">
+                <Image 
+                  src="/Inbox.svg"
+                  width={44}
+                  height={0}
+                  alt="Inbox logo"
+                />
+              </div>
+              <div className="sidebar-link-title">
+                Inbox
+              </div>
             </Link>
           </div>
         </div>
         <div className="sidebar-lower-section">
-          <div className="sidebar-link">
-            <Link href="/" className="sidebar-link-title">
-              <Image 
-                src="/Plus square.svg"
-                width={44}
-                height={0}
-                alt="Plus logo"
-                className="sidebar-link-image"
-              />
-              Upload
+          <div className="sidebar-link-container">
+            <Link href="/" className="sidebar-link">
+              <div className="sidebar-link-image">
+                <Image 
+                  src="/Plus square.svg"
+                  width={44}
+                  height={0}
+                  alt="Upload logo"
+                />
+              </div>
+              <div className="sidebar-link-title">
+                Upload
+              </div>
             </Link>
           </div>
-          <div className="sidebar-link avatar-container">
+          <div className="sidebar-link-container avatar-container">
             <div className="avatar-logo">
               <Image
                 src="/Generic avatar.svg"

@@ -15,7 +15,10 @@ body {
     left-0
     bottom-0
     top-0
-    w-96;
+    md:w-96
+    
+    w-5/12
+    ;
 }
 
 .sidebar-container {
@@ -23,22 +26,35 @@ body {
     float-right;
 }
 
-.sidebar-link {
+/* .sidebar-upper-section {
+  @apply
+    resize-none;
+} */
+
+.sidebar-link-container {
   @apply
     px-10
     py-4;
 }
 
-.sidebar-link-title {
+.sidebar-link {
   @apply
     flex
-    items-center
-    text-xl;
+    items-center;
 }
 
 .sidebar-link-image {
   @apply
     mr-3;
+}
+
+.sidebar-link-title {
+  @apply
+    text-xl
+    md:flex
+
+    hidden
+    ;
 }
 
 .sidebar-lower-section {
