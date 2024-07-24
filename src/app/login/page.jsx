@@ -90,7 +90,7 @@ export default function Login() {
           </div>
 
           {/* Login Button */}
-          <button className="mt-4 w-full md:h-20 md:rounded-md h-12 bg-loginButton text-projectWhite font-bold" type="submit" disabled={isLoading}>
+          <button className="mt-4 w-full md:h-20 rounded-md h-12 bg-loginButton text-projectWhite font-bold" type="submit" disabled={isLoading}>
             {!isLoading ? "Log In" : "Loading..."}
           </button>
           <p className="md:text-sm text-xs mt-1 text-projectGrey">Need an account? <Link href={registerPath} className="text-projectBlue hover:text-projectHoverBlue cursor-pointer">Register</Link></p>

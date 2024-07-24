@@ -22,6 +22,11 @@ module.exports = {
         161: "40.25rem",
         192: "48rem",
       },
+      height: {
+        138: "34.5rem",
+        161: "40.25rem",
+        192: "48rem",
+      },
       textColor: {
         projectGrey: "#66757F",
         projectBlue: "#0894DB",
