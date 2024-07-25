@@ -11,30 +11,31 @@ body {
   @apply 
     text-secondary
     bg-primary
-    fixed
-    left-0
-    bottom-0
-    top-0
+    sm:fixed
+    sm:left-0
+    sm:bottom-0
+    sm:top-0
     md:w-96
+    sm:w-2/5
+    sm:h-full
     
-    w-5/12
-    ;
+    fixed
+    bottom-0
+    left-0
+    right-0
+    h-12
+    w-full;
 }
 
 .sidebar-container {
   @apply
-    float-right;
+    sm:float-right;
 }
-
-/* .sidebar-upper-section {
-  @apply
-    resize-none;
-} */
 
 .sidebar-link-container {
   @apply
-    px-10
-    py-4;
+    sm:px-10
+    sm:py-4;
 }
 
 .sidebar-link {
@@ -45,7 +46,7 @@ body {
 
 .sidebar-link-image {
   @apply
-    mr-3;
+    sm:mr-3;
 }
 
 .sidebar-link-title {
@@ -78,12 +79,18 @@ body {
 .avatar-name {
   @apply
     text-nowrap
-    text-base;
+    text-base
+    
+    md:flex
+    hidden;
 }
 
 .avatar-handle {
   @apply
     mt-1
     text-slate-400
-    text-xs;
+    text-xs
+    
+    md:flex
+    hidden;
 }
