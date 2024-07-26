@@ -23,7 +23,7 @@ body {
     bottom-0
     left-0
     right-0
-    h-48
+    h-12
     w-full
     flex
     sm:block;
@@ -31,7 +31,12 @@ body {
 
 .sidebar-container {
   @apply
-    sm:float-right;
+    sm:float-right
+    sm:w-auto
+    sm:block
+    w-full
+    flex
+    ;
 }
 
 .sidebar-link-container {
@@ -60,11 +65,21 @@ body {
     ;
 }
 
+/* Sidebar Sections */
+.sidebar-upper-section {
+  @apply
+    sm:block
+    flex;
+}
+
 .sidebar-lower-section {
   @apply
-    absolute
-    bottom-0
-    mb-8;
+    sm:absolute
+    sm:bottom-0
+    sm:mb-8
+    sm:block
+    flex;
+    ;
 }
 
 .avatar-container {
@@ -75,7 +90,7 @@ body {
 .avatar-logo {
   @apply
     flex
-    mr-3;
+    sm:mr-3;
 }
 
 .avatar-name {
@@ -96,3 +111,4 @@ body {
     md:flex
     hidden;
 }
+
