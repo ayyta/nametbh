@@ -11,7 +11,7 @@ export default function Navbar() {
             <Link href="/" className="sidebar-link">
               <div className="sidebar-link-image">
                 <Image 
-                  src="/Home.svg"
+                  src="/Home Icon.svg"
                   width={44}
                   height={0}
                   alt="Home logo"

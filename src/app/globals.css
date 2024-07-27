@@ -16,14 +16,14 @@ body {
     sm:bottom-0
     sm:top-0
     md:w-96
-    sm:w-2/5
+    sm:w-1/4
     sm:h-full
     
     fixed
     bottom-0
     left-0
     right-0
-    h-12
+    h-20
     w-full
     flex
     sm:block;
@@ -36,6 +36,10 @@ body {
     sm:block
     w-full
     flex
+    items-center
+    justify-center
+    gap-7
+    sm:gap-0
     ;
 }
 
@@ -69,7 +73,9 @@ body {
 .sidebar-upper-section {
   @apply
     sm:block
-    flex;
+    flex
+    sm:gap-0
+    gap-7;
 }
 
 .sidebar-lower-section {
@@ -78,8 +84,9 @@ body {
     sm:bottom-0
     sm:mb-8
     sm:block
-    flex;
-    ;
+    flex
+    sm:gap-0
+    gap-7;
 }
 
 .avatar-container {
