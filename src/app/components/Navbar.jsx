@@ -5,138 +5,81 @@ import { useState } from "react";
 
 export default function Navbar() {
 
-  // const [isBold, setIsBold] = useState(0);
-  const [selectedItem, setSelectedItem] = useState('Home')
-
-
-  function handleClick(item) {
-    // 
-    const lastItem = selectedItem;
-    setSelectedItem(item);
-
-    // unbold lastItem
-    // apply bold to new item
-  }
-
   let navbarItems = [
     {
-      'name': "Home", 
-      "link": "/"
+      "name": "Home", 
+      "link": "/home",
+      "image": {
+        "nonfill": "/Home Icon.svg",
+        "fill": "/Home Icon Fill.svg"
+      },
     },
     {
       "name": "Following",
-      "link": "/following"
+      "link": "/following",
+      "image": {
+        "nonfill": "/Following Icon.svg",
+        "fill": "/Following Icon Fill.svg"
+      },
     },
     {
       "name": "Friends",
-      "link": "/friends"
+      "link": "/friends",
+      "image": {
+        "nonfill": "/Friends Icon.svg",
+        "fill": "/Friends Icon Fill.svg"
+      },
     },
     {
       "name": "Inbox",
-      "link": "/inbox"
+      "link": "/inbox",
+      "image": {
+        "nonfill": "/Inbox Icon.svg",
+        "fill": "/Inbox Icon Fill.svg"
+      },
     },
-    {
-      "name": "Upload",
-      "link": "/upload"
-    }
   ];
 
-  const NavItem = ({item, index}) =>  {
-    const {name, link, image, alt} = item;
-    return (
-      <>
-        <div className="sidebar-link-container" onClick={(e) => changePage(e, index)}>
-          <Link href={link} className="sidebar-link" onClick={() => {
-              handleClick("Home")
-            }}>
-            <div className="sidebar-link-image">
-              <Image 
-                src="/Home Icon.svg"
-                width={44}
-                height={0}
-                alt="Home logo"
-              />
-            </div>
-            <div className={`sidebar-link-title 
-              ${activeIndex === index ? 'font-bold' : 'font-normal'}`
-            }>
-              Home
-            </div>
-          </Link>
-        </div>
-      </>
-    )
-  }
+  function Nav() {
+    const [activeIndex, setActiveIndex] = useState(null);
+
+    const changePage = (e, index) => {
+      setActiveIndex(index);
+    };
+
+    return navbarItems.map((value, index) => {
+      return (
+        <Link href={value.link}>
+          <div
+            className="sidebar-link-container"
+            key={index}
+            style={{ fontWeight: activeIndex === index ? 700 : 400 }}
+            onClick={(e) => changePage(e, index)}
+          >
+            <Link href={value.link} className="sidebar-link">
+              <div className="sidebar-link-image">
+                <Image 
+                  src={activeIndex === index ? value.image.fill : value.image.nonfill}
+                  width={44}
+                  height={0}
+                  alt="Logo"
+                />
+              </div>
+              <div className="sidebar-link-title">
+                {value.name}
+              </div>
+            </Link>
+          </div>
+        </Link>
+      );
+    });
+  };
 
   return (
     <nav className="sidebar">
       <div className="sidebar-container">
         <div className="sidebar-upper-section">
-          {navbarItems.map((value, index) => {
-            <NavItem item={value} index={index}/>
-          })}
-          <div className="sidebar-link-container">
-            <Link href="/" className="sidebar-link" onClick={() => {
-                handleClick("Home")
-              }}>
-              <div className="sidebar-link-image">
-                <Image 
-                  src="/Home Icon.svg"
-                  width={44}
-                  height={0}
-                  alt="Home logo"
-                />
-              </div>
-              <div className="sidebar-link-title">
-                Home
-              </div>
-            </Link>
-          </div>
-          <div className="sidebar-link-container">
-            <Link href="/following" className="sidebar-link">
-              <div className="sidebar-link-image">
-                <Image 
-                  src="/favorite.svg"
-                  width={44}
-                  height={0}
-                  alt="Following logo"
-                />
-              </div>
-              <div className="sidebar-link-title">
-                Following
-              </div>
-            </Link>
-          </div>
-          <div className="sidebar-link-container">
-            <Link href="/friends" className="sidebar-link">
-              <div className="sidebar-link-image">
-                <Image 
-                  src="/Friends Icon.svg"
-                  width={44}
-                  height={0}
-                  alt="Friends logo"
-                />
-              </div>
-              <div className="sidebar-link-title">
-                Friends
-              </div>
-            </Link>
-          </div>
-          <div className="sidebar-link-container">
-            <Link href="/inbox" className="sidebar-link">
-              <div className="sidebar-link-image">
-                <Image 
-                  src="/Inbox.svg"
-                  width={44}
-                  height={0}
-                  alt="Inbox logo"
-                />
-              </div>
-              <div className="sidebar-link-title">
-                Inbox
-              </div>
-            </Link>
-          </div>
+          <Nav />
         </div>
         <div className="sidebar-lower-section">
           <div className="sidebar-link-container">
