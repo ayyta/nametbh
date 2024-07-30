@@ -1,14 +1,22 @@
-import Link from "next/link"
+'use client';
+import Link from "next/link";
 import Image from "next/image";
+import { useState } from "react";
 
 export default function Navbar() {
+
+  const [isBold, setIsBold] = useState(0);
+
+  function handleClick() {
+    console.log("hi");
+  }
 
   return (
     <nav className="sidebar">
       <div className="sidebar-container">
         <div className="sidebar-upper-section">
           <div className="sidebar-link-container">
-            <Link href="/" className="sidebar-link">
+            <Link href="/" className="sidebar-link" onClick={handleClick}>
               <div className="sidebar-link-image">
                 <Image 
                   src="/Home Icon.svg"
@@ -23,7 +31,7 @@ export default function Navbar() {
             </Link>
           </div>
           <div className="sidebar-link-container">
-            <Link href="/" className="sidebar-link">
+            <Link href="/following" className="sidebar-link">
               <div className="sidebar-link-image">
                 <Image 
                   src="/favorite.svg"
@@ -38,7 +46,7 @@ export default function Navbar() {
             </Link>
           </div>
           <div className="sidebar-link-container">
-            <Link href="/" className="sidebar-link">
+            <Link href="/friends" className="sidebar-link">
               <div className="sidebar-link-image">
                 <Image 
                   src="/Friends Icon.svg"
@@ -53,7 +61,7 @@ export default function Navbar() {
             </Link>
           </div>
           <div className="sidebar-link-container">
-            <Link href="/" className="sidebar-link">
+            <Link href="/inbox" className="sidebar-link">
               <div className="sidebar-link-image">
                 <Image 
                   src="/Inbox.svg"
@@ -70,7 +78,7 @@ export default function Navbar() {
         </div>
         <div className="sidebar-lower-section">
           <div className="sidebar-link-container">
-            <Link href="/" className="sidebar-link">
+            <Link href="/upload" className="sidebar-link">
               <div className="sidebar-link-image">
                 <Image 
                   src="/Plus square.svg"
@@ -85,22 +93,24 @@ export default function Navbar() {
             </Link>
           </div>
           <div className="sidebar-link-container avatar-container">
-            <div className="avatar-logo">
-              <Image
-                src="/Generic avatar.svg"
-                width={44}
-                height={0}
-                alt="Avatar logo"
-              />
-            </div>
-            <div className="avatar-name-container">
-              <div className="avatar-name">
-                huge burger
+            <Link href="/profile" className="sidebar-link">
+              <div className="avatar-logo">
+                <Image
+                  src="/Generic avatar.svg"
+                  width={44}
+                  height={0}
+                  alt="Avatar logo"
+                />
               </div>
-              <div className="avatar-handle">
-                @hugeburger
+              <div className="avatar-name-container">
+                <div className="avatar-name">
+                  huge burger
+                </div>
+                <div className="avatar-handle">
+                  @hugeburger
+                </div>
               </div>
-            </div>
+            </Link>
           </div>
         </div>
       </div>
