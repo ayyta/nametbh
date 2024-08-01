@@ -52,8 +52,7 @@ body {
     hover:bg-zinc-800
     active:opacity-50
     cursor-pointer
-    select-none
-    ;
+    select-none;
 }
 
 .sidebar-link {
@@ -72,8 +71,7 @@ body {
     text-xl
     md:flex
     hidden
-    w-20
-    ;
+    w-20;
 }
 
 /* Sidebar Sections */
@@ -109,7 +107,8 @@ body {
 
 .avatar-name-container {
   @apply
-    w-20
+    md:w-20
+    w-0
     select-text;
 }
 
