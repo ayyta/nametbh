@@ -1,9 +1,8 @@
 export default function Upload() {
+
   return (
-    <main>
-      <h1>
-        Upload Page
-      </h1>
-    </main>
-  )
+    <div className="upload-container">
+      Hi
+    </div>
+  );
 }

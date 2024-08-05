@@ -49,7 +49,7 @@ export default function Navbar() {
 
     return navbarItems.map((value, index) => {
       return (
-        <Link href={value.link}>
+        // <Link href={value.link}>
           <div
             className="sidebar-link-container"
             key={index}
@@ -70,7 +70,7 @@ export default function Navbar() {
               </div>
             </Link>
           </div>
-        </Link>
+        // {/* </Link> */}
       );
     });
   };
@@ -86,7 +86,7 @@ export default function Navbar() {
             <Link href="/upload" className="sidebar-link">
               <div className="sidebar-link-image">
                 <Image 
-                  src="/Plus square.svg"
+                  src="/Upload Icon.svg"
                   width={44}
                   height={0}
                   alt="Upload logo"
