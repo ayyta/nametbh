@@ -133,7 +133,52 @@ body {
 
 
 /* Upload Page */
-/* .upload-container {
+.upload-container {
   @apply
-    absolute
-} */
+    fixed
+    top-1/2
+    left-1/2
+    -translate-y-2/4
+    -translate-x-2/4
+    border
+    border-solid
+    border-black
+    rounded-lg
+    z-20
+    bg-white
+    w-96
+    ;
+}
+
+.upload-header {
+  @apply
+    flex
+    px-2.5
+    py-4
+    justify-between
+    items-center
+    ;
+}
+
+.upload-close-button {
+  @apply
+    cursor-pointer;
+}
+
+.upload-body {
+  @apply
+    px-2.5
+    py-4
+    ;
+}
+
+.overlay {
+  @apply
+    fixed
+    /* opacity-0  */
+    inset-x-0
+    inset-y-0
+    bg-black/50
+    pointer-events-none
+    ;
+}

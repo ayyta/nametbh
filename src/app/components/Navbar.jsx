@@ -82,7 +82,7 @@ export default function Navbar() {
           <Nav />
         </div>
         <div className="sidebar-lower-section">
-          <div className="sidebar-link-container">
+          <button className="sidebar-link-container">
             <Link href="/upload" className="sidebar-link">
               <div className="sidebar-link-image">
                 <Image 
@@ -96,7 +96,7 @@ export default function Navbar() {
                 Upload
               </div>
             </Link>
-          </div>
+          </button>
           <div className="sidebar-link-container avatar-container">
             <Link href="/profile" className="sidebar-link">
               <div className="avatar-logo">
