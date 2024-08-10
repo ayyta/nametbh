@@ -133,19 +133,28 @@ body {
 
 
 /* Upload Page */
-.upload-container {
+.upload {
   @apply
     fixed
     top-1/2
     left-1/2
     -translate-y-2/4
     -translate-x-2/4
-    border
+    border-4
     border-solid
-    border-black
-    rounded-lg
+    border-primary/50
+    rounded-2xl
     z-20
-    bg-white
+    bg-third
+    w-96
+    h-72
+    flex
+    text-secondary;
+}
+
+.upload-container {
+  @apply
+    m-2
     w-96
     ;
 }
@@ -153,32 +162,102 @@ body {
 .upload-header {
   @apply
     flex
-    px-2.5
-    py-4
+    px-2
+    pt-2
+    pb-2
     justify-between
     items-center
     ;
 }
 
-.upload-close-button {
+.upload-avatar {
   @apply
-    cursor-pointer;
-}
-
-.upload-body {
-  @apply
-    px-2.5
-    py-4
+    p-2
     ;
 }
 
-.overlay {
+.upload-close-button {
+  @apply
+    p-1.5
+    absolute
+    top-2
+    right-2
+    hover:opacity-80
+    hover:rounded-full
+    hover:bg-primary
+    active:opacity-50
+    cursor-pointer;
+}
+
+/* .upload-body-section {
+  @apply
+} */
+
+.upload-body {
+  @apply
+    flex
+    w-full
+    h-36
+    p-2.5
+    resize-none
+    outline-none
+    bg-third
+    focus:border-primary
+    focus:border
+    focus:rounded-md
+    ;
+}
+
+.upload-utilities-left-section {
+  @apply
+    flex
+    p-px
+    absolute
+    bottom-0
+    left-0;
+}
+
+.upload-utilities {
+  @apply
+    p-1.5
+    hover:opacity-80
+    hover:rounded-full
+    hover:bg-primary
+    active:opacity-50
+    cursor-pointer;
+}
+
+.upload-utilities-right-section {
+  @apply
+    flex
+    p-px
+    absolute
+    bottom-0
+    right-0;
+}
+
+.upload-button {
+  @apply
+    py-px
+    px-8
+    m-1.5
+    border-2
+    border-transparent
+    rounded-full
+    bg-primary
+    hover:opacity-70
+    hover:rounded-full
+    active:opacity-40
+    cursor-pointer;
+}
+
+
+.upload-overlay {
   @apply
     fixed
     /* opacity-0  */
     inset-x-0
     inset-y-0
     bg-black/50
-    pointer-events-none
-    ;
+    pointer-events-none;
 }
