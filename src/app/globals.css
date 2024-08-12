@@ -2,6 +2,276 @@
 @tailwind components;
 @tailwind utilities;
 
+body {
+  margin: 0px;
+}
+
+/* Navbar Styles */
+.sidebar {
+  @apply 
+    text-secondary
+    bg-primary
+    sm:relative
+    sm:left-0
+    sm:bottom-0
+    sm:top-0
+    md:w-1/4
+    md:min-w-56
+    md:max-w-sm
+    sm:w-24
+    sm:h-full
+    
+    fixed
+    bottom-0
+    left-0
+    right-0
+    h-20
+    w-full
+    flex
+    sm:block;
+}
+
+.sidebar-container {
+  @apply
+    sm:float-right
+    sm:w-auto
+    sm:block
+    w-full
+    flex
+    items-center
+    justify-center
+    gap-7
+    sm:gap-0;
+}
+
+.sidebar-link-container {
+  @apply
+    md:px-10
+    sm:py-4
+    sm:px-3
+
+    hover:opacity-80
+    hover:rounded-full
+    hover:bg-zinc-800
+    active:opacity-50
+    cursor-pointer
+    select-none;
+}
+
+.sidebar-link {
+  @apply
+    flex
+    items-center;
+}
+
+.sidebar-link-image {
+  @apply
+    sm:mr-3;
+}
+
+.sidebar-link-title {
+  @apply
+    text-lg
+    md:flex
+    hidden
+    w-20;
+}
+
+/* Sidebar Sections */
+.sidebar-upper-section {
+  @apply
+    sm:block
+    flex
+    sm:gap-0
+    gap-7;
+}
+
+.sidebar-lower-section {
+  @apply
+    sm:absolute
+    sm:bottom-0
+    sm:mb-8
+    sm:block
+    flex
+    sm:gap-0
+    gap-7;
+}
+
+.avatar-container {
+  @apply
+    flex;
+}
+
+.avatar-logo {
+  @apply
+    flex
+    sm:mr-3;
+}
+
+.avatar-name-container {
+  @apply
+    md:w-20
+    w-0
+    select-text;
+}
+
+.avatar-name {
+  @apply
+    text-nowrap
+    text-base
+    
+    md:flex
+    hidden;
+}
+
+.avatar-handle {
+  @apply
+    mt-1
+    text-slate-400
+    text-xs
+    
+    md:flex
+    hidden;
+}
+
+
+/* Upload Page */
+.upload {
+  @apply
+    fixed
+    top-1/2
+    left-1/2
+    -translate-y-2/4
+    -translate-x-2/4
+    border-4
+    border-solid
+    border-primary/50
+    rounded-2xl
+    z-20
+    bg-third
+    w-161
+    h-72
+    flex
+    text-secondary;
+}
+
+.upload-container {
+  @apply
+    m-2
+    w-96
+    ;
+}
+
+.upload-header {
+  @apply
+    flex
+    px-2
+    pt-2
+    pb-2
+    justify-between
+    items-center
+    ;
+}
+
+.upload-avatar {
+  @apply
+    p-2
+    ;
+}
+
+.upload-close-button {
+  @apply
+    p-1.5
+    absolute
+    top-2
+    right-2
+    hover:opacity-80
+    hover:rounded-full
+    hover:bg-primary
+    active:opacity-50
+    cursor-pointer;
+}
+
+/* .upload-body-section {
+  @apply
+} */
+
+.upload-body {
+  @apply
+    flex
+    w-full
+    h-36
+    p-2.5
+    resize-none
+    outline-none
+    bg-third
+    focus:border-primary
+    focus:border
+    focus:rounded-md
+    ;
+}
+
+.upload-utilities-left-section {
+  @apply
+    flex
+    p-px
+    absolute
+    bottom-0
+    left-0;
+}
+
+.upload-utilities {
+  @apply
+    p-1.5
+    hover:opacity-80
+    hover:rounded-full
+    hover:bg-primary
+    active:opacity-50
+    cursor-pointer;
+}
+
+.upload-utilities-right-section {
+  @apply
+    flex
+    p-px
+    absolute
+    bottom-0
+    right-0;
+}
+
+.upload-button {
+  @apply
+    py-px
+    px-8
+    m-1.5
+    border-2
+    border-transparent
+    rounded-full
+    bg-primary
+    hover:opacity-70
+    hover:rounded-full
+    active:opacity-40
+    cursor-pointer;
+}
+
+
+.upload-overlay {
+  @apply
+    absolute
+    w-full
+    h-full
+    z-10;
+}
+
+.upload-popup-container {
+  @apply
+    fixed
+    w-screen
+    h-screen
+    top-0
+    left-0
+    bg-black/50;
+}
 input:focus {
   @apply outline-none ring-0 border-none;
 }
