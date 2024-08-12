@@ -11,7 +11,10 @@ module.exports = {
         primary: '#1E1E1E',
         secondary: '#FFFFFF',
         third: "#2F363B"
-      }
+      },
+      minWidth: {
+        56: '14rem',
+      },
     },
   },
   plugins: [],
