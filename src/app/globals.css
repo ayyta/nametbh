@@ -11,12 +11,14 @@ body {
   @apply 
     text-secondary
     bg-primary
-    sm:fixed
+    sm:relative
     sm:left-0
     sm:bottom-0
     sm:top-0
-    md:w-96
-    sm:w-1/4
+    md:w-1/4
+    md:min-w-56
+    md:max-w-sm
+    sm:w-24
     sm:h-full
     
     fixed
@@ -44,9 +46,10 @@ body {
 
 .sidebar-link-container {
   @apply
-    sm:px-10
+    md:px-10
     sm:py-4
-    
+    sm:px-3
+
     hover:opacity-80
     hover:rounded-full
     hover:bg-zinc-800
@@ -68,7 +71,7 @@ body {
 
 .sidebar-link-title {
   @apply
-    text-xl
+    text-lg
     md:flex
     hidden
     w-20;

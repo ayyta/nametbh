@@ -12,6 +12,7 @@ module.exports = {
         secondary: '#FFFFFF',
         third: "#2F363B"
       },
+<<<<<<< HEAD
       width: {
         138: "34.5rem",
         161: "40.25rem",
@@ -21,6 +22,10 @@ module.exports = {
         138: "34.5rem",
         161: "40.25rem",
         192: "48rem",
+=======
+      minWidth: {
+        56: '14rem',
+>>>>>>> 88b8b6f3f2e00b25ddc81b0dd38e6025af8f1d96
       },
     },
   },
