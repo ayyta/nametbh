@@ -2,6 +2,7 @@
 import Link from "next/link";
 import Image from "next/image";
 import { useState } from "react";
+import Upload from "../upload/page";
 
 export default function Navbar() {
 
@@ -40,6 +41,8 @@ export default function Navbar() {
     },
   ];
 
+  /** Our Nav Component that renders the bold and filled in icons on the nav when active.
+  */
   function Nav() {
     const [activeIndex, setActiveIndex] = useState(null);
 
@@ -49,31 +52,35 @@ export default function Navbar() {
 
     return navbarItems.map((value, index) => {
       return (
-        // <Link href={value.link}>
-          <div
-            className="sidebar-link-container"
-            key={index}
-            style={{ fontWeight: activeIndex === index ? 700 : 400 }}
-            onClick={(e) => changePage(e, index)}
-          >
-            <Link href={value.link} className="sidebar-link">
-              <div className="sidebar-link-image">
-                <Image 
-                  src={activeIndex === index ? value.image.fill : value.image.nonfill}
-                  width={44}
-                  height={0}
-                  alt="Logo"
-                />
+        <>
+          <Link href={value.link}>
+              <div
+                className="sidebar-link-container"
+                key={index}
+                style={{ fontWeight: activeIndex === index ? 700 : 400 }}
+                onClick={(e) => changePage(e, index)}
+              >
+                <div className="sidebar-link">
+                  <div className="sidebar-link-image">
+                    <Image 
+                      src={activeIndex === index ? value.image.fill : value.image.nonfill}
+                      width={44}
+                      height={0}
+                      alt="Logo"
+                    />
+                  </div>
+                  <div className="sidebar-link-title">
+                    {value.name}
+                  </div>
+                </div>
               </div>
-              <div className="sidebar-link-title">
-                {value.name}
-              </div>
-            </Link>
-          </div>
-        // {/* </Link> */}
+          </Link>
+        </>
       );
     });
   };
+
+  const [isOpen, setIsOpen] = useState(false);
 
   return (
     <nav className="sidebar">
@@ -82,37 +89,49 @@ export default function Navbar() {
           <Nav />
         </div>
         <div className="sidebar-lower-section">
-          <button className="sidebar-link-container">
-            <Link href="/upload" className="sidebar-link">
-              <div className="sidebar-link-image">
-                <Image 
-                  src="/Upload Icon.svg"
-                  width={44}
-                  height={0}
-                  alt="Upload logo"
-                />
-              </div>
-              <div className="sidebar-link-title">
-                Upload
-              </div>
-            </Link>
-          </button>
-          <div className="sidebar-link-container avatar-container">
-            <Link href="/profile" className="sidebar-link">
-              <div className="avatar-logo">
-                <Image
-                  src="/Generic avatar.svg"
-                  width={44}
-                  height={0}
-                  alt="Avatar logo"
-                />
-              </div>
-              <div className="avatar-name-container">
-                <div className="avatar-name">
-                  huge burger
+          <Link href="/upload">
+            <button 
+              onClick={() => setIsOpen(true)}
+              className="sidebar-link-container"
+            >
+              <div className="sidebar-link">
+                <div className="sidebar-link-image">
+                  <Image 
+                    src="/Upload Icon.svg"
+                    width={44}
+                    height={0}
+                    alt="Upload logo"
+                  />
                 </div>
-                <div className="avatar-handle">
-                  @hugeburger
+                <div className="sidebar-link-title">
+                  Upload
+                </div>
+              </div>
+            </button>
+          </Link>
+          <Upload 
+            open={isOpen} 
+            onClose={() => setIsOpen(false)} 
+            // shouldCloseOnOverlayClick={false}
+          />
+          <div className="sidebar-link-container avatar-container">
+            <Link href="/profile">
+              <div className="sidebar-link">
+                <div className="avatar-logo">
+                  <Image
+                    src="/Generic avatar.svg"
+                    width={44}
+                    height={0}
+                    alt="Avatar logo"
+                  />
+                </div>
+                <div className="avatar-name-container">
+                  <div className="avatar-name">
+                    huge burger
+                  </div>
+                  <div className="avatar-handle">
+                    @hugeburger
+                  </div>
                 </div>
               </div>
             </Link>

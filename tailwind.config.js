@@ -11,7 +11,17 @@ module.exports = {
         primary: '#1E1E1E',
         secondary: '#FFFFFF',
         third: "#2F363B"
-      }
+      },
+      width: {
+        138: "34.5rem",
+        161: "40.25rem",
+        192: "48rem",
+      },
+      height: {
+        138: "34.5rem",
+        161: "40.25rem",
+        192: "48rem",
+      },
     },
   },
   plugins: [],
