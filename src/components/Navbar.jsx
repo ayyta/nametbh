@@ -3,6 +3,7 @@ import Link from "next/link";
 import Image from "next/image";
 import { useState } from "react";
 import Upload from "../app/upload/page";
+import { useRouter } from "next/router";
 import "../styles/Navbar.css";
 export default function Navbar() {
 
@@ -44,18 +45,16 @@ let navbarItems = [
   /** Our Nav Component that renders the bold and filled in icons on the nav when active.
   */
   function Nav() {
-    const [activeIndex, setActiveIndex] = useState(null);
-
     const changePage = (e, index) => {
       setActiveIndex(index);
     };
-
+    console.log("activeIndex", activeIndex);
     return navbarItems.map((value, index) => (
       <Link href={value.link} key={index}>
           <div
             className="sidebar-link-container"
             style={{ fontWeight: activeIndex === index ? 700 : 400 }}
-            onClick={(e) => changePage(e, index)}
+            onClick={(e) => changePage(e, index, value)}
           >
             <div className="sidebar-link">
               <div className="sidebar-link-image">
@@ -76,6 +75,7 @@ let navbarItems = [
   };
 
   const [isOpen, setIsOpen] = useState(false);
+  const [activeIndex, setActiveIndex] = useState(null);
 
   return (
     <nav className="sidebar">

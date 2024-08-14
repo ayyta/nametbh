@@ -13,6 +13,13 @@
     md:max-w-sm
     sm:w-24
     sm:h-full
+    sm:border-r
+    sm:border-t-0
+
+    border-r-0
+    border-t
+    border-opacity-80	
+    border-solid
     
     fixed
     bottom-0
