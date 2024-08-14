@@ -2,8 +2,8 @@
 import Link from "next/link";
 import Image from "next/image";
 import { useState } from "react";
-import Upload from "../upload/page";
-
+import Upload from "../app/upload/page";
+import "../styles/Navbar.css";
 export default function Navbar() {
 
   let navbarItems = [

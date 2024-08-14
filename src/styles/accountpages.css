@@ -1,0 +1,26 @@
+.dropup-menu {
+  width: 100%;
+  bottom: calc(90%);
+  left: 0;
+  overflow-y: auto;
+  max-height: 235px;
+}
+
+.dropup-menu::-webkit-scrollbar {
+  width: 0.4rem;
+  background-color: #292F33;
+}
+
+.dropup-menu::-webkit-scrollbar-track {
+  background: #373f45; 
+}
+
+.dropup-menu::-webkit-scrollbar-thumb {
+
+  background: #888; 
+  border-radius: 5px;
+}
+
+.dropup-menu::-webkit-scrollbar-thumb:hover {
+  background: #555; 
+}
