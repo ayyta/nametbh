@@ -3,7 +3,6 @@ import Link from "next/link";
 import Image from "next/image";
 import { useState } from "react";
 import Upload from "../app/upload/page";
-import { useRouter } from "next/router";
 import "../styles/Navbar.css";
 export default function Navbar() {
 
