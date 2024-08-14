@@ -75,7 +75,7 @@ export default function Register() {
           <button className="mt-5 w-full md:h-12 rounded-md h-12 bg-loginButton text-projectWhite font-bold" type="submit" disabled={isLoading}>
             {!isLoading ? "Continue" : "Loading..."} 
           </button>
-          <Link href={loginPath} className="md:text-sm text-xs mt-1 text-projectBlue hover:text-projectHoverBlue cursor-pointer">Need an account?</Link>
+          <Link href={loginPath} className="md:text-sm text-xs mt-1 text-projectBlue hover:text-projectHoverBlue cursor-pointer">Have an account?</Link>
         </form>  
       </div>
     </>
