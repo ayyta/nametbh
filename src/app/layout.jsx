@@ -2,7 +2,7 @@ import { Inter } from "next/font/google";
 import "../styles/globals.css";
 
 // components
-import Navbar from "../components/Navbar.jsx";
+import NavbarWrapper from "../components/NavbarWrapper.jsx";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -16,7 +16,7 @@ export default function RootLayout({ children }) {
     <html lang="en">
       <body className={`${inter.className} w-screen h-screen`}>
         <div className="flex w-full h-full">
-          <Navbar />
+          {<NavbarWrapper/>}
           {children}
         </div>
       </body>
