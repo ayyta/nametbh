@@ -11,14 +11,28 @@ const inter = Inter( {
 })
 
 export default function Register() {
+  const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
-  const [ dateOfBirth, setDateOfBirth ] = useState({day: "", month: "", year: ""});
+  const [dateOfBirth, setDateOfBirth] = useState({day: "", month: "", year: ""});
+  const [error, setError] = useState("");
 
   const [isLoading, setIsLoading] = useState(false);
-  const [logInError, setlogInError] = useState(false);
+  const [logInError, setLogInError] = useState(false);
   const loginPath = "/login";
+
+  // Styles if user inputs bad input
+  let headerStyle = logInError ? "text-red-600" : "";
+  let headerErrorStyle = logInError ? "italic" : "";
+  let errorMsg = logInError ? ` - Invalid input` : "*";
+  let emailUsernameErrorMsg = logInError ? ` - ${error ? error: 'Invalid Input'}` : "*";
+  let passwordErrorMsg = logInError ? " - Password must be atleast 6 characters" : "*";
+
+  // If there is an error, set logInError to true
+  useEffect(() => {
+    error ? setLogInError(true) : setLogInError(false);
+  }, [error]);
 
   const validateEmail = (email) => {
     const re = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
@@ -26,23 +40,26 @@ export default function Register() {
   };
 
   // Submit function for login
-  const handleLogin = (e) => {
+  const handleLogin = async (e) => {
     e.preventDefault();
-    setlogInError(false);
-    if (validateEmail(email) === false) {
-      setlogInError(true);
+    if (validateEmail(email) === false || password.length < 6) {
+      setLogInError(true);
       return;
     }
-    setIsLoading(true);
+    //
+    const dateOfBirthString = convertDateOfBirthToDate(dateOfBirth);
 
     const userInfo = {
       username,
       password,
+      name,
       email,
-      dateOfBirth
+      dateOfBirth: dateOfBirthString,
     }
-
-    console.log("User Info: ", userInfo);
+    if (await handleRegister(userInfo, setError)) {
+      setIsLoading(true);
+      setError("");
+    };
     // TODO: Fetch request to backend, make async function and await response
   }
 
@@ -53,29 +70,36 @@ export default function Register() {
     }
   };
 
-  // Styles if user inputs bad input
-  const headerStyle = logInError ? "text-red-600" : "";
-  const headerErrorStyle = logInError ? "italic" : "";
-  const errorMsg = logInError ? " - Invalid input" : "*";
 
+  useEffect(() => {
+    // Styles if user inputs bad input
+    headerStyle = logInError ? "text-red-600" : "";
+    headerErrorStyle = logInError ? "italic" : "";
+    errorMsg = logInError ? ` - Invalid input` : "*";
+    emailUsernameErrorMsg = logInError ? ` - ${error ? error: 'Invalid Input'}` : "*";
+    passwordErrorMsg = logInError ? " - Password must be atleast 6 characters" : "*";
+  }, [logInError]);
   return (
     <>
       <div className="w-screen h-screen md:bg-login bg-loginPopup flex justify-center md:items-center ">
         {/* Login Popup */}
-        <form onSubmit={handleLogin} className={`md:w-138 md:h-138 md:rounded-3xl md:px-16 md:py-7 py-16 w-full min-w-min	px-10 bg-loginPopup flex flex-col ${inter.className}`}>
-          <p className="md:text-center md:mb-7 md:text-2xl mb-7 text-2xl text-center font-bold ">Create an account</p>
+        <form onSubmit={handleLogin} className={`md:w-138 md:h-161 md:rounded-3xl md:px-16 md:py-7 py-16 w-full min-w-min	px-10 bg-loginPopup flex flex-col ${inter.className}`}>
+          <p className="md:text-center md:text-2xl mb-4 text-2xl text-center font-bold ">Create an account</p>
           
           {/* Input Fields */}
-          <InputComponent name="email" value={email} setValue={setEmail} logInError={logInError} handleKeyDown={handleKeyDown} headerStyle={headerStyle} headerErrorStyle={headerErrorStyle} errorMsg={errorMsg}/>
-          <InputComponent name="username" value={username} setValue={setUsername} logInError={logInError} handleKeyDown={handleKeyDown} headerStyle={headerStyle} headerErrorStyle={headerErrorStyle} errorMsg={errorMsg}/>
-          <InputComponent name="password" value={password} setValue={setPassword} logInError={logInError} handleKeyDown={handleKeyDown} headerStyle={headerStyle} headerErrorStyle={headerErrorStyle} errorMsg={errorMsg}/>
+          <InputComponent name="name" value={name} setValue={setName} logInError={logInError} handleKeyDown={handleKeyDown} headerStyle={headerStyle} headerErrorStyle={headerErrorStyle} errorMsg={errorMsg}/>
+          <InputComponent name="email" value={email} setValue={setEmail} logInError={logInError} handleKeyDown={handleKeyDown} headerStyle={headerStyle} headerErrorStyle={headerErrorStyle} errorMsg={emailUsernameErrorMsg}/>
+          <InputComponent name="username" value={username} setValue={setUsername} logInError={logInError} handleKeyDown={handleKeyDown} headerStyle={headerStyle} headerErrorStyle={headerErrorStyle} errorMsg={emailUsernameErrorMsg}/>
+          <InputComponent name="password" value={password} setValue={setPassword} logInError={logInError} handleKeyDown={handleKeyDown} headerStyle={headerStyle} headerErrorStyle={headerErrorStyle} errorMsg={passwordErrorMsg}/>
           <DateOfBirth name="date of birth" value={dateOfBirth} setValue={setDateOfBirth} logInError={logInError} headerStyle={headerStyle} headerErrorStyle={headerErrorStyle} errorMsg={errorMsg}/>
 
           {/* Continue Button */}
           <button className="mt-5 w-full md:h-12 rounded-md h-12 bg-loginButton text-projectWhite font-bold" type="submit" disabled={isLoading}>
             {!isLoading ? "Continue" : "Loading..."} 
           </button>
-          <Link href={loginPath} className="md:text-sm text-xs mt-1 text-projectBlue hover:text-projectHoverBlue cursor-pointer">Have an account?</Link>
+          <div className="w-full">
+            <Link href={loginPath} className="md:text-sm text-xs mt-1 text-projectBlue hover:text-projectHoverBlue cursor-pointer">Have an account?</Link>
+          </div>
         </form>  
       </div>
     </>
@@ -84,7 +108,7 @@ export default function Register() {
 
 // Component for text input fields
 function InputComponent({ name, value, setValue, handleKeyDown, headerStyle, headerErrorStyle, errorMsg }) {
-  const style = name == "email" ? "" : "pt-5";
+  const style = name == "name" ? "" : "pt-5";
   return (
     <>
       <label className={`flex flex-col ${style}`}>
@@ -185,4 +209,55 @@ function DropUp( props ) {
       )}
     </div>
   )
+}
+
+// Convert date of birth object to string
+function convertDateOfBirthToDate(dateOfBirth) {
+  const monthMap = {
+    January: '01',
+    February: '02',
+    March: '03',
+    April: '04',
+    May: '05',
+    June: '06',
+    July: '07',
+    August: '08',
+    September: '09',
+    October: '10',
+    November: '11',
+    December: '12',
+  };
+
+  // Get the day, month, and year from the dateOfBirth object
+  const day = String(dateOfBirth.day).padStart(2, '0'); // Ensure day is two digits
+  const month = monthMap[dateOfBirth.month]; // Convert month name to number
+  const year = String(dateOfBirth.year); // Convert year to string
+
+  // Combine them into the YYYY-MM-DD format
+  return `${year}-${month}-${day}`;
+}
+
+async function handleRegister(userInfo, setError) {
+  try {
+    const response = await fetch("/api/register", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify(userInfo),
+    });
+
+    if (response.ok) {
+      alert("User created!");
+      return true;
+    } else {
+      const errorData = await response.json();
+      setError(errorData.error);
+      return false;
+    }
+  } catch (error) {
+    console.error("OVER HERE", error)
+    setError(error.message);
+    return false;
+  }
 }
