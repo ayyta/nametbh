@@ -1,7 +1,7 @@
 "use client"; 
 import Link from "next/link"
 import { Inter } from "next/font/google"
-import { useState, useRef } from "react"
+import { useState } from "react"
 import "../../styles/accountpages.css"
 
 const inter = Inter( {
