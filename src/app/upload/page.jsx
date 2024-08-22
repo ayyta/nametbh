@@ -1,9 +1,12 @@
 "use client";
 import Image from "next/image";
+import { useState } from "react";
+import Header from "./header";
 
 export default function Upload({ open, onClose }) {
-  if (!open) return null
+  const [text, setText] = useState("");
 
+  if (!open) return null
 
   const handler = () => {
     if (open) {
@@ -17,31 +20,12 @@ export default function Upload({ open, onClose }) {
         <div className="upload-overlay" onClick={handler}></div>
         <div className="upload">
           <div className="upload-container">
-            <div className="upload-header">
-              <div className="upload-avatar">
-                <Image 
-                  src="/Generic avatar.svg"
-                  width={50}
-                  height={0}
-                  alt="Avatar logo"
-                />
-              </div>
-              <button 
-                className="upload-close-button"
-                onClick={onClose}
-              >
-                <Image
-                  src="/Close Icon.svg"
-                  width={32}
-                  height={0}
-                  alt="Close logo" 
-                />
-              </button>
-            </div>
+            <Header close={onClose} />
             <div className="upload-body-section">
               <textarea 
                 className="upload-body" 
                 placeholder="Enter Text..." 
+                onChange={(e) => setText(e.target.value)}
                 required 
               />
             </div>
@@ -72,7 +56,10 @@ export default function Upload({ open, onClose }) {
               </button>
             </div>
             <div className="upload-utilities-right-section">
-              <button className="upload-button">
+              <button 
+                className="upload-button"
+                onClick={() => console.log(text)}
+              >
                 Post
               </button>
             </div>
