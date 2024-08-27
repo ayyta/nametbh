@@ -2,10 +2,9 @@
 import Image from "next/image";
 import { useState } from "react";
 import Header from "./header";
+import MediaButton from "./media";
 
 export default function Upload({ open, onClose }) {
-  const [text, setText] = useState("");
-
   if (!open) return null
 
   const handler = () => {
@@ -14,11 +13,22 @@ export default function Upload({ open, onClose }) {
     }
   }
 
+  const [text, setText] = useState("");
+  const [media, setMedia] = useState("");
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    
+    const post = { text }
+
+    console.log(post);
+  }
+
   return (
     <>
       <div className="upload-popup-container">
         <div className="upload-overlay" onClick={handler}></div>
-        <div className="upload">
+        <form className="upload" onSubmit={handleSubmit}>
           <div className="upload-container">
             <Header close={onClose} />
             <div className="upload-body-section">
@@ -26,18 +36,13 @@ export default function Upload({ open, onClose }) {
                 className="upload-body" 
                 placeholder="Enter Text..." 
                 onChange={(e) => setText(e.target.value)}
-                required 
               />
             </div>
             <div className="upload-utilities-left-section">
-              <button className="upload-utilities">
-                <Image
-                  src="/Video Icon.svg"
-                  width={28}
-                  height={0}
-                  alt="Video logo" 
-                />
-              </button>
+              <MediaButton
+                media={media} 
+                setMedia={setMedia} 
+              />
               <button className="upload-utilities">
                 <Image
                   src="/Mic Icon.svg"
@@ -58,13 +63,12 @@ export default function Upload({ open, onClose }) {
             <div className="upload-utilities-right-section">
               <button 
                 className="upload-button"
-                onClick={() => console.log(text)}
               >
                 Post
               </button>
             </div>
           </div>
-        </div>      
+        </form>      
       </div>
     </>
   );
