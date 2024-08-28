@@ -1,4 +1,5 @@
 "use client";
+import "../../styles/uploadpage.css";
 import Image from "next/image";
 import { useState } from "react";
 import Header from "./header";
@@ -31,22 +32,24 @@ export default function Upload({ open, onClose }) {
         <form className="upload" onSubmit={handleSubmit}>
           <div className="upload-container">
             <Header close={onClose} />
-            <div alt="upload-body-section" className="w-138 flex items-center justify-center">
-              <div className="w-full flex items-center justify-center place-content-center">
-                <textarea 
-                  className="upload-body" 
-                  placeholder="Enter Text..." 
-                  onChange={(e) => setText(e.target.value)}
-                />
-              </div>
-              <div alt="upload-image" className="flex h-full">
-                <Image
-                  src="/Generic avatar.svg"
-                  width={20}
-                  height={0}
-                  alt="Media of choice"
-                />
-              </div>
+            <div className="upload-body-section">
+              <textarea 
+                className="upload-body" 
+                placeholder="Enter Text..." 
+                onChange={(e) => setText(e.target.value)}
+              />
+            </div>
+            <div className="upload-image"> 
+              <Image
+                // src="/Generic avatar.svg"
+                src={media}
+                width={0}
+                height={0}
+                sizes="100vw"
+                // media is "" by default resulting in a falsey value therefore the display is set to none else the media is displayed
+                style={{display: `${media ? "block" : "none"} `, width: "min-content", height: "min-content"}}
+                alt="Media of choice"
+              />
             </div>
             <div className="upload-utilities-left-section">
               <MediaButton
