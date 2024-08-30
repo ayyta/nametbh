@@ -14,6 +14,7 @@
     bg-third
     w-161
     h-72
+    min-h-16
     flex
     text-secondary;
 }
@@ -67,7 +68,7 @@
   @apply
     flex
     w-full
-    h-36
+    /* h-36 */
     p-2.5
     resize-none
     outline-none

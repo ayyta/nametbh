@@ -1,7 +1,7 @@
 "use client";
 import "../../styles/uploadpage.css";
 import Image from "next/image";
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import Header from "./header";
 import MediaButton from "./media";
 
@@ -16,7 +16,9 @@ export default function Upload({ open, onClose }) {
 
   const [text, setText] = useState("");
   const [media, setMedia] = useState("");
+  const textAreaRef = useRef("");
 
+  /** Function handleSubmit logs the input text, however the issue is that whenever we click any button like the GIF button for example it still logs hte input text */
   const handleSubmit = (e) => {
     e.preventDefault();
     
@@ -24,6 +26,10 @@ export default function Upload({ open, onClose }) {
 
     console.log(post);
   }
+
+  useEffect(() => {
+    textAreaRef.current.style.height = textAreaRef.current.scrollHeight + "px";
+  }, [text])
 
   return (
     <>
@@ -36,7 +42,10 @@ export default function Upload({ open, onClose }) {
               <textarea 
                 className="upload-body" 
                 placeholder="Enter Text..." 
+                rows="1"
+                value={text}
                 onChange={(e) => setText(e.target.value)}
+                ref={textAreaRef}
               />
             </div>
             <div className="upload-image"> 
