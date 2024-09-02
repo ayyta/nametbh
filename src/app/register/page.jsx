@@ -42,6 +42,7 @@ export default function Register() {
   // Submit function for login
   const handleLogin = async (e) => {
     e.preventDefault();
+
     if (validateEmail(email) === false || password.length < 6) {
       setLogInError(true);
       return;
@@ -59,6 +60,8 @@ export default function Register() {
     if (await handleRegister(userInfo, setError)) {
       setIsLoading(true);
       setError("");
+      // Redirect to home page
+      
     };
     // TODO: Fetch request to backend, make async function and await response
   }
@@ -256,7 +259,6 @@ async function handleRegister(userInfo, setError) {
       return false;
     }
   } catch (error) {
-    console.error("OVER HERE", error)
     setError(error.message);
     return false;
   }
