@@ -2,8 +2,9 @@
 import Link from "next/link"
 import { Inter } from "next/font/google"
 import { useState, useEffect, useRef } from "react"
+import { useRouter } from "next/navigation"
 import "../../styles/accountpages.css"
-
+import { login } from "@/lib/auth"
 const inter = Inter( {
   subsets: ['latin'],
   weight: ['100', '300', '400', '500', '700', '900'],
@@ -21,6 +22,7 @@ export default function Register() {
   const [isLoading, setIsLoading] = useState(false);
   const [logInError, setLogInError] = useState(false);
   const loginPath = "/login";
+  const router = useRouter();
 
   // Styles if user inputs bad input
   let headerStyle = logInError ? "text-red-600" : "";
@@ -60,8 +62,9 @@ export default function Register() {
     if (await handleRegister(userInfo, setError)) {
       setIsLoading(true);
       setError("");
+
       // Redirect to home page
-      
+      router.push("/home");
     };
     // TODO: Fetch request to backend, make async function and await response
   }

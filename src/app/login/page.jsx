@@ -2,8 +2,9 @@
 import Link from "next/link"
 import { Inter } from "next/font/google"
 import { useState } from "react"
+import { useRouter } from "next/navigation"
 import "../../styles/accountpages.css"
-
+import { login } from "@/lib/auth"
 const inter = Inter( {
   subsets: ['latin'],
   weight: ['100', '300', '400', '500', '700', '900'],
@@ -16,7 +17,7 @@ export default function Login() {
   const [isLoading, setIsLoading] = useState(false);
   const [logInError, setlogInError] = useState(false);
 
-  
+  const router = useRouter();
   const registerPath = "/register";
   const forgotPasswordPath = "/register"; // PLACEHOLDER: Change to forgot password path
 
@@ -41,6 +42,8 @@ export default function Login() {
     }
 
     console.log("User Info: ", userInfo);
+    // Call login function from auth.js
+    login(username, password, router);
     // Fetch request to backend, make async function and await response
   }
 
