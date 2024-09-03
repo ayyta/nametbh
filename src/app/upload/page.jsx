@@ -1,9 +1,10 @@
 "use client";
 import "../../styles/uploadpage.css";
 import Image from "next/image";
-import { useEffect, useRef, useState } from "react";
+import { useState } from "react";
 import Header from "./header";
-import MediaButton from "./media";
+import MediaButton from "./mediabutton";
+import TextareaAutosize from "react-textarea-autosize";
 
 export default function Upload({ open, onClose }) {
   if (!open) return null
@@ -16,7 +17,6 @@ export default function Upload({ open, onClose }) {
 
   const [text, setText] = useState("");
   const [media, setMedia] = useState("");
-  const textAreaRef = useRef("");
 
   /** Function handleSubmit logs the input text, however the issue is that whenever we click any button like the GIF button for example it still logs hte input text */
   const handleSubmit = (e) => {
@@ -27,30 +27,29 @@ export default function Upload({ open, onClose }) {
     console.log(post);
   }
 
-  useEffect(() => {
-    textAreaRef.current.style.height = textAreaRef.current.scrollHeight + "px";
-  }, [text])
-
   return (
     <>
       <div className="upload-popup-container">
         <div className="upload-overlay" onClick={handler}></div>
-        <form className="upload" onSubmit={handleSubmit}>
+        <form 
+          className="upload" 
+          onSubmit={handleSubmit}
+          style={{height: `${media ? "552px" : "288px"}`}}
+        >
           <div className="upload-container">
             <Header close={onClose} />
-            <div className="upload-body-section">
-              <textarea 
-                className="upload-body" 
-                placeholder="Enter Text..." 
-                rows="1"
+            <div className="upload-body-container">
+              <TextareaAutosize
+                className="upload-body"
+                minRows={1}
+                maxRows={5}
+                placeholder="Enter Text..."
                 value={text}
                 onChange={(e) => setText(e.target.value)}
-                ref={textAreaRef}
               />
             </div>
             <div className="upload-image"> 
               <Image
-                // src="/Generic avatar.svg"
                 src={media}
                 width={0}
                 height={0}

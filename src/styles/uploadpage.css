@@ -13,8 +13,8 @@
     z-20
     bg-third
     w-161
-    h-72
-    min-h-16
+    /* h-72
+    min-h-72 */
     flex
     text-secondary;
 }
@@ -22,7 +22,6 @@
 .upload-container {
   @apply
     m-2
-    w-96
     ;
 }
 
@@ -58,18 +57,20 @@
 }
 
 /* Body Section */
-.upload-body-section {
+.upload-body-container {
   @apply
-    w-138
-    flex;
+    flex
+    w-152
+    items-center
+    justify-center;
 }
 
 .upload-body {
   @apply
     flex
     w-full
-    /* h-36 */
     p-2.5
+    overflow-hidden
     resize-none
     outline-none
     bg-third
@@ -81,7 +82,11 @@
 
 .upload-image {
   @apply
-    flex;
+    flex
+    h-44
+    w-44
+    p-1
+    object-contain;
 }
 
 /* Utilities Section */
