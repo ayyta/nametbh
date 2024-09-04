@@ -18,9 +18,9 @@ export default function AuthCheckWrapper({ children }) {
       if (!session && (pathname !== "/login" && pathname !== "/register")) {
         router.push("/login");
       } 
-      // else if (session && (pathname === "/login" || pathname === "/register")) {
-      //   router.push("/home");
-      // }
+      else if (session && (pathname === "/login" || pathname === "/register")) {
+        router.push("/home");
+      }
       setLoading(false);
     }
 
