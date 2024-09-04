@@ -5,9 +5,6 @@ export const login = async (email, password, router) => {
   const { error } = await supabaseAnon.auth.signInWithPassword({ email, password });
 
   if (error) {
-    console.log("ERROR")
-    console.error("error", error);
-    router.push("/login?message=Could not authenticate user"); // Use router.push for client-side navigation
     return NextResponse.json({error: "Invalid Credentials"}, { status: 400 });
   }
   router.push("/home");

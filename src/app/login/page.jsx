@@ -5,6 +5,7 @@ import { useState } from "react"
 import { useRouter } from "next/navigation"
 import "../../styles/accountpages.css"
 import { login } from "@/lib/auth"
+
 const inter = Inter( {
   subsets: ['latin'],
   weight: ['100', '300', '400', '500', '700', '900'],
@@ -27,24 +28,22 @@ export default function Login() {
   };
 
   // Submit function for login
-  const handleLogin = (e) => {
+  const handleLogin = async (e) => {
     e.preventDefault();
     setlogInError(false);
     if (validateEmail(username) === false) {
       setlogInError(true);
       return;
     }
-    setIsLoading(true);
 
-    const userInfo = {
-      username,
-      password
-    }
-
-    console.log("User Info: ", userInfo);
     // Call login function from auth.js
-    login(username, password, router);
-    // Fetch request to backend, make async function and await response
+    const response = await login(username, password, router);
+    if (!response.ok) {
+      setlogInError(true);
+      setIsLoading(false);
+      return;
+    }
+    setIsLoading(true);
   }
 
   const handleKeyDown = (e) => {
@@ -68,7 +67,7 @@ export default function Login() {
           {/* Email/Number Input */}
           <label className="flex flex-col">
             <p className={`md:text-sm uppercase text-xs font-bold ${headerStyle}`}>Email or phone number <span className={`md:text-xs text-red-600 ${headerErrorStyle}`}>{errorMsg}</span></p>
-            <input className="md:w-full md:h-12 md:rounded-md mt-1 h-10 text-projectWhite bg-login pl-3" 
+            <input className="md:w-full md:h-12 md:rounded-md mt-1 h-10 text-projectWhite bg-login pl-3 account-input" 
               required
               value={username}
               onChange={(e) => setUsername(e.target.value)}
@@ -79,7 +78,7 @@ export default function Login() {
           {/* Password Input */}
           <label className="flex flex-col pt-5">
             <p className={`md:text-sm uppercase text-xs font-bold ${headerStyle}`}>Password <span className={`md:text-xs text-red-600 ${headerErrorStyle}`}>{errorMsg}</span></p>
-            <input className="md:w-full md:h-12 md:rounded-md h-10 text-projectWhite bg-login pl-3" 
+            <input className="md:w-full md:h-12 md:rounded-md h-10 text-projectWhite bg-login pl-3 account-input" 
               required
               type="password" 
               value={password}
