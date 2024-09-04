@@ -80,13 +80,14 @@
     ;
 }
 
-.upload-image {
+.upload-image-container {
   @apply
     flex
-    h-44
-    w-44
-    p-1
-    object-contain;
+    relative
+    w-48
+    h-48
+    m-4
+    ;
 }
 
 /* Utilities Section */

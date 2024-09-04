@@ -48,15 +48,20 @@ export default function Upload({ open, onClose }) {
                 onChange={(e) => setText(e.target.value)}
               />
             </div>
-            <div className="upload-image"> 
+            <div className="upload-image-container">
               <Image
                 src={media}
                 width={0}
                 height={0}
                 sizes="100vw"
                 // media is "" by default resulting in a falsey value therefore the display is set to none else the media is displayed
-                style={{display: `${media ? "block" : "none"} `, width: "min-content", height: "min-content"}}
+                style={{
+                  display: `${media ? "block" : "none"} `,
+                  width: "min-content",
+                  height: "min-content"
+                }}
                 alt="Media of choice"
+                className="rounded-lg object-contain"
               />
             </div>
             <div className="upload-utilities-left-section">
