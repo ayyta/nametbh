@@ -89,7 +89,7 @@ export default function Register() {
     <>
       <div className="w-screen h-screen md:bg-login bg-loginPopup flex justify-center md:items-center ">
         {/* Login Popup */}
-        <form onSubmit={handleLogin} className={`md:w-138 md:h-161 md:rounded-3xl md:px-16 md:py-7 py-16 w-full min-w-min	px-10 bg-loginPopup flex flex-col ${inter.className}`}>
+        <form onSubmit={handleLogin} className={`md:w-138 md:h-auto md:rounded-3xl md:px-16 md:py-7 py-16 w-full min-w-min	px-10 bg-loginPopup flex flex-col ${inter.className}`}>
           <p className="md:text-center md:text-2xl mb-4 text-2xl text-center font-bold ">Create an account</p>
           
           {/* Input Fields */}
