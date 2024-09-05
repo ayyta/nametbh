@@ -4,7 +4,7 @@ import { Inter } from "next/font/google"
 import { useState, useEffect, useRef } from "react"
 import { useRouter } from "next/navigation"
 import "../../styles/accountpages.css"
-import { login } from "@/lib/auth"
+
 const inter = Inter( {
   subsets: ['latin'],
   weight: ['100', '300', '400', '500', '700', '900'],
@@ -96,7 +96,7 @@ export default function Register() {
           <InputComponent name="name" value={name} setValue={setName} logInError={logInError} handleKeyDown={handleKeyDown} headerStyle={headerStyle} headerErrorStyle={headerErrorStyle} errorMsg={errorMsg}/>
           <InputComponent name="email" value={email} setValue={setEmail} logInError={logInError} handleKeyDown={handleKeyDown} headerStyle={headerStyle} headerErrorStyle={headerErrorStyle} errorMsg={emailUsernameErrorMsg}/>
           <InputComponent name="username" value={username} setValue={setUsername} logInError={logInError} handleKeyDown={handleKeyDown} headerStyle={headerStyle} headerErrorStyle={headerErrorStyle} errorMsg={emailUsernameErrorMsg}/>
-          <InputComponent name="password" value={password} setValue={setPassword} logInError={logInError} handleKeyDown={handleKeyDown} headerStyle={headerStyle} headerErrorStyle={headerErrorStyle} errorMsg={passwordErrorMsg}/>
+          <PasswordInput name="password" value={password} setValue={setPassword} logInError={logInError} handleKeyDown={handleKeyDown} headerStyle={headerStyle} headerErrorStyle={headerErrorStyle} errorMsg={passwordErrorMsg}/>
           <DateOfBirth name="date of birth" value={dateOfBirth} setValue={setDateOfBirth} logInError={logInError} headerStyle={headerStyle} headerErrorStyle={headerErrorStyle} errorMsg={errorMsg}/>
 
           {/* Continue Button */}
@@ -132,6 +132,36 @@ function InputComponent({ name, value, setValue, handleKeyDown, headerStyle, hea
 
 }
 
+function PasswordInput({ name, value, setValue, handleKeyDown, headerStyle, headerErrorStyle, errorMsg }) {
+  const [passwordVisible, setPasswordVisible] = useState(false);
+
+  const togglePasswordVisibility = () => {
+    setPasswordVisible(!passwordVisible);
+  };
+  const style = name == "name" ? "" : "pt-5";
+  return (
+    <label className={`flex flex-col ${style}`}>
+      <p className={`md:text-sm uppercase text-xs font-bold ${headerStyle}`}>{name}<span className={`md:text-xs text-red-600 ${headerErrorStyle}`}>{errorMsg}</span></p>
+      <div className="flex flex-row md:w-full md:h-12  mt-1 rounded-md h-10 text-projectWhite bg-login">
+        <input className="w-full h-full rounded-md pl-3 bg-transparent" 
+          required
+          value={value}
+          type={passwordVisible ? "text" : "password"}
+          onChange={(e) => setValue(e.target.value)}
+          onKeyDown={handleKeyDown}
+          autoComplete="new-password"
+        />
+        <button className="px-2 text-projectWhite text-sm" type="button" onClick={togglePasswordVisibility}> 
+          {passwordVisible ? "Hide" : "Show"}
+          
+        </button>
+      </div>
+    </label>
+
+  )
+
+}
+
 // Component for date of birth input field
 function DateOfBirth({ name, value, setValue, headerStyle, headerErrorStyle, errorMsg }) {
   const months = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
@@ -161,11 +191,9 @@ function DateOfBirth({ name, value, setValue, headerStyle, headerErrorStyle, err
 }
 
 // Component for text dropup fields
-function DropUp( props ) {
+function DropUp({ value, setValue, placeHolder, options }) {
   const [isOpen, setIsOpen] = useState(false);
   const dropUpRef = useRef(null);
-  const { value, setValue, placeHolder, options } = props;
-
 
   // Closes dropup menu when option is selected
   const handleOnClick = (option) => {
