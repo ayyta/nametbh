@@ -4,7 +4,7 @@ import { Inter } from "next/font/google"
 import { useState, useEffect, useRef } from "react"
 import { useRouter } from "next/navigation"
 import "../../styles/accountpages.css"
-
+import { login } from "@/lib/auth"
 const inter = Inter( {
   subsets: ['latin'],
   weight: ['100', '300', '400', '500', '700', '900'],
@@ -49,7 +49,6 @@ export default function Register() {
       setLogInError(true);
       return;
     }
-    //
     const dateOfBirthString = convertDateOfBirthToDate(dateOfBirth);
 
     const userInfo = {
@@ -59,14 +58,12 @@ export default function Register() {
       email,
       dateOfBirth: dateOfBirthString,
     }
+
     if (await handleRegister(userInfo, setError)) {
       setIsLoading(true);
       setError("");
-
-      // Redirect to home page
-      router.push("/home");
+      login(email, password, router);
     };
-    // TODO: Fetch request to backend, make async function and await response
   }
 
   // Can submit form with enter key
@@ -169,7 +166,6 @@ function DateOfBirth({ name, value, setValue, headerStyle, headerErrorStyle, err
   const years = Array.from({ length: 91 }, (_, i) => new Date().getFullYear() - i - 13);
 
   const handleDateChange = (field, value) => {
-    console.log("Field: ", field, "Value: ", value);
     setValue((prevValue) => ({
       ...prevValue,
       [field]: value
@@ -282,7 +278,6 @@ async function handleRegister(userInfo, setError) {
     });
 
     if (response.ok) {
-      alert("User created!");
       return true;
     } else {
       const errorData = await response.json();
