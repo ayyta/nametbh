@@ -13,19 +13,24 @@ export default function AuthCheckWrapper({ children }) {
   useEffect(() => {
     const checkAuth = async () => {
       const { data: { session } } = await supabaseAnon.auth.getSession();
-      console.log("session", session);
+
       // Skip redirect if user is on login or register page
       if (!session && (pathname !== "/login" && pathname !== "/register")) {
         router.push("/login");
+        setLoading(true);
+
       } 
       else if (session && (pathname === "/login" || pathname === "/register")) {
         router.push("/home");
+        setLoading(true);
+
+      } else {
+        setLoading(false);
       }
-      setLoading(false);
     }
 
     checkAuth();
-  }, [router]);
+  }, [router, pathname]);
 
   if (loading) {
     return (
