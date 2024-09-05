@@ -76,16 +76,8 @@ export default function Login() {
           </label>
 
           {/* Password Input */}
-          <label className="flex flex-col pt-5">
-            <p className={`md:text-sm uppercase text-xs font-bold ${headerStyle}`}>Password <span className={`md:text-xs text-red-600 ${headerErrorStyle}`}>{errorMsg}</span></p>
-            <input className="md:w-full md:h-12 md:rounded-md h-10 text-projectWhite bg-login pl-3 account-input" 
-              required
-              type="password" 
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              onKeyDown={handleKeyDown}
-              />
-          </label> 
+          <PasswordInput headerErrorStyle={headerErrorStyle} headerStyle={headerStyle} errorMsg={errorMsg} value={password} setValue={setPassword} handleKeyDown={handleKeyDown} />
+
 
           {/* Forgot Password */}
           <div>
@@ -101,4 +93,33 @@ export default function Login() {
       </div>
     </>
   )
+}
+
+function PasswordInput ({headerErrorStyle, headerStyle, errorMsg, value, setValue, handleKeyDown}) {
+  const [passwordVisible, setPasswordVisible] = useState(false);
+
+  const togglePasswordVisibility = () => {
+    setPasswordVisible(!passwordVisible);
+  };
+
+return (
+  <label className={`flex flex-col pt-5`}>
+    <p className={`md:text-sm uppercase text-xs font-bold ${headerStyle}`}>Password<span className={`md:text-xs text-red-600 ${headerErrorStyle}`}>{errorMsg}</span></p>
+    <div className="flex flex-row md:w-full md:h-12  mt-1 rounded-md h-10 text-projectWhite bg-login">
+      <input className="w-full h-full rounded-md pl-3 bg-transparent" 
+        required
+        value={value}
+        type={passwordVisible ? "text" : "password"}
+        onChange={(e) => setValue(e.target.value)}
+        onKeyDown={handleKeyDown}
+        autoComplete="new-password"
+      />
+      <button className="px-2 text-projectWhite text-sm" type="button" onClick={togglePasswordVisibility}> 
+        {passwordVisible ? "Hide" : "Show"}
+        
+      </button>
+    </div>
+  </label>
+
+)
 }
