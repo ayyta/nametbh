@@ -27,6 +27,35 @@ export default function Upload({ open, onClose }) {
     console.log(post);
   }
 
+  const renderMedia = (image) => {
+    return image.map((media) => {
+      return (
+        <>
+          <Image
+            src={media}
+            width={0}
+            height={0}
+            sizes="100vw"
+            style={{
+              display: "flex",
+              width: "min-content",
+              height: "min-content"
+            }}
+            alt="Media of choice"
+            className="rounded-lg object-contain"
+          />
+          <button
+          onClick={() => 
+            setMedia(image.filter((e) => e !== media))
+          }
+          >
+            Delete Image
+          </button>
+         </>
+      );
+    })
+  }
+
   return (
     <>
       <div className="upload-popup-container">
@@ -49,7 +78,8 @@ export default function Upload({ open, onClose }) {
               />
             </div>
             <div className="upload-image-container">
-              {media &&
+              {renderMedia(media)}
+              {/* {media &&
                  media.map((image, index) => {
                   return (
                     <div key={image} className="media">
@@ -77,7 +107,7 @@ export default function Upload({ open, onClose }) {
                       <p>{index}</p>
                     </div>
                   );
-              })}
+              })} */}
             </div>
             <div className="upload-utilities-left-section">
               <MediaButton

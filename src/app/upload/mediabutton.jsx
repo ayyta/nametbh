@@ -19,14 +19,15 @@ export default function MediaButton({ media, setMedia }) {
     const imagesArray = selectedFilesArray.map((file) => {
       return URL.createObjectURL(file);
     });
+    // console.log(imagesArray);
 
-    setMedia(imagesArray);
+    setMedia((prevImages) => {
+      return prevImages.concat(imagesArray);
+    });
 
-    // const uploadedFile = fileUploadRef.current.files[0];
-
-    // const cachedURL = URL.createObjectURL(uploadedFile);
-
-    // setMedia(cachedURL);
+    selectedFilesArray.map((file) => {
+      return URL.revokeObjectURL(file);
+    }); 
   }
 
   return (
