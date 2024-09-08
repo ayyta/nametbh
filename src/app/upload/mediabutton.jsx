@@ -3,20 +3,30 @@ import { useRef } from "react";
 
 export default function MediaButton({ media, setMedia }) {
 
+  /**
+   * The useRef hook creates a reference to the upload button
+   */
   const fileUploadRef = useRef();
-
   const handleMediaUpload = () => {
-    // e.preventDefault();
-
     fileUploadRef.current.click();
   }
 
-  const uploadMediaDisplay = () => {
-    const uploadedFile = fileUploadRef.current.files[0];
+  const uploadMediaDisplay = (e) => {
+    const selectedFiles = e.target.files;
+    // console.log(selectedFiles);
+    const selectedFilesArray = Array.from(selectedFiles);
 
-    const cachedURL = URL.createObjectURL(uploadedFile);
+    const imagesArray = selectedFilesArray.map((file) => {
+      return URL.createObjectURL(file);
+    });
 
-    setMedia(cachedURL);
+    setMedia(imagesArray);
+
+    // const uploadedFile = fileUploadRef.current.files[0];
+
+    // const cachedURL = URL.createObjectURL(uploadedFile);
+
+    // setMedia(cachedURL);
   }
 
   return (
@@ -35,7 +45,8 @@ export default function MediaButton({ media, setMedia }) {
       <input 
           type="file"
           ref={fileUploadRef}
-          multiple onChange={uploadMediaDisplay}
+          onChange={uploadMediaDisplay}
+          multiple accept="image/png, image/jpeg"
           hidden
         />
     </>
