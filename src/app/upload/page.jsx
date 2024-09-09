@@ -1,10 +1,11 @@
 "use client";
 import "../../styles/uploadpage.css";
-import Image from "next/image";
 import { useState } from "react";
+import Image from "next/image";
+import TextareaAutosize from "react-textarea-autosize";
 import Header from "./header";
 import MediaButton from "./mediabutton";
-import TextareaAutosize from "react-textarea-autosize";
+import Media from "./media";
 
 export default function Upload({ open, onClose }) {
   if (!open) return null
@@ -27,35 +28,6 @@ export default function Upload({ open, onClose }) {
     console.log(post);
   }
 
-  const renderMedia = (image) => {
-    return image.map((media) => {
-      return (
-        <>
-          <Image
-            src={media}
-            width={0}
-            height={0}
-            sizes="100vw"
-            style={{
-              display: "flex",
-              width: "min-content",
-              height: "min-content"
-            }}
-            alt="Media of choice"
-            className="rounded-lg object-contain"
-          />
-          <button
-          onClick={() => 
-            setMedia(image.filter((e) => e !== media))
-          }
-          >
-            Delete Image
-          </button>
-         </>
-      );
-    })
-  }
-
   return (
     <>
       <div className="upload-popup-container">
@@ -63,7 +35,8 @@ export default function Upload({ open, onClose }) {
         <form 
           className="upload" 
           onSubmit={handleSubmit}
-          style={{height: `${media ? "288px" : "552px"}`}}
+          // The height of the form is set to 522px if there is media else it is set to 288px
+          style={{height: `${media.length > 0 ? "522px" : "288px"}`}}
         >
           <div className="upload-container">
             <Header close={onClose} />
@@ -78,36 +51,10 @@ export default function Upload({ open, onClose }) {
               />
             </div>
             <div className="upload-image-container">
-              {renderMedia(media)}
-              {/* {media &&
-                 media.map((image, index) => {
-                  return (
-                    <div key={image} className="media">
-                      <Image
-                        src={image}
-                        width={0}
-                        height={0}
-                        sizes="100vw"
-                        // media is "" by default resulting in a falsey value therefore the display is set to none else the media is displayed
-                        style={{
-                          display: `${image ? "block" : "none"} `,
-                          width: "min-content",
-                          height: "min-content"
-                        }}
-                        alt="Media of choice"
-                        className="rounded-lg object-contain"
-                      />
-                      <button
-                        onClick={() => 
-                          setMedia(media.filter((e) => e !== image))
-                        }
-                      >
-                        Delete Image
-                      </button>
-                      <p>{index}</p>
-                    </div>
-                  );
-              })} */}
+              <Media 
+                media={media} 
+                setMedia={setMedia} 
+              />
             </div>
             <div className="upload-utilities-left-section">
               <MediaButton

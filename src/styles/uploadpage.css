@@ -84,9 +84,9 @@
   @apply
     flex
     relative
-    w-48
+    w-152
     h-48
-    m-4
+    mt-4
     ;
 }
 
