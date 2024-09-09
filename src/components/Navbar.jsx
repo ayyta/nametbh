@@ -47,7 +47,6 @@ let navbarItems = [
     const changePage = (e, index) => {
       setActiveIndex(index);
     };
-    console.log("activeIndex", activeIndex);
     return navbarItems.map((value, index) => (
       <Link href={value.link} key={index}>
           <div

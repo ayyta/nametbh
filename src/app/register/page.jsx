@@ -2,8 +2,9 @@
 import Link from "next/link"
 import { Inter } from "next/font/google"
 import { useState, useEffect, useRef } from "react"
+import { useRouter } from "next/navigation"
 import "../../styles/accountpages.css"
-
+import { login } from "@/lib/auth"
 const inter = Inter( {
   subsets: ['latin'],
   weight: ['100', '300', '400', '500', '700', '900'],
@@ -11,14 +12,29 @@ const inter = Inter( {
 })
 
 export default function Register() {
+  const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
-  const [ dateOfBirth, setDateOfBirth ] = useState({day: "", month: "", year: ""});
+  const [dateOfBirth, setDateOfBirth] = useState({day: "", month: "", year: ""});
+  const [error, setError] = useState("");
 
   const [isLoading, setIsLoading] = useState(false);
-  const [logInError, setlogInError] = useState(false);
+  const [logInError, setLogInError] = useState(false);
   const loginPath = "/login";
+  const router = useRouter();
+
+  // Styles if user inputs bad input
+  let headerStyle = logInError ? "text-red-600" : "";
+  let headerErrorStyle = logInError ? "italic" : "";
+  let errorMsg = logInError ? ` - Invalid input` : "*";
+  let emailUsernameErrorMsg = logInError ? ` - ${error ? error: 'Invalid Input'}` : "*";
+  let passwordErrorMsg = logInError ? " - Password must be atleast 6 characters" : "*";
+
+  // If there is an error, set logInError to true
+  useEffect(() => {
+    error ? setLogInError(true) : setLogInError(false);
+  }, [error]);
 
   const validateEmail = (email) => {
     const re = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
@@ -26,24 +42,28 @@ export default function Register() {
   };
 
   // Submit function for login
-  const handleLogin = (e) => {
+  const handleLogin = async (e) => {
     e.preventDefault();
-    setlogInError(false);
-    if (validateEmail(email) === false) {
-      setlogInError(true);
+
+    if (validateEmail(email) === false || password.length < 6) {
+      setLogInError(true);
       return;
     }
-    setIsLoading(true);
+    const dateOfBirthString = convertDateOfBirthToDate(dateOfBirth);
 
     const userInfo = {
       username,
       password,
+      name,
       email,
-      dateOfBirth
+      dateOfBirth: dateOfBirthString,
     }
 
-    console.log("User Info: ", userInfo);
-    // TODO: Fetch request to backend, make async function and await response
+    if (await handleRegister(userInfo, setError)) {
+      setIsLoading(true);
+      setError("");
+      login(email, password, router);
+    };
   }
 
   // Can submit form with enter key
@@ -53,29 +73,36 @@ export default function Register() {
     }
   };
 
-  // Styles if user inputs bad input
-  const headerStyle = logInError ? "text-red-600" : "";
-  const headerErrorStyle = logInError ? "italic" : "";
-  const errorMsg = logInError ? " - Invalid input" : "*";
 
+  useEffect(() => {
+    // Styles if user inputs bad input
+    headerStyle = logInError ? "text-red-600" : "";
+    headerErrorStyle = logInError ? "italic" : "";
+    errorMsg = logInError ? ` - Invalid input` : "*";
+    emailUsernameErrorMsg = logInError ? ` - ${error ? error: 'Invalid Input'}` : "*";
+    passwordErrorMsg = logInError ? " - Password must be atleast 6 characters" : "*";
+  }, [logInError]);
   return (
     <>
       <div className="w-screen h-screen md:bg-login bg-loginPopup flex justify-center md:items-center ">
         {/* Login Popup */}
-        <form onSubmit={handleLogin} className={`md:w-138 md:h-138 md:rounded-3xl md:px-16 md:py-7 py-16 w-full min-w-min	px-10 bg-loginPopup flex flex-col ${inter.className}`}>
-          <p className="md:text-center md:mb-7 md:text-2xl mb-7 text-2xl text-center font-bold ">Create an account</p>
+        <form onSubmit={handleLogin} className={`md:w-138 md:h-auto md:rounded-3xl md:px-16 md:py-7 py-16 w-full min-w-min	px-10 bg-loginPopup flex flex-col ${inter.className}`}>
+          <p className="md:text-center md:text-2xl mb-4 text-2xl text-center font-bold ">Create an account</p>
           
           {/* Input Fields */}
-          <InputComponent name="email" value={email} setValue={setEmail} logInError={logInError} handleKeyDown={handleKeyDown} headerStyle={headerStyle} headerErrorStyle={headerErrorStyle} errorMsg={errorMsg}/>
-          <InputComponent name="username" value={username} setValue={setUsername} logInError={logInError} handleKeyDown={handleKeyDown} headerStyle={headerStyle} headerErrorStyle={headerErrorStyle} errorMsg={errorMsg}/>
-          <InputComponent name="password" value={password} setValue={setPassword} logInError={logInError} handleKeyDown={handleKeyDown} headerStyle={headerStyle} headerErrorStyle={headerErrorStyle} errorMsg={errorMsg}/>
+          <InputComponent name="name" value={name} setValue={setName} logInError={logInError} handleKeyDown={handleKeyDown} headerStyle={headerStyle} headerErrorStyle={headerErrorStyle} errorMsg={errorMsg}/>
+          <InputComponent name="email" value={email} setValue={setEmail} logInError={logInError} handleKeyDown={handleKeyDown} headerStyle={headerStyle} headerErrorStyle={headerErrorStyle} errorMsg={emailUsernameErrorMsg}/>
+          <InputComponent name="username" value={username} setValue={setUsername} logInError={logInError} handleKeyDown={handleKeyDown} headerStyle={headerStyle} headerErrorStyle={headerErrorStyle} errorMsg={emailUsernameErrorMsg}/>
+          <PasswordInput name="password" value={password} setValue={setPassword} logInError={logInError} handleKeyDown={handleKeyDown} headerStyle={headerStyle} headerErrorStyle={headerErrorStyle} errorMsg={passwordErrorMsg}/>
           <DateOfBirth name="date of birth" value={dateOfBirth} setValue={setDateOfBirth} logInError={logInError} headerStyle={headerStyle} headerErrorStyle={headerErrorStyle} errorMsg={errorMsg}/>
 
           {/* Continue Button */}
           <button className="mt-5 w-full md:h-12 rounded-md h-12 bg-loginButton text-projectWhite font-bold" type="submit" disabled={isLoading}>
             {!isLoading ? "Continue" : "Loading..."} 
           </button>
-          <Link href={loginPath} className="md:text-sm text-xs mt-1 text-projectBlue hover:text-projectHoverBlue cursor-pointer">Need an account?</Link>
+          <div className="w-full">
+            <Link href={loginPath} className="md:text-sm text-xs mt-1 text-projectBlue hover:text-projectHoverBlue cursor-pointer">Have an account?</Link>
+          </div>
         </form>  
       </div>
     </>
@@ -84,7 +111,7 @@ export default function Register() {
 
 // Component for text input fields
 function InputComponent({ name, value, setValue, handleKeyDown, headerStyle, headerErrorStyle, errorMsg }) {
-  const style = name == "email" ? "" : "pt-5";
+  const style = name == "name" ? "" : "pt-5";
   return (
     <>
       <label className={`flex flex-col ${style}`}>
@@ -102,6 +129,36 @@ function InputComponent({ name, value, setValue, handleKeyDown, headerStyle, hea
 
 }
 
+function PasswordInput({ name, value, setValue, handleKeyDown, headerStyle, headerErrorStyle, errorMsg }) {
+  const [passwordVisible, setPasswordVisible] = useState(false);
+
+  const togglePasswordVisibility = () => {
+    setPasswordVisible(!passwordVisible);
+  };
+  const style = name == "name" ? "" : "pt-5";
+  return (
+    <label className={`flex flex-col ${style}`}>
+      <p className={`md:text-sm uppercase text-xs font-bold ${headerStyle}`}>{name}<span className={`md:text-xs text-red-600 ${headerErrorStyle}`}>{errorMsg}</span></p>
+      <div className="flex flex-row md:w-full md:h-12  mt-1 rounded-md h-10 text-projectWhite bg-login">
+        <input className="w-full h-full rounded-md pl-3 bg-transparent" 
+          required
+          value={value}
+          type={passwordVisible ? "text" : "password"}
+          onChange={(e) => setValue(e.target.value)}
+          onKeyDown={handleKeyDown}
+          autoComplete="new-password"
+        />
+        <button className="px-2 text-projectWhite text-sm" type="button" onClick={togglePasswordVisibility}> 
+          {passwordVisible ? "Hide" : "Show"}
+          
+        </button>
+      </div>
+    </label>
+
+  )
+
+}
+
 // Component for date of birth input field
 function DateOfBirth({ name, value, setValue, headerStyle, headerErrorStyle, errorMsg }) {
   const months = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
@@ -109,7 +166,6 @@ function DateOfBirth({ name, value, setValue, headerStyle, headerErrorStyle, err
   const years = Array.from({ length: 91 }, (_, i) => new Date().getFullYear() - i - 13);
 
   const handleDateChange = (field, value) => {
-    console.log("Field: ", field, "Value: ", value);
     setValue((prevValue) => ({
       ...prevValue,
       [field]: value
@@ -131,11 +187,9 @@ function DateOfBirth({ name, value, setValue, headerStyle, headerErrorStyle, err
 }
 
 // Component for text dropup fields
-function DropUp( props ) {
+function DropUp({ value, setValue, placeHolder, options }) {
   const [isOpen, setIsOpen] = useState(false);
   const dropUpRef = useRef(null);
-  const { value, setValue, placeHolder, options } = props;
-
 
   // Closes dropup menu when option is selected
   const handleOnClick = (option) => {
@@ -185,4 +239,53 @@ function DropUp( props ) {
       )}
     </div>
   )
+}
+
+// Convert date of birth object to string
+function convertDateOfBirthToDate(dateOfBirth) {
+  const monthMap = {
+    January: '01',
+    February: '02',
+    March: '03',
+    April: '04',
+    May: '05',
+    June: '06',
+    July: '07',
+    August: '08',
+    September: '09',
+    October: '10',
+    November: '11',
+    December: '12',
+  };
+
+  // Get the day, month, and year from the dateOfBirth object
+  const day = String(dateOfBirth.day).padStart(2, '0'); // Ensure day is two digits
+  const month = monthMap[dateOfBirth.month]; // Convert month name to number
+  const year = String(dateOfBirth.year); // Convert year to string
+
+  // Combine them into the YYYY-MM-DD format
+  return `${year}-${month}-${day}`;
+}
+
+async function handleRegister(userInfo, setError) {
+  try {
+    const response = await fetch("/api/register", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify(userInfo),
+    });
+
+    if (response.ok) {
+      return true;
+    } else {
+      const errorData = await response.json();
+      setError(errorData.error);
+      return false;
+    }
+  } catch (error) {
+    setError(error.message);
+    return false;
+  }
 }
