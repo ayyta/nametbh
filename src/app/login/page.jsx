@@ -1,8 +1,10 @@
 "use client"; 
 import Link from "next/link"
 import { Inter } from "next/font/google"
-import { useState, useRef } from "react"
+import { useState } from "react"
+import { useRouter } from "next/navigation"
 import "../../styles/accountpages.css"
+import { login } from "@/lib/auth"
 
 const inter = Inter( {
   subsets: ['latin'],
@@ -16,7 +18,7 @@ export default function Login() {
   const [isLoading, setIsLoading] = useState(false);
   const [logInError, setlogInError] = useState(false);
 
-  
+  const router = useRouter();
   const registerPath = "/register";
   const forgotPasswordPath = "/register"; // PLACEHOLDER: Change to forgot password path
 
@@ -26,22 +28,22 @@ export default function Login() {
   };
 
   // Submit function for login
-  const handleLogin = (e) => {
+  const handleLogin = async (e) => {
     e.preventDefault();
     setlogInError(false);
     if (validateEmail(username) === false) {
       setlogInError(true);
       return;
     }
-    setIsLoading(true);
 
-    const userInfo = {
-      username,
-      password
+    // Call login function from auth.js
+    const response = await login(username, password, router);
+    if (!response.ok) {
+      setlogInError(true);
+      setIsLoading(false);
+      return;
     }
-
-    console.log("User Info: ", userInfo);
-    // Fetch request to backend, make async function and await response
+    setIsLoading(true);
   }
 
   const handleKeyDown = (e) => {
@@ -65,7 +67,7 @@ export default function Login() {
           {/* Email/Number Input */}
           <label className="flex flex-col">
             <p className={`md:text-sm uppercase text-xs font-bold ${headerStyle}`}>Email or phone number <span className={`md:text-xs text-red-600 ${headerErrorStyle}`}>{errorMsg}</span></p>
-            <input className="md:w-full md:h-12 md:rounded-md mt-1 h-10 text-projectWhite bg-login pl-3" 
+            <input className="md:w-full md:h-12 md:rounded-md mt-1 h-10 text-projectWhite bg-login pl-3 account-input" 
               required
               value={username}
               onChange={(e) => setUsername(e.target.value)}
@@ -74,16 +76,8 @@ export default function Login() {
           </label>
 
           {/* Password Input */}
-          <label className="flex flex-col pt-5">
-            <p className={`md:text-sm uppercase text-xs font-bold ${headerStyle}`}>Password <span className={`md:text-xs text-red-600 ${headerErrorStyle}`}>{errorMsg}</span></p>
-            <input className="md:w-full md:h-12 md:rounded-md h-10 text-projectWhite bg-login pl-3" 
-              required
-              type="password" 
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              onKeyDown={handleKeyDown}
-              />
-          </label> 
+          <PasswordInput headerErrorStyle={headerErrorStyle} headerStyle={headerStyle} errorMsg={errorMsg} value={password} setValue={setPassword} handleKeyDown={handleKeyDown} />
+
 
           {/* Forgot Password */}
           <div>
@@ -99,4 +93,33 @@ export default function Login() {
       </div>
     </>
   )
+}
+
+function PasswordInput ({headerErrorStyle, headerStyle, errorMsg, value, setValue, handleKeyDown}) {
+  const [passwordVisible, setPasswordVisible] = useState(false);
+
+  const togglePasswordVisibility = () => {
+    setPasswordVisible(!passwordVisible);
+  };
+
+return (
+  <label className={`flex flex-col pt-5`}>
+    <p className={`md:text-sm uppercase text-xs font-bold ${headerStyle}`}>Password<span className={`md:text-xs text-red-600 ${headerErrorStyle}`}>{errorMsg}</span></p>
+    <div className="flex flex-row md:w-full md:h-12  mt-1 rounded-md h-10 text-projectWhite bg-login">
+      <input className="w-full h-full rounded-md pl-3 bg-transparent" 
+        required
+        value={value}
+        type={passwordVisible ? "text" : "password"}
+        onChange={(e) => setValue(e.target.value)}
+        onKeyDown={handleKeyDown}
+        autoComplete="new-password"
+      />
+      <button className="px-2 text-projectWhite text-sm" type="button" onClick={togglePasswordVisibility}> 
+        {passwordVisible ? "Hide" : "Show"}
+        
+      </button>
+    </div>
+  </label>
+
+)
 }
