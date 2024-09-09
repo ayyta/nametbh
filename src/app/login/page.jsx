@@ -3,7 +3,7 @@ import Link from "next/link"
 import { Inter } from "next/font/google"
 import { useState } from "react"
 import { useRouter } from "next/navigation"
-import "../../styles/accountpages.css"
+import "@/styles/accountpages.css"
 import { login } from "@/lib/auth"
 
 const inter = Inter( {
@@ -22,19 +22,10 @@ export default function Login() {
   const registerPath = "/register";
   const forgotPasswordPath = "/register"; // PLACEHOLDER: Change to forgot password path
 
-  const validateEmail = (email) => {
-    const re = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    return re.test(String(email).toLowerCase());
-  };
-
   // Submit function for login
   const handleLogin = async (e) => {
     e.preventDefault();
     setlogInError(false);
-    if (validateEmail(username) === false) {
-      setlogInError(true);
-      return;
-    }
 
     // Call login function from auth.js
     const response = await login(username, password, router);
@@ -53,9 +44,9 @@ export default function Login() {
   };
 
   // Styles if user inputs wrong email or password
-  const headerStyle = logInError ? "text-red-600" : "";
-  const headerErrorStyle = logInError ? "italic" : "";
-  const errorMsg = logInError ? " - Invalid email or password" : "*";
+  let headerStyle = logInError ? "text-red-600" : "";
+  let headerErrorStyle = logInError ? "italic" : "";
+  let errorMsg = logInError ? " - Invalid email or password" : "*";
 
   return (
     <>
