@@ -6,7 +6,7 @@ export default function Media({ media, setMedia }) {
   return media.map((mediaImage) => {
     return (
       <>
-        <div className="m-2">
+        <div className="relative m-2 object-contain">
           <Image
             src={mediaImage}
             width={0}
@@ -18,16 +18,16 @@ export default function Media({ media, setMedia }) {
               height: "min-content"
             }}
             alt="Media of choice"
-            className="rounded-lg object-contain"
+            className="rounded-lg"
           />
           <button
-            className="absolute top-0.5 right-0.5 z-50"
+            className="absolute top-1.5 right-1.5 z-50 bg-slate-200 rounded-full hover:opacity-80 hover:bg-secondary active:opacity-50 cursor-pointer"
             onClick={() => 
               setMedia(media.filter((e) => e !== mediaImage))
             }
           >
             <Image
-              src="/Close Icon.svg"
+              src="/Close Small Icon.svg"
               width={32}
               height={0}
               alt="Close logo" 

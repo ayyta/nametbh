@@ -84,8 +84,7 @@
   @apply
     flex
     relative
-    w-152
-    h-48
+    w-full
     mt-4
     ;
 }
