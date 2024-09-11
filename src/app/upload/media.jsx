@@ -6,14 +6,18 @@ export default function Media({ media, setMedia, text }) {
   return media.map((mediaImage) => {
     return (
       <>
-        <div className="relative m-2">
+        <div 
+          className="relative m-2" 
+          style={{
+            "width" : `${media.length === 1 ? "100%" : "fit-content"}`,
+          }}
+        >
           <Image
             src={mediaImage}
             width={0}
             height={0}
             sizes="100vw"
             style={{
-              "display" : "flex",
               "width" : "100%",
             }}
             alt="Media of choice"

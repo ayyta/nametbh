@@ -15,6 +15,7 @@
     /* w-138 */
     /* w-161 */
     /* h-72 */
+    /* max-h-161 */
     flex
     text-secondary;
 }
@@ -60,8 +61,9 @@
     flex
     /* w-152 */
     /* w-129 */
-    items-center
-    justify-center
+    /* w-full
+    max-h-161 */
+    /* overflow-x-scroll */
     ml-1.5;
 }
 

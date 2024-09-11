@@ -27,6 +27,9 @@ module.exports = {
       minWidth: {
         56: '14rem',
       },
+      maxHeight: {
+        161: '40.25rem',
+      },
       backgroundColor: {
         login: "#292F33",
         loginPopup: "#CCD6DD",
