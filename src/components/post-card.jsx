@@ -1,6 +1,6 @@
 "use client"
 
-import React, { useState, fowardRef } from "react"
+import React, { useState, forwardRef } from "react"
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardFooter, CardHeader } from "@/components/ui/card"
@@ -60,14 +60,16 @@ export default function Component({
         </CardContent>
 
         <CardFooter className="flex justify-between">
-          <Button className="rounded-3xl hover:bg-gray-600/10 hover:text-white" variant="ghost" size="sm">
-            <Heart fill="red" strokeWidth={0} className="w-6 h-6 mr-2"/>
-            <p>{"1"}</p>
-          </Button>
-          <Button variant="ghost" size="default">
-            <ThumbsDown className="w-4 h-4 mr-2" />
-            Dislike
-          </Button>
+
+          <PostCardInteractionButton 
+            initialCount={0}
+            activeColor="#f91980"
+            inactiveColor=""
+            color="pink-600"
+            callBack={handleLike} 
+            Icon={Heart} 
+          />
+
           <Button variant="ghost" size="default">
             <MessageCircle className="w-4 h-4 mr-2" />
             Comment
@@ -83,10 +85,11 @@ export default function Component({
 
 }
 
-const PostCardInteractionButton = fowardRef(function PostCardButton({
+const PostCardInteractionButton = forwardRef(function PostCardButton({
   initialCount = 0,
   activeColor = "red",
   inactiveColor = "gray",
+  color = "white",
   callBack = () => {},
   Icon
 }, ref) {
@@ -103,17 +106,43 @@ const PostCardInteractionButton = fowardRef(function PostCardButton({
   return (
     <Button 
       ref={ref} 
-      className="rounded-3xl hover:bg-gray-600/10 hover:text-white" 
+      className={`rounded-3xl ${isActive ? `hover:bg-${color}/10`: "hover:bg-gray-600/10"} hover:text-white w-16 active:scale-90 transition-transform duration-150 ease-in-out`}
       variant="ghost" 
       size="sm"
       onClick={handleClick}
     >
       <Icon 
         fill={`${isActive ? activeColor: inactiveColor}`} 
-        strokeWidth={0} 
-        className="w-6 h-6 mr-2"
+        strokeWidth={`${isActive ? 0: 2}`} 
+        className="w-6 h-6 mr-2 "
       />
-      <span>{count}</span>
+      <span className={`text-sm  ${isActive ? `text-${color}` : "text-white"}`}>{count}</span>
     </Button>
   )
+})
+
+const PostCardActionButton = forwardRef(function PostCardActionButton({
+  label,
+  Icon,
+  color,
+  callBack=() => {},
+}, ref) {
+  return (
+    <Button
+      ref={ref}
+      className={`rounded-3xl hover:bg-gray-600/10 hover:text-white w-16 active:scale-90 transition-transform duration-150 ease-in-out`}
+      variant="ghost" 
+      size="sm"
+      onClick={callBack}
+    >
+      <Icon 
+        fill={`${isActive ? activeColor: inactiveColor}`} 
+        strokeWidth={`${isActive ? 0: 2}`} 
+        className="w-6 h-6 mr-2 "
+      />
+      <span className={`text-sm  ${isActive ? `text-${color}` : "text-white"}`}>{count}</span>
+
+    </Button>
+  )
+
 })
