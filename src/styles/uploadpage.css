@@ -1,5 +1,5 @@
 /* Upload Page */
-.upload {
+.upload-container {
   @apply
     fixed
     top-1/2
@@ -12,14 +12,14 @@
     rounded-2xl
     z-20
     bg-third
-    w-161
-    /* h-72
-    min-h-72 */
+    /* w-138 */
+    /* w-161 */
+    /* h-72 */
     flex
     text-secondary;
 }
 
-.upload-container {
+.upload {
   @apply
     m-2
     ;
@@ -29,9 +29,7 @@
 .upload-header {
   @apply
     flex
-    px-2
-    pt-2
-    pb-2
+    p-2
     justify-between
     items-center
     ;
@@ -60,9 +58,11 @@
 .upload-body-container {
   @apply
     flex
-    w-152
+    /* w-152 */
+    /* w-129 */
     items-center
-    justify-center;
+    justify-center
+    ml-1.5;
 }
 
 .upload-body {
@@ -84,8 +84,8 @@
   @apply
     flex
     relative
-    w-full
-    mt-4
+    mt-2
+    mb-10
     ;
 }
 

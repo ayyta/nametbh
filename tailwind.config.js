@@ -13,6 +13,7 @@ module.exports = {
         third: "#2F363B"
       },
       width: {
+        129: "32.25rem",
         138: "34.5rem",
         152: "38rem",
         161: "40.25rem",
@@ -33,6 +34,7 @@ module.exports = {
         projectLightGrey: "#373f45",
       },
       width: {
+        129: "32.25rem",
         138: "34.5rem",
         152: "38rem",
         161: "40.25rem",

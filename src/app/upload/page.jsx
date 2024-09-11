@@ -33,14 +33,22 @@ export default function Upload({ open, onClose }) {
       <div className="upload-popup-container">
         <div className="upload-overlay" onClick={handler}></div>
         <form 
-          className="upload" 
+          className="upload-container" 
           onSubmit={handleSubmit}
-          // The height of the form is set to 522px if there is media else it is set to 288px
-          style={{height: `${media.length > 0 ? "522px" : "288px"}`}}
+          // The height of the form is set to max-content if there is media else it is set to 288px
+          style={{
+            "height" : `${media.length > 0 ? "max-content" : "288px"}`,
+            "width" : `${media.length > 0 ? "644px" : "552px"}`,
+          }}
         >
-          <div className="upload-container">
+          <div className="upload">
             <Header close={onClose} />
-            <div className="upload-body-container">
+            <div 
+              className="upload-body-container"
+              style={{
+                "width" : `${media.length > 0 ? "608px" : "516px"}`,
+              }}
+            >
               <TextareaAutosize
                 className="upload-body"
                 minRows={1}
@@ -54,6 +62,7 @@ export default function Upload({ open, onClose }) {
               <Media 
                 media={media} 
                 setMedia={setMedia} 
+                text={text}
               />
             </div>
             <div className="upload-utilities-left-section">

@@ -1,12 +1,12 @@
 'use client';
 import Image from "next/image";
 
-export default function Media({ media, setMedia }) {
+export default function Media({ media, setMedia, text }) {
 
   return media.map((mediaImage) => {
     return (
       <>
-        <div className="relative m-2 object-contain">
+        <div className="relative m-2">
           <Image
             src={mediaImage}
             width={0}
@@ -14,13 +14,10 @@ export default function Media({ media, setMedia }) {
             sizes="100vw"
             style={{
               "display" : "flex",
-              "width" : "min-content",
-              "height" : "min-content",
-              "max-width" : "400px",
-              "max-height" : "400px"
+              "width" : "100%",
             }}
             alt="Media of choice"
-            className="rounded-lg object-contain"
+            className="rounded-lg"
           />
           <button
             className="absolute top-1.5 right-1.5 z-50 bg-slate-200 rounded-full hover:opacity-80 hover:bg-secondary active:opacity-50 cursor-pointer"
