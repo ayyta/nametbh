@@ -18,14 +18,7 @@ const roboto = Roboto({
 })
 
 export default function Profile() {
-  // {
-  //   name: "",
-  //   username: "",
-  //   bio: "",
-  //   pfp: "",
-  //   profile_background: "",
-  //   num_of_followers: 0,
-  // }
+
   const [user, setUser] = useState({
     name: "John Doe",
     username: "johndoe",
@@ -88,7 +81,7 @@ export default function Profile() {
 
   return (
     <>
-      <div className="w-full h-full flex flex-col ">
+      <div className="w-full h-full flex flex-col overflow-y-scroll">
         <div className={`w-full h-64	p-10 flex ${user.profile_background === "" ? "bg-gray-700" : ""}`} style={backgroundStyle}>
           <Avatar className="md:w-28 md:h-28">
             <AvatarImage src={user.pfp} />
