@@ -11,8 +11,8 @@ export default function Component({
   name = "John Doe",
   username = "@johndoe",
   creationDate = "2h ago",
-  content = "This is a sample post content. It can be much longer and will wrap to multiple lines if needed.",
-  media = ["/placeholder.svg?height=100&width=100", "/placeholder.svg?height=100&width=100"]
+  content = "This is a sample post content. It can be much longer and will wrap to multiple lines if needed. ",
+  media = ["/placeholder-avatar.jpg", "/placeholder.svg?height=100&width=100", "/placeholder.svg?height=100&width=100", "/placeholder.svg?height=100&width=100"]
 }) {
 
   const handleLike = (isActive, count) => {
@@ -57,28 +57,30 @@ export default function Component({
               ))}
             </div>
           )}
-        </CardContent>
+      </CardContent>
 
-        <CardFooter className="flex justify-between">
-
-          <PostCardInteractionButton 
-            initialCount={0}
-            activeColor="#f91980"
-            inactiveColor=""
-            color="pink-600"
-            callBack={handleLike} 
-            Icon={Heart} 
-          />
-
-          <Button variant="ghost" size="default">
-            <MessageCircle className="w-4 h-4 mr-2" />
-            Comment
-          </Button>
-          <Button variant="ghost" size="default">
-            <Share2 className="w-4 h-4 mr-2" />
-            Share
-          </Button>
-        </CardFooter>
+      <CardFooter className="flex justify-between">
+        <PostCardInteractionButton 
+          initialCount={0}
+          activeColor="#f91980"
+          inactiveColor=""
+          color="pink"
+          callBack={handleLike} 
+          Icon={Heart} 
+        />
+        <PostCardActionButton
+          initialCount={2}
+          color="blue"
+          callBack={handleComment}
+          Icon={MessageCircle}
+        />
+        <PostCardActionButton
+          initialCount={5}
+          color="green"
+          callBack={handleShare}
+          Icon={Share2}
+        />
+      </CardFooter>
     </Card>
 
   )
@@ -96,17 +98,26 @@ const PostCardInteractionButton = forwardRef(function PostCardButton({
   const [isActive, setIsActive] = useState(false);
   const [count, setCount] = useState(initialCount);
 
+  // Set the active state and count
   const handleClick = () => {
     setIsActive(!isActive);
     setCount(prevCount => isActive ? prevCount-1 : prevCount+1)
     if (callBack) {
-      callBack(!isActive, setCount)
+      callBack(!isActive, count)
     }
+  }
+  const colorVariants = {
+    "pink": {
+      buttonBackgroundHover: `hover:bg-pink-600/10`,
+      iconGroupHover: `group-hover:stroke-pink-500`,
+      countColor: `text-pink-600`,
+      countGroupHover: `group-hover:text-pink-600`,
+    },
   }
   return (
     <Button 
       ref={ref} 
-      className={`rounded-3xl ${isActive ? `hover:bg-${color}/10`: "hover:bg-gray-600/10"} hover:text-white w-16 active:scale-90 transition-transform duration-150 ease-in-out`}
+      className={`rounded-3xl ${colorVariants[color].buttonBackgroundHover} group hover:text-white w-16 active:scale-90 transition-all duration-150 ease-in-out`}
       variant="ghost" 
       size="sm"
       onClick={handleClick}
@@ -114,34 +125,115 @@ const PostCardInteractionButton = forwardRef(function PostCardButton({
       <Icon 
         fill={`${isActive ? activeColor: inactiveColor}`} 
         strokeWidth={`${isActive ? 0: 2}`} 
-        className="w-6 h-6 mr-2 "
+        className={`w-6 h-6 mr-2 group-hover:stroke-pink-500`}
+        color="currentColor"
+
       />
-      <span className={`text-sm  ${isActive ? `text-${color}` : "text-white"}`}>{count}</span>
+      <span 
+        className={`
+          text-sm 
+          ${isActive ? colorVariants[color].countColor : `text-white`} 
+          ${colorVariants[color].countGroupHover} 
+          transition-colors 
+          duration-150`}
+      >      
+        {count}
+      </span>
     </Button>
   )
 })
 
 const PostCardActionButton = forwardRef(function PostCardActionButton({
-  label,
-  Icon,
   color,
+  initialCount=0,
+  Icon,
   callBack=() => {},
 }, ref) {
+  const [count, setCount] = useState(initialCount);
+
+  // const updateCount = async () => {
+  //   try { 
+  //     const newCount = await fetch("update count");
+  //     setCount(newCount);
+  //   } catch (error) {
+  //     console.error("Error failed in fetching data", error);
+  //   }
+  // }
+
+  // // Update the count every 3 seconds
+  // useEffect(() => {
+  //   setInterval(updateCount(), 3000);
+  //   return () => clearInterval(intervalId); // Clean up on unmount
+  // }, [])
+
+  const colorVariants = {
+    "blue": {
+      buttonBackgroundHover: `hover:bg-blue-500/10`,
+      iconGroupHover: `group-hover:stroke-blue-400`,
+      countColor: `text-blue-500`,
+      countGroupHover: `group-hover:text-blue-500`,
+    },
+    "green": {
+      buttonBackgroundHover: `hover:bg-green-600/10`,
+      iconGroupHover: `group-hover:stroke-green-500`,
+      countColor: `text-green-600`,
+      countGroupHover: `group-hover:text-green-600`,
+    },
+  }
+
+  const handleClick = () => {
+    if (callBack) {
+      callBack()
+    }
+  }
+
+  // const updateCount = async () => {
+  //   try { 
+  //     const newCount = await fetch("update count");
+  //     setCount(newCount);
+  //   } catch (error) {
+  //     console.error("Error failed in fetching data", error);
+  //   }
+  // }
+
+  // // Update the count every 3 seconds
+  // useEffect(() => {
+  //   setInterval(updateCount(), 3000);
+  //   return () => clearInterval(intervalId); // Clean up on unmount
+  // }, [])
+
   return (
     <Button
       ref={ref}
-      className={`rounded-3xl hover:bg-gray-600/10 hover:text-white w-16 active:scale-90 transition-transform duration-150 ease-in-out`}
+      className={`
+        rounded-3xl 
+        ${colorVariants[color].buttonBackgroundHover} 
+        hover:text-white 
+        group 
+        w-fit 
+        active:scale-90 
+        transition-all 
+        duration-150 
+        ease-in-out
+      `}
       variant="ghost" 
       size="sm"
-      onClick={callBack}
+      onClick={handleClick}
     >
       <Icon 
-        fill={`${isActive ? activeColor: inactiveColor}`} 
-        strokeWidth={`${isActive ? 0: 2}`} 
-        className="w-6 h-6 mr-2 "
+        className={`
+          w-6 
+          h-6 
+          mr-2  
+          ${colorVariants[color].iconGroupHover}
+        `}
+        color="currentColor"
       />
-      <span className={`text-sm  ${isActive ? `text-${color}` : "text-white"}`}>{count}</span>
-
+      <span className={`
+        text-sm 
+        text-white 
+        ${colorVariants[color].countGroupHover} 
+      `}>{count}</span>
     </Button>
   )
 
