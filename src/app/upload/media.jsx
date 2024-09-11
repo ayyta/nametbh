@@ -13,12 +13,14 @@ export default function Media({ media, setMedia }) {
             height={0}
             sizes="100vw"
             style={{
-              display: "flex",
-              width: "min-content",
-              height: "min-content"
+              "display" : "flex",
+              "width" : "min-content",
+              "height" : "min-content",
+              "max-width" : "400px",
+              "max-height" : "400px"
             }}
             alt="Media of choice"
-            className="rounded-lg"
+            className="rounded-lg object-contain"
           />
           <button
             className="absolute top-1.5 right-1.5 z-50 bg-slate-200 rounded-full hover:opacity-80 hover:bg-secondary active:opacity-50 cursor-pointer"
