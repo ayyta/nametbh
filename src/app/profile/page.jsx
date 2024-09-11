@@ -8,7 +8,7 @@ import { signOut } from "@/lib/auth";
 import { Button } from "@/components/ui/button"
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import { SkeletonProfile } from "@/components/SkeletonComponents";
-
+import PostCard from "@/components/post-card"
   
 const roboto = Roboto({
   weight: ['100', '300', '400', '700'],
@@ -35,17 +35,33 @@ export default function Profile() {
     num_of_followers: 0,
   });
 
+  
+  /*
+  {
+    user_id: null,
+    post_id: null,
+    title: "",
+    text_content: "",
+    like_count: "",
+    dislike_count: "",
+    comments: "",
+    created_at: "",
+  } 
+  */
+
   // Generate 20 posts at a time
   const [posts, setPosts] = useState([{
     user_id: null,
     post_id: null,
     title: "",
     text_content: "",
-    date: "",
-    likes: "",
+    like_count: "",
+    dislike_count: "",
     comments: "",
+    created_at: "",
   }]);
-  const [loading, setLoading] = useState(true);
+
+  const [loading, setLoading] = useState(false);
 
   const router = useRouter();
 
@@ -91,10 +107,23 @@ export default function Profile() {
             Logout
           </Button>
         </div>
-        <p> hello</p>
         {loading ? <SkeletonProfile/> : null}
+
+        <div className="w-full h-full flex justify-center">
+          <PostCard/>
+
+        </div>
       </div>
+
     </>
   )
 }
 
+/*
+  user_id: null,
+  post_id: null,
+  text_content: "",
+  likes: "",
+  comment_count: "",
+  created_at: "",
+*/
