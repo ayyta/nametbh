@@ -9,6 +9,7 @@ export default function AuthCheckWrapper({ children }) {
   const router = useRouter();
   const pathname = usePathname();
   const [loading, setLoading] = useState(true);
+  const [user, setUser] = useState(null);
 
   useEffect(() => {
     const checkAuth = async () => {
@@ -25,6 +26,7 @@ export default function AuthCheckWrapper({ children }) {
         setLoading(true);
 
       } else {
+        setUser(session?.user || null);
         setLoading(false);
       }
     }
