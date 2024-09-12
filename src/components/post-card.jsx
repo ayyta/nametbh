@@ -5,6 +5,7 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardFooter, CardHeader } from "@/components/ui/card"
 import { Heart, ThumbsDown, MessageCircle, Share2 } from "lucide-react"
+import Image from "next/image"
 
 export default function Component({
   avatar = "/placeholder-avatar.jpg",
@@ -12,7 +13,8 @@ export default function Component({
   username = "@johndoe",
   creationDate = "2h ago",
   content = "This is a sample post content. It can be much longer and will wrap to multiple lines if needed. ",
-  media = ["/placeholder-avatar.jpg", "/placeholder.svg?height=100&width=100", "/placeholder.svg?height=100&width=100", "/placeholder.svg?height=100&width=100"]
+  media = ["/massageServices.jpg", "/haircut2.jpg", "/massageServices.jpg", "/haircut2.jpg"], 
+  // "/haircut2.jpg", "/massageServices.jpg", "/Plus square.svg", "/Upload Icon.svg", "/Home Icon.svg", "/Generic avatar.svg"
 }) {
 
   const handleLike = (isActive, count) => {
@@ -31,6 +33,7 @@ export default function Component({
     console.log("Pressed comment button");
   }
 
+  // optimize image loading by allowing optimization from s3 bucket in next.config.js remotePatterns
   return (
     <Card className="w-192 h-fit bg-transparent border-none text-white">
       <CardHeader className="flex flex-row items-center gap-4">
@@ -44,19 +47,23 @@ export default function Component({
         </div>
       </CardHeader>
       <CardContent className="space-y-4">
-          <p>{content}</p>
-          {media.length > 0 && (
-            <div className={`grid gap-2 ${media.length > 1 ? 'grid-cols-2' : 'grid-cols-1'}`}>
-              {media.slice(0, 4).map((src, index) => (
-                <img
-                  key={index}
+        <p>{content}</p>
+        {media.length > 0 && (
+          <div className={`grid gap-0.5 ${media.length > 1 ? 'grid-cols-2' : 'grid-cols-1'} rounded-2xl border overflow-hidden`}>
+            {media.slice(0, 4).map((src, index) => (
+              <div className={`relative w-full flex justify-center`} key={index}>
+                <Image
                   src={src}
                   alt={`Media ${index + 1}`}
-                  className="rounded-lg object-cover w-full h-48"
+                  layout="intrinsic" // Let the image control the container's size
+                  width={media.length > 1 ? 400 : 700} // Example width based on media length
+                  height={media.length > 1 ? 300 : 500} // Example height based on media length
+                  className={`${media.length > 1 ? "object-cover max-h-52" : "object-contain"} max-h-161`}
                 />
-              ))}
-            </div>
-          )}
+              </div>
+            ))}
+          </div>
+        )}
       </CardContent>
 
       <CardFooter className="flex justify-between">
