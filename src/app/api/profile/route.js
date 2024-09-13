@@ -1,6 +1,16 @@
+// app/api/profile/route.js
+
 import supabaseService from '../../../lib/supabaseServiceClient';
 
-export async function getUserProfile(userId) {
+export async function GET(req) {
+  // Extract userId from the query parameters
+  const { searchParams } = new URL(req.url);
+  const userId = searchParams.get('userId');
+
+  if (!userId) {
+    return new Response(JSON.stringify({ error: 'User ID is required' }), { status: 400 });
+  }
+
   try {
     const { data, error } = await supabaseService
       .from('user')
@@ -11,9 +21,9 @@ export async function getUserProfile(userId) {
       throw new Error(`Error fetching user data: ${error.message}`);
     }
 
-    return data;
+    return new Response(JSON.stringify(data), { status: 200 });
   } catch (error) {
     console.error(error.message);
-    throw error;
+    return new Response(JSON.stringify({ error: error.message }), { status: 500 });
   }
 }

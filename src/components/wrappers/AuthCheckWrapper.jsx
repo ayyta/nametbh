@@ -1,8 +1,10 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import React, { createContext, useContext, useState, useEffect } from "react";
 import { useRouter, usePathname } from "next/navigation";
 import supabaseAnon from "@/lib/supabaseAnonClient";
+
+const AuthContext = createContext();
 
 // Wrapper that redirects to login if user is not authenticated
 export default function AuthCheckWrapper({ children }) {
@@ -14,6 +16,7 @@ export default function AuthCheckWrapper({ children }) {
   useEffect(() => {
     const checkAuth = async () => {
       const { data: { session } } = await supabaseAnon.auth.getSession();
+      console.log(session?.user?.id)
 
       // Skip redirect if user is on login or register page
       if (!session && (pathname !== "/login" && pathname !== "/register")) {
@@ -34,19 +37,17 @@ export default function AuthCheckWrapper({ children }) {
     checkAuth();
   }, [router, pathname]);
 
-  if (loading) {
-    return (
-      <div className="flex w-full h-full items-center justify-center">
-        {/* Add your loading spinner or any loading UI here */}
-        <p className="text-xl text-white">Loading...</p>
-      </div>
-    );
-  }
-
   return (
-    <div className="flex w-full h-full">
-      {children}
-    </div>
-  )
+    <AuthContext.Provider value={{ user, loading }}>
+      {loading ? (
+        <div className="flex w-full h-full items-center justify-center">
+          <p className="text-xl text-white">Loading...</p>
+        </div>
+      ) : (
+        children
+      )}
+    </AuthContext.Provider>
+  );
 }
 
+export const useAuth = () => useContext(AuthContext);
