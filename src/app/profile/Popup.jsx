@@ -1,4 +1,5 @@
 "use client";
+import { useEffect, useState } from "react";
 import { useForm, Controller, FormProvider } from "react-hook-form";
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
 import { Avatar } from "@radix-ui/react-avatar";
@@ -8,6 +9,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input"; // Assuming you have an Input component
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
+import { useAuth } from "@/components/wrappers/AuthCheckWrapper";
 import Image from "next/image";
 
 // Schema validation using Zod
@@ -22,6 +24,9 @@ const formSchema = z.object({
 });
 
 export default function Popup({ setIsPopupOpen }) {
+    const { user } = useAuth(); // Get the user object from the current session
+    const [userProfile, setUserProfile] = useState(null); // Updated useState syntax
+
     // Initialize the form with useForm hook
     const { control, handleSubmit, getValues } = useForm({
         resolver: zodResolver(formSchema),
@@ -31,6 +36,26 @@ export default function Popup({ setIsPopupOpen }) {
             password: "",
         },
     });
+
+    async function fetchUserProfile(userId) {
+        try {
+            const response = await fetch(`/api/profile?userId=${userId}`, {
+                method: "GET",
+            }); // Ensure the method is GET
+            if (!response.ok) throw new Error("Failed to fetch user profile");
+            const data = await response.json();
+            setUserProfile(data[0]); // Update state with fetched profile data
+            console.log(data[0]);
+        } catch (error) {
+            console.error(error.message);
+        }
+    }
+
+    useEffect(() => {
+        if (user?.id) {
+            fetchUserProfile(user.id);
+        }
+    }, [user]);
 
     function onSubmit(fieldType) {
         switch (fieldType) {
@@ -52,15 +77,33 @@ export default function Popup({ setIsPopupOpen }) {
         <div className="flex flex-col items-center justify-center">
             <Label className="text-4xl">My Account</Label>
             <Card className="w-[75vw] h-[90vh] border-none flex flex-col rounded-t-3xl bg-[#313131]">
-                <CardHeader className="bg-blue-500 rounded-t-3xl h-48 flex items-end">
+                <CardHeader
+                    className="rounded-t-3xl h-48 flex items-end"
+                    style={{
+                        backgroundImage:
+                            userProfile && userProfile.profile_background
+                                ? `url(${userProfile.profile_background})`
+                                : "none",
+                        backgroundColor: !userProfile?.profile_background
+                            ? "skyblue"
+                            : "transparent",
+                        backgroundSize: "cover",
+                        backgroundPosition: "center",
+                    }}
+                >
                     <Cross2Icon
                         className="w-9 h-9 cursor-pointer"
                         onClick={() => setIsPopupOpen(false)}
                     />
                 </CardHeader>
+
                 <div className="flex gap-2 mt-[-50px] p-6">
                     <Image
-                        src="/Generic avatar.svg"
+                        src={
+                            userProfile && userProfile.pfp
+                                ? userProfile.pfp
+                                : "/Generic avatar.svg"
+                        }
                         width={120}
                         height={120}
                         alt="Avatar logo"
@@ -68,7 +111,9 @@ export default function Popup({ setIsPopupOpen }) {
                     <div className="flex flex-col justify-between">
                         <div></div>
                         <p className="text-white text-2xl italic">
-                            @hugeburger
+                            {userProfile && userProfile.name
+                                ? `@${userProfile.name}`
+                                : "Loading..."}
                         </p>
                     </div>
                 </div>
