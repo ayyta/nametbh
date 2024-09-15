@@ -25,6 +25,9 @@ export default function MediaButton({ media, setMedia }) {
       return prevImages.concat(imagesArray);
     });
 
+    // Reset the input value
+    fileUploadRef.current.value = null;
+
     selectedFilesArray.map((file) => {
       return URL.revokeObjectURL(file);
     }); 

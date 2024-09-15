@@ -35,9 +35,9 @@ export default function Upload({ open, onClose }) {
         <form 
           className="upload-container" 
           onSubmit={handleSubmit}
-          // The height of the form is set to max-content if there is media else it is set to 288px
+          // The height of the form is set to min-content if there is media else it is set to 288px
           style={{
-            "height" : `${media.length > 0 ? "max-content" : "288px"}`,
+            "height" : `${media.length > 0 ? "min-content" : "288px"}`,
             "width" : `${media.length > 0 ? "644px" : "552px"}`,
           }}
         >
@@ -60,9 +60,8 @@ export default function Upload({ open, onClose }) {
             </div>
             <div className="upload-image-container">
               <Media 
-                media={media} 
+                images={media} 
                 setMedia={setMedia} 
-                text={text}
               />
             </div>
             <div className="upload-utilities-left-section">
