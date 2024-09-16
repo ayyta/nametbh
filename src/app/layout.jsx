@@ -19,7 +19,9 @@ export default function RootLayout({ children }) {
       <body className={`${inter.className} w-screen h-screen bg-primary`}>
         <AuthCheckWrapper>
           {<NavbarWrapper/>}
-          {children}
+          <div className="flex-1">
+            {children}
+          </div>
         </AuthCheckWrapper>
       </body>
     </html>
