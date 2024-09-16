@@ -19,12 +19,11 @@ export default function Upload({ open, onClose }) {
   const [text, setText] = useState("");
   const [media, setMedia] = useState([]);
 
-  /** Function handleSubmit logs the input text, however the issue is that whenever we click any button like the GIF button for example it still logs hte input text */
-  const handleSubmit = (e) => {
-    e.preventDefault();
+  const handlePostButton = (e) => {
+    // console.log(e.target);
+    // e.preventDefault();
     
-    const post = { text }
-
+    const post = { text, media }
     console.log(post);
   }
 
@@ -34,7 +33,7 @@ export default function Upload({ open, onClose }) {
         <div className="upload-overlay" onClick={handler}></div>
         <form 
           className="upload-container" 
-          onSubmit={handleSubmit}
+          onSubmit={(e) => e.preventDefault()}
           // The height of the form is set to min-content if there is media else it is set to 288px
           style={{
             "height" : `${media.length > 0 ? "min-content" : "288px"}`,
@@ -89,6 +88,7 @@ export default function Upload({ open, onClose }) {
             <div className="upload-utilities-right-section">
               <button 
                 className="upload-button"
+                onClick={handlePostButton}
               >
                 Post
               </button>
