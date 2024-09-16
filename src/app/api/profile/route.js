@@ -14,7 +14,7 @@ export async function GET(req) {
   try {
     const { data, error } = await supabaseService
       .from('user')
-      .select('profile_background, pfp, name')
+      .select('profile_background, pfp, name, email')
       .eq('user_id', userId);
 
     if (error) {

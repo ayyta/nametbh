@@ -41,7 +41,7 @@ export default function Popup({ setIsPopupOpen }) {
         try {
             const response = await fetch(`/api/profile?userId=${userId}`, {
                 method: "GET",
-            }); // Ensure the method is GET
+            });
             if (!response.ok) throw new Error("Failed to fetch user profile");
             const data = await response.json();
             setUserProfile(data[0]); // Update state with fetched profile data
@@ -134,7 +134,7 @@ export default function Popup({ setIsPopupOpen }) {
                                         render={({ field }) => (
                                             <Input
                                                 {...field}
-                                                placeholder="Username"
+                                                placeholder={userProfile?.name}
                                                 className="flex-grow text-white text-3xl h-16"
                                             />
                                         )}
@@ -160,7 +160,7 @@ export default function Popup({ setIsPopupOpen }) {
                                         render={({ field }) => (
                                             <Input
                                                 {...field}
-                                                placeholder="Email"
+                                                placeholder={userProfile?.email}
                                                 className="flex-grow text-white text-3xl h-16"
                                             />
                                         )}
