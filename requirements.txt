@@ -1,2 +1,5 @@
 npm install
 npm install @supabase/supabase-js
+npm i @aws-sdk/client-s3
+
+
