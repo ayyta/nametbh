@@ -1,10 +1,11 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useRef } from "react";
 import { useRouter } from "next/navigation";
 import { Roboto } from 'next/font/google'
 
 import { signOut } from "@/lib/auth";
+import { uploadFile } from "@/lib/s3Functions";
 import { Button } from "@/components/ui/button"
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import { SkeletonProfile } from "@/components/SkeletonComponents";
@@ -101,17 +102,69 @@ export default function Profile() {
           </Button>
         </div>
         {loading ? <SkeletonProfile/> : null}
+        <TestS3Button className="bg-white"/>
 
         <div className="w-full h-full flex justify-center">
           <PostCard/>
 
         </div>
+
       </div>
 
     </>
   )
 }
 
+
+const TestS3Button = () => {
+  const fileInputRef = useRef(null);
+  const [files, setFiles] = useState([]);
+
+  const handleClick = async () => {
+    const formData = new FormData();
+    
+    // Append all files to form data
+    for (const file of files) {
+      formData.append("files", file);
+    }
+
+    // Append path to form data
+    formData.append("path", "test/");
+
+    // Upload files to S3 given path and files
+    const response = await fetch("/api/s3", {
+      method: "POST",
+      body: formData,
+    })
+
+    setFiles([]);
+
+    const data = await response.json();
+    
+    console.log("response data from api s3", data.data);
+  }
+
+  const handleFileChange = (event) => {
+    const targetFile = event.target.files[0];
+    setFiles([...files, targetFile]);
+  };
+  return (
+    <>
+    <input
+      type="file" 
+      ref={fileInputRef}
+      onChange={handleFileChange}
+      className=""
+    />
+    <Button       
+      variant="ghost" 
+      size="lg"
+      onClick={handleClick}
+      className="bg-white p-10 w-fit"
+    >hello</Button>
+    </>
+  )
+}
 /*
   user_id: null,
   post_id: null,
