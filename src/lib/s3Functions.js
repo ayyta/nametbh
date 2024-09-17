@@ -1,4 +1,5 @@
 import { PutObjectCommand, GetObjectCommand, DeleteObjectCommand, S3Client } from "@aws-sdk/client-s3";
+import { getSignedUrl } from "@aws-sdk/s3-request-presigner";
 import { NextResponse } from 'next/server';
 
 const client = new S3Client({
@@ -11,7 +12,7 @@ const client = new S3Client({
 
 
 // Upload file to S3 bucket given file and path
-const uploadFileToS3 = async (file, path="") => {
+const uploadFilesToS3 = async (file, path="") => {
   // Convert file to ArrayBuffer, then to Buffer
   const arrayBuffer = await file.arrayBuffer();  // Convert file to ArrayBuffer
   const buffer = Buffer.from(arrayBuffer);  // Convert ArrayBuffer to Buffer
@@ -34,7 +35,21 @@ const uploadFileToS3 = async (file, path="") => {
   }
 }
 
-const getFileFromS3 = async (objectKey) => {
+// Given path to file, get image link from S3 bucket
+const getPresignedUrl = async (objectKey) => {
+  const command = new GetObjectCommand({
+    Bucket: process.env.BUCKET_NAME, // Your S3 bucket
+    Key: objectKey, // Your file key (path to file)
+  });
+
+  // Generate the signed URL (valid for 60 minutes)
+  const signedUrl = await getSignedUrl(client, command, { expiresIn: 3600 });
+
+  return signedUrl;
+};
+
+// Get file content NOT URLS from S3 bucket given objectKey
+const getFilesFromS3 = async (objectKey) => {
   const command = new GetObjectCommand({
     Bucket: process.env.BUCKET_NAME,
     Key: objectKey,
@@ -42,7 +57,8 @@ const getFileFromS3 = async (objectKey) => {
 
   try {
     const response = await client.send(command);
-    return response;
+    const str = await response.Body.transformToWebStream();
+    return NextResponse.json({data: str}, { status: 200 });
   } catch (error) {
     return {error: "Failed to get file"};
   }
@@ -63,4 +79,4 @@ const createHexPath = (path="") => {
 // get file given key
 // delete file given key
 
-export { uploadFileToS3 };
+export { uploadFilesToS3, getFilesFromS3, getPresignedUrl };

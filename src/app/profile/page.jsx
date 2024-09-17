@@ -119,8 +119,9 @@ export default function Profile() {
 const TestS3Button = () => {
   const fileInputRef = useRef(null);
   const [files, setFiles] = useState([]);
+  const [images, setImages] = useState([]);
 
-  const handleClick = async () => {
+  const handlePOSTClick = async () => {
     const formData = new FormData();
     
     // Append all files to form data
@@ -132,15 +133,25 @@ const TestS3Button = () => {
     formData.append("path", "test/");
 
     // Upload files to S3 given path and files
-    const response = await fetch("/api/s3", {
-      method: "POST",
-      body: formData,
-    })
+    try {
+      const response = await fetch("/api/s3", {
+        method: "POST",
+        body: formData,
+      })
+      
+      if (!response.ok) {
+        // indicate some error in frontend
+      }
+    } catch (error) {
+      console.error(error);
+      // indicate some error in frontend
+
+    }
 
     setFiles([]);
 
     const data = await response.json();
-    
+
     console.log("response data from api s3", data.data);
   }
 
@@ -148,6 +159,29 @@ const TestS3Button = () => {
     const targetFile = event.target.files[0];
     setFiles([...files, targetFile]);
   };
+
+  const handleGETClick = async () => {
+    // Query S3 paths to get image links
+    const params = new URLSearchParams();
+
+    const s3Paths = ["test/efe010a494c5a", "test/093d6854700e1"];
+
+    s3Paths.forEach((imagePath) => {
+      params.append("image", imagePath);
+    });
+    
+
+    try {
+      const response = await fetch(`/api/s3?${params.toString()}`, {
+        method: "GET",
+      });
+      const data = await response.json();
+      setImages(data.data);
+    } catch (error) {
+      console.error(error);
+      // indicate some error in frontend
+    }
+  }
   return (
     <>
     <input
@@ -159,9 +193,15 @@ const TestS3Button = () => {
     <Button       
       variant="ghost" 
       size="lg"
-      onClick={handleClick}
+      onClick={handleGETClick}
       className="bg-white p-10 w-fit"
     >hello</Button>
+
+    {images.map((image, index) => {
+      return (
+        <img key={index} src={image} alt="uploaded" className="w-20 h-20"/>
+      )
+    })}
     </>
   )
 }
