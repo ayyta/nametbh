@@ -16,13 +16,18 @@ export default function MediaButton({ media, setMedia }) {
     // console.log(selectedFiles);
     const selectedFilesArray = Array.from(selectedFiles);
 
-    const imagesArray = selectedFilesArray.map((file) => {
-      return URL.createObjectURL(file);
-    });
+    // Create an array to store media objects with URL and type(image/video)
+    const mediaArray = selectedFilesArray.map((file) => ({
+      url : URL.createObjectURL(file),
+      type : file.type,
+    }));
+    // const imagesArray = selectedFilesArray.map((file) => {
+    //   return URL.createObjectURL(file);
+    // });
     // console.log(imagesArray);
 
     setMedia((prevImages) => {
-      return prevImages.concat(imagesArray);
+      return prevImages.concat(mediaArray);
     });
 
     // Reset the input value
@@ -50,7 +55,7 @@ export default function MediaButton({ media, setMedia }) {
           type="file"
           ref={fileUploadRef}
           onChange={uploadMediaDisplay}
-          multiple accept="image/png, image/jpeg"
+          multiple accept="image/png, image/jpeg, video/mp4, video/x-m4v, video/*"
           hidden
         />
     </>
