@@ -64,12 +64,25 @@ const getFilesFromS3 = async (objectKey) => {
   }
 }
 
+const deleteFilesFromS3 = async(objectKey) => {
+  const command = new DeleteObjectCommand({
+    Bucket: process.env.BUCKET_NAME,
+    Key: objectKey,
+  });
+
+  try {
+    const response = await client.send(command);
+    return NextResponse.json({data: "File deleted"}, { status: 200 });
+  } catch (error) {
+    return NextResponse.json({error: "Failed to delete file"}, { status: 500 });
+  }
+}
+
 // Create random path for file
 const createHexPath = (path="") => {
   if (path[path.length - 1] !== "/" && path.length > 0) {
     path += "/";
   }
-  console.log(path + Math.random().toString(16).slice(2));
   return path + Math.random().toString(16).slice(2);
 
 } 
@@ -79,4 +92,4 @@ const createHexPath = (path="") => {
 // get file given key
 // delete file given key
 
-export { uploadFilesToS3, getFilesFromS3, getPresignedUrl };
+export { uploadFilesToS3, getFilesFromS3, getPresignedUrl, deleteFilesFromS3 };

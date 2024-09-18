@@ -72,6 +72,7 @@ async function createUser(user, email, username, dateOfBirth, name) {
     ])
 
   if (profileError) {
+    console.error(profileError);
     throw new Error(profileError.message);
   }
 

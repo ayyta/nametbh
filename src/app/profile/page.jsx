@@ -4,13 +4,10 @@ import { useState, useRef } from "react";
 import { useRouter } from "next/navigation";
 import { Roboto } from 'next/font/google'
 
-import { signOut } from "@/lib/auth";
-import { uploadFile } from "@/lib/s3Functions";
 import { Button } from "@/components/ui/button"
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import { SkeletonProfile } from "@/components/SkeletonComponents";
 import PostCard from "@/components/post-card"
-  
+import Header from "./header"
 const roboto = Roboto({
   weight: ['100', '300', '400', '700'],
   style: ['normal', 'italic'],
@@ -59,54 +56,18 @@ export default function Profile() {
 
   const router = useRouter();
 
-  const handleLogout = () => {
-    signOut(router);
-  }
 
-  function formatNumber(num) {
-    if (Math.abs(num) >= 1_000_000) {
-      return (num / 1_000_000).toFixed(1) + 'M';  // Converts to millions (M)
-    } else if (Math.abs(num) >= 1_000) {
-      return (num / 1_000).toFixed(1) + 'K';  // Converts to thousands (K)
-    } else {
-      return num.toString();  // Less than 1,000 stays as is
-    }
-  }
-
-  let backgroundStyle = {
-    backgroundImage: user.profile_background !== "" ? `url('${user.profile_background}')`: "",
-    backgroundSize: "cover",
-    backgroundPosition: "center",
-    backgroundRepeat: 'no-repeat',
-  }
 
   return (
     <>
       <div className="w-full h-full flex flex-col overflow-y-scroll">
-        <div className={`w-full h-64	p-10 flex ${user.profile_background === "" ? "bg-gray-700" : ""}`} style={backgroundStyle}>
-          <Avatar className="md:w-28 md:h-28">
-            <AvatarImage src={user.pfp} />
-            <AvatarFallback>CN</AvatarFallback>
-          </Avatar>
-          <div className={`flex-1 ml-6 flex flex-col ${roboto.className}`}>
-            <p className={`text-white text-3xl font-bold `}>{user.name}</p>
-            <p className="text-lg text-gray-400">@{user.username}</p>
-
-            <p className="text-xl text-white font-normal my-4">{user.bio}</p>
-            
-            <div className="flex-grow"></div>
-            <p className="text-lg text-gray-400 mt-auto">{formatNumber(user.num_of_followers)} Followers</p>
-          </div>
-          <Button variant="secondary" onClick={handleLogout}>
-            Logout
-          </Button>
-        </div>
+        <Header user={user} roboto={roboto} router={router}/>
         {loading ? <SkeletonProfile/> : null}
-        <TestS3Button className="bg-white"/>
+
+        {false ? <TestS3Button className="bg-white"/> : null}
 
         <div className="w-full h-full flex justify-center">
           <PostCard/>
-
         </div>
 
       </div>
@@ -167,7 +128,7 @@ const TestS3Button = () => {
     const s3Paths = ["test/efe010a494c5a", "test/093d6854700e1"];
 
     s3Paths.forEach((imagePath) => {
-      params.append("image", imagePath);
+      params.append("paths", imagePath);
     });
     
 
@@ -177,6 +138,30 @@ const TestS3Button = () => {
       });
       const data = await response.json();
       setImages(data.data);
+    } catch (error) {
+      console.error(error);
+      // indicate some error in frontend
+    }
+  }
+
+  const handleDELETEClick = async () => {
+
+    // Delete files from s3 bucket
+    const s3Paths = ["test/efe010a494c5a", "test/093d6854700e1"];
+    const params = new URLSearchParams();
+
+    s3Paths.forEach((imagePath) => {
+      params.append("paths", imagePath);
+    });
+
+    try {
+      const response = await fetch(`/api/s3?${params.toString()}`, {
+        method: "DELETE",
+      });
+      if (!response.ok) {
+        // indicate some error in frontend
+      }
+      console.log("response data from api s3", response.data, response);
     } catch (error) {
       console.error(error);
       // indicate some error in frontend
@@ -193,7 +178,7 @@ const TestS3Button = () => {
     <Button       
       variant="ghost" 
       size="lg"
-      onClick={handleGETClick}
+      onClick={handleDELETEClick}
       className="bg-white p-10 w-fit"
     >hello</Button>
 
