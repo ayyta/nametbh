@@ -1,10 +1,17 @@
 "use client"
 
-import React, { useState, forwardRef } from "react"
+import React, { useState, useCallback, useEffect, forwardRef, useRef } from "react"
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardFooter, CardHeader } from "@/components/ui/card"
-import { Heart, ThumbsDown, MessageCircle, Share2 } from "lucide-react"
+import {
+  Carousel,
+  CarouselContent,
+  CarouselItem,
+  CarouselNext,
+  CarouselPrevious,
+} from "@/components/ui/carousel"
+import { Heart, ThumbsDown, MessageCircle, Share2, X } from "lucide-react"
 import Image from "next/image"
 
 export default function Component({
@@ -13,9 +20,23 @@ export default function Component({
   username = "@johndoe",
   creationDate = "2h ago",
   content = "This is a sample post content. It can be much longer and will wrap to multiple lines if needed. ",
-  media = ["/massageServices.jpg", "/haircut2.jpg", "/massageServices.jpg", "/haircut2.jpg"], 
+  images = ["/massageServices.jpg", "/haircut2.jpg", "/massageServices.jpg", "/haircut2.jpg"], 
   // "/haircut2.jpg", "/massageServices.jpg", "/Plus square.svg", "/Upload Icon.svg", "/Home Icon.svg", "/Generic avatar.svg"
 }) {
+  const [isCarouselOpen, setIsCarouselOpen] = useState(false);
+  const [currentImageIndex, setCurrentImageIndex] = useState(0);
+  const carouselRef = useRef(null)
+
+  useEffect(() => {
+    console.log(isCarouselOpen, currentImageIndex, carouselRef.current)
+    if (isCarouselOpen && carouselRef.current) {
+      const scrollPosition = currentImageIndex * carouselRef.current.offsetWidth
+      carouselRef.current.scrollTo({
+        left: scrollPosition,
+        behavior: 'instant'
+      })
+    }
+  }, [isCarouselOpen, currentImageIndex])
 
   const handleLike = (isActive, count) => {
     console.log(`Like is now ${isActive ? "active": "inactive"} with count: ${count}`);
@@ -32,63 +53,84 @@ export default function Component({
   const handleComment = () => {
     console.log("Pressed comment button");
   }
+  const openCarousel = (index) => {
+    setCurrentImageIndex(index)
+    setIsCarouselOpen(true)
+  }
+
+  const closeCarousel = () => {
+    setIsCarouselOpen(false)
+  }
 
   // optimize image loading by allowing optimization from s3 bucket in next.config.js remotePatterns
   return (
-    <Card className="w-192 h-fit bg-transparent border-none text-white">
-      <CardHeader className="flex flex-row items-center gap-4">
-        <Avatar>
-          <AvatarImage src={avatar} alt={name} />
-          <AvatarFallback>{name.charAt(0)}</AvatarFallback>
-        </Avatar>
-        <div className="flex flex-col">
-          <p className="text-lg font-semibold">{name}</p>
-          <p className="text-sm text-gray-500">{username} • {creationDate}</p>
-        </div>
-      </CardHeader>
-      <CardContent className="space-y-4">
-        <p>{content}</p>
-        {media.length > 0 && (
-          <div className={`grid gap-0.5 ${media.length > 1 ? 'grid-cols-2' : 'grid-cols-1'} rounded-2xl border overflow-hidden`}>
-            {media.slice(0, 4).map((src, index) => (
-              <div className={`relative w-full flex justify-center`} key={index}>
-                <Image
-                  src={src}
-                  alt={`Media ${index + 1}`}
-                  layout="intrinsic" // Let the image control the container's size
-                  width={media.length > 1 ? 400 : 700} // Example width based on media length
-                  height={media.length > 1 ? 300 : 500} // Example height based on media length
-                  className={`${media.length > 1 ? "object-cover max-h-52" : "object-contain"} max-h-161`}
-                />
-              </div>
-            ))}
+    <>
+      <Card className="w-192 h-fit bg-transparent border-none text-white">
+        <CardHeader className="flex flex-row items-center gap-4">
+          <Avatar>
+            <AvatarImage src={avatar} alt={name} />
+            <AvatarFallback>{name.charAt(0)}</AvatarFallback>
+          </Avatar>
+          <div className="flex flex-col">
+            <p className="text-lg font-semibold">{name}</p>
+            <p className="text-sm text-gray-500">{username} • {creationDate}</p>
           </div>
-        )}
-      </CardContent>
+        </CardHeader>
+        <CardContent className="space-y-4">
+          <p>{content}</p>
+          {images.length > 0 && (
+            <div className={`grid gap-0.5 ${images.length > 1 ? 'grid-cols-2' : 'grid-cols-1'} rounded-2xl border overflow-hidden`}>
+              {images.map((src, index) => (
+                <div 
+                  className={`relative w-full flex justify-center`} 
+                  key={index} 
+                  onClick={() => openCarousel(index)}
+                >
+                  <Image
+                    src={src}
+                    alt={`Image ${index + 1}`}
+                    layout="intrinsic" // Let the image control the container's size
+                    width={images.length > 1 ? 400 : 700} // Example width based on media length
+                    height={images.length > 1 ? 300 : 500} // Example height based on media length
+                    className={`${images.length > 1 ? "object-cover max-h-52" : "object-contain"} max-h-161`}
+                  />
+                </div>
+              ))}
+            </div>
+          )}
+        </CardContent>
 
-      <CardFooter className="flex justify-between">
-        <PostCardInteractionButton 
-          initialCount={0}
-          activeColor="#f91980"
-          inactiveColor=""
-          color="pink"
-          callBack={handleLike} 
-          Icon={Heart} 
-        />
-        <PostCardActionButton
-          initialCount={2}
-          color="blue"
-          callBack={handleComment}
-          Icon={MessageCircle}
-        />
-        <PostCardActionButton
-          initialCount={5}
-          color="green"
-          callBack={handleShare}
-          Icon={Share2}
-        />
-      </CardFooter>
-    </Card>
+        <CardFooter className="flex justify-between">
+          <PostCardInteractionButton 
+            initialCount={0}
+            activeColor="#f91980"
+            inactiveColor=""
+            color="pink"
+            callBack={handleLike} 
+            Icon={Heart} 
+          />
+          <PostCardActionButton
+            initialCount={2}
+            color="blue"
+            callBack={handleComment}
+            Icon={MessageCircle}
+          />
+          <PostCardActionButton
+            initialCount={5}
+            color="green"
+            callBack={handleShare}
+            Icon={Share2}
+          />
+        </CardFooter>
+      </Card>
+      <PostCardCarousel 
+        images={images} 
+        isCarouselOpen={isCarouselOpen} 
+        currentImageIndex={currentImageIndex}
+        closeCarousel={closeCarousel}
+        carouselRef={carouselRef}
+      />
+    </>
 
   )
 
@@ -244,4 +286,58 @@ const PostCardActionButton = forwardRef(function PostCardActionButton({
     </Button>
   )
 
+})
+
+const PostCardCarousel = forwardRef(function PostCardCarousel({
+  images = [],
+  currentImageIndex = 0,
+  isCarouselOpen = false,
+  closeCarousel = () => {},
+  carouselRef={carouselRef}
+
+}, ref) {
+
+
+  return (
+    <>
+      {isCarouselOpen &&  (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/90">
+          <Button
+            variant="ghost"
+            size="icon"
+            className="absolute top-4 right-4 z-10 text-white hover:bg-white/20 hover:text-white rounded-full"
+            onClick={closeCarousel}
+            
+          >
+            <X className="w-5 h-5" />
+            <span className="sr-only">Close</span>
+          </Button>
+          <Carousel 
+            ref={carouselRef} 
+            className="w-screen h-screen"
+          >
+              
+            <CarouselContent className="">
+              {images.map((image, index) => (
+                <CarouselItem key={index} className="w-90 h-screen flex justify-center items-center">
+                  {/* <Image
+                    src={image}
+                    alt={`Image ${index}`}
+                    layout="fill"
+                    objectFit="contain"
+                  /> */}
+                  <img className="w-fit" src={image} alt={`Image ${index}`} />
+                </CarouselItem>
+              ))}
+            </CarouselContent>
+            <CarouselPrevious className="absolute top-1/2 left-6 transform -translate-y-1/2 -translate-x-1/2 z-10" />
+            <CarouselNext className="absolute top-1/2 right-0 transform -translate-y-1/2 -translate-x-1/2 z-10" />
+          </Carousel>
+        </div>
+      )}
+
+    </>
+
+  )
+  
 })
