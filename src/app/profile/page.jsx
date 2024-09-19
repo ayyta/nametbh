@@ -64,7 +64,7 @@ export default function Profile() {
         <Header user={user} roboto={roboto} router={router}/>
         {loading ? <SkeletonProfile/> : null}
 
-        {false ? <TestS3Button className="bg-white"/> : null}
+        {true ? <TestS3Button className="bg-white"/> : null}
 
         <div className="w-full h-full flex justify-center">
           <PostCard/>
@@ -125,7 +125,7 @@ const TestS3Button = () => {
     // Query S3 paths to get image links
     const params = new URLSearchParams();
 
-    const s3Paths = ["test/efe010a494c5a", "test/093d6854700e1"];
+    const s3Paths = ["test/147624e232bbf", "test/093d6854700e1"];
 
     s3Paths.forEach((imagePath) => {
       params.append("paths", imagePath);
@@ -178,7 +178,7 @@ const TestS3Button = () => {
     <Button       
       variant="ghost" 
       size="lg"
-      onClick={handleDELETEClick}
+      onClick={handleGETClick}
       className="bg-white p-10 w-fit"
     >hello</Button>
 
