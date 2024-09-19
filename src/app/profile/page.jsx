@@ -61,10 +61,7 @@ export default function Profile() {
   return (
     <>
       <div className="w-full h-full flex flex-col overflow-y-scroll">
-        <Header user={user} roboto={roboto} router={router}/>
-        {loading ? <SkeletonProfile/> : null}
-
-        {true ? <TestS3Button className="bg-white"/> : null}
+        {loading ? <SkeletonProfile/> : <Header user={user} roboto={roboto} router={router}/>}
 
         <div className="w-full h-full flex justify-center">
           <PostCard/>
@@ -190,11 +187,3 @@ const TestS3Button = () => {
     </>
   )
 }
-/*
-  user_id: null,
-  post_id: null,
-  text_content: "",
-  likes: "",
-  comment_count: "",
-  created_at: "",
-*/
