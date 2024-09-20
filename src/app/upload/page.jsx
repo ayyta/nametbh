@@ -18,6 +18,7 @@ export default function Upload({ open, onClose }) {
 
   const [text, setText] = useState("");
   const [media, setMedia] = useState([]);
+  const [gifs, setGifs] = useState([]);
 
   const handlePostButton = (e) => {
     // console.log(e.target);
@@ -60,7 +61,9 @@ export default function Upload({ open, onClose }) {
             <div className="upload-image-container">
               <Media 
                 images={media} 
-                setMedia={setMedia} 
+                setMedia={setMedia}
+                gifs={gifs}
+                setGifs={setGifs} 
               />
             </div>
             <div className="upload-utilities-left-section">

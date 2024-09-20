@@ -1,6 +1,8 @@
 'use client'
 
 import Image from 'next/image'
+import { useEffect } from 'react';
+import axios from "axios";
 import {
   Carousel,
   CarouselContent,
@@ -9,7 +11,7 @@ import {
   CarouselPrevious,
 } from "@/components/ui/carousel"
 
-export default function Media({ images=[], setMedia }) {
+export default function Media({ images=[], setMedia, gifs, setGifs }) {
 
   /**
    * If we only have one image then we want to return the max size the image can be rendered on the screen, else we want to return a carousel of our images.
@@ -147,5 +149,43 @@ export default function Media({ images=[], setMedia }) {
       </Carousel>
     )
   }
+
+
+  useEffect(() => {
+    const fetchData = async () => {
+      const results = await axios("https://api.giphy.com/v1/gifs/trending", {
+        params: {
+          api_key : '7VGHs9vybY2b6EcUZtVi3ay9pVVlFOxu',
+        }
+      });
+      console.log(results);
+      setGifs(results.data.data);
+    }
+    fetchData();
+  }, []);
+
+  const renderGifs = () => {
+    return gifs.map(giphy => {
+      return (
+        <div className="" key={giphy.id}>
+          <Image 
+            src={giphy.images.fixed_height.url}
+            width={0}
+            height={0}
+            sizes='100vw'
+            style={{ "width" : "100%" }}
+            alt='Gif'
+            className='rounded-lg'
+          />
+        </div>
+      )
+    });
+  }
+
+  return (
+    <>
+      {renderGifs()}
+    </>
+  );
 
 }
