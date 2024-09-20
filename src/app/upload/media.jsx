@@ -182,10 +182,10 @@ export default function Media({ images=[], setMedia, gifs, setGifs }) {
     });
   }
 
-  return (
-    <>
-      {renderGifs()}
-    </>
-  );
+  // return (
+  //   <>
+  //     {renderGifs()}
+  //   </>
+  // );
 
 }

@@ -29,6 +29,7 @@ export default function MediaButton({ media, setMedia }) {
     const mediaArray = selectedFilesArray.map((file) => ({
       url : URL.createObjectURL(file),
       type : file.type,
+      file : file,
     }));
     // console.log(mediaArray);
 

@@ -1,6 +1,6 @@
 "use client";
 import "../../styles/uploadpage.css";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Image from "next/image";
 import TextareaAutosize from "react-textarea-autosize";
 import Header from "./header";
@@ -20,12 +20,49 @@ export default function Upload({ open, onClose }) {
   const [media, setMedia] = useState([]);
   const [gifs, setGifs] = useState([]);
 
-  const handlePostButton = (e) => {
+  useEffect(() => {
+    console.log("media", media);
+  }, [media]);
+
+  const handlePOSTButton = async () => {
     // console.log(e.target);
     // e.preventDefault();
+
+    const formData = new FormData();
+    const path = "media/";
+
+    // Append file to form data object
+    media.forEach((m) => {
+      formData.append("files", m.file);
+    });
+
+    // Append path to form data object
+    formData.append("path", path);
+
+    // Send POST request to S3 Bucket
+    try {
+      const response = await fetch("/api/s3", {
+        method: "POST",
+        body: formData,   // if were sending text it would be JSON.stringify()
+      });
+
+      if (response.error) {
+        console.error("Error uploading file to S3");
+      }
+  
+      const data = await response.json();
+  
+      // data.data is the array of image paths in s3
+      console.log(data.data);
+
+    } catch (error) {
+      //indicated frontend error
+      console.error(error);
+    }
     
-    const post = { text, media }
-    console.log(post);
+
+    // const post = { text, media }
+    // console.log(post);
   }
 
   return (
@@ -91,7 +128,7 @@ export default function Upload({ open, onClose }) {
             <div className="upload-utilities-right-section">
               <button 
                 className="upload-button"
-                onClick={handlePostButton}
+                onClick={handlePOSTButton}
               >
                 Post
               </button>

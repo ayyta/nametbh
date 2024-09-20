@@ -2,6 +2,8 @@ npm install
 npm install @supabase/supabase-js
 npm i @aws-sdk/client-s3
 npm install @aws-sdk/s3-request-presigner
+npm install react-textarea-autosize
+npm install axios
 
 
 
