@@ -1,0 +1,39 @@
+.dropup-menu {
+  width: 100%;
+  bottom: calc(90%);
+  left: 0;
+  overflow-y: auto;
+  max-height: 235px;
+}
+
+.dropup-menu::-webkit-scrollbar {
+  width: 0.4rem;
+  background-color: #292F33;
+}
+
+.dropup-menu::-webkit-scrollbar-track {
+  background: #373f45; 
+}
+
+.dropup-menu::-webkit-scrollbar-thumb {
+
+  background: #888; 
+  border-radius: 5px;
+}
+
+.dropup-menu::-webkit-scrollbar-thumb:hover {
+  background: #555; 
+}
+
+.account-input::-webkit-autofill:hover, .account-input::-webkit-autofill:focus, .account-input::-webkit-autofill:active, .account-input.account-input:-webkit-autofill-selected, .account-input:-internal-autofill-selected {
+  -webkit-box-shadow: 0 0 0 30px #292F33 inset !important;
+  -webkit-text-fill-color: white !important;
+}
+
+input:-webkit-autofill,
+input:-webkit-autofill:hover, 
+input:-webkit-autofill:focus, 
+input:-webkit-autofill:active{
+    transition: all 5000s ease-in-out 0s;
+    
+}
