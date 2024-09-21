@@ -88,77 +88,9 @@ export default function Profile() {
 
   const [isPopupOpen, setIsPopupOpen] = useState(false);
 
-  // {
-  //   name: "",
-  //   username: "",
-  //   bio: "",
-  //   pfp: "",
-  //   profile_background: "",
-  //   num_of_followers: 0,
-  // }
-  const [user, setUser] = useState({
-    name: "John Doe",
-    username: "johndoe",
-    bio: "I'm a software engineer",
-    pfp: "/Generic avatar.svg",
-    profile_background: "", // /Home Icon.svg
-    num_of_followers: 0,
-  });
 
-  /*
-  {
-    user_id: null,
-    post_id: null,
-    title: "",
-    text_content: "",
-    like_count: "",
-    dislike_count: "",
-    comments: "",
-    created_at: "",
-  } 
-  */
 
-  // Generate 20 posts at a time
-  const [posts, setPosts] = useState([
-    {
-      user_id: null,
-      post_id: null,
-      title: "",
-      text_content: "",
-      like_count: "",
-      dislike_count: "",
-      comments: "",
-      created_at: "",
-    },
-  ]);
-
-  const [loading, setLoading] = useState(false);
-
-  const router = useRouter();
-
-  const handleLogout = () => {
-    signOut(router);
-  };
-
-  function formatNumber(num) {
-    if (Math.abs(num) >= 1_000_000) {
-      return (num / 1_000_000).toFixed(1) + "M"; // Converts to millions (M)
-    } else if (Math.abs(num) >= 1_000) {
-      return (num / 1_000).toFixed(1) + "K"; // Converts to thousands (K)
-    } else {
-      return num.toString(); // Less than 1,000 stays as is
-    }
-  }
-
-  let backgroundStyle = {
-    backgroundImage:
-      user.profile_background !== "" ? `url('${user.profile_background}')` : "",
-    backgroundSize: "cover",
-    backgroundPosition: "center",
-    backgroundRepeat: "no-repeat",
-  };
-
-  return (
+return(
     <>
       <div className="w-full h-full flex flex-col relative">
         <div
