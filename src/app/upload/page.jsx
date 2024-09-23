@@ -6,6 +6,8 @@ import TextareaAutosize from "react-textarea-autosize";
 import Header from "./header";
 import MediaButton from "./mediabutton";
 import Media from "./media";
+import GiphyButton from "./giphybutton";
+import GiphySelector from "./giphyselector";
 
 export default function Upload({ open, onClose }) {
   if (!open) return null
@@ -19,11 +21,19 @@ export default function Upload({ open, onClose }) {
   const [text, setText] = useState("");
   const [media, setMedia] = useState([]);
   const [gifs, setGifs] = useState([]);
+  const [showGifs, setShowGifs] = useState(false);
+  const [showPopup, setShowPopup] = useState(false);
 
+  /**
+   * useEffect hook to log the current media state, it only triggers whenever the media state changes
+   */
   useEffect(() => {
     console.log("media", media);
   }, [media]);
 
+  /**
+   * Handles the POST request to the server(S3 Bucket)
+   */
   const handlePOSTButton = async () => {
     // console.log(e.target);
     // e.preventDefault();
@@ -59,7 +69,6 @@ export default function Upload({ open, onClose }) {
       //indicated frontend error
       console.error(error);
     }
-    
 
     // const post = { text, media }
     // console.log(post);
@@ -69,6 +78,14 @@ export default function Upload({ open, onClose }) {
     <>
       <div className="upload-popup-container">
         <div className="upload-overlay" onClick={handler}></div>
+        <GiphySelector 
+          gifs={gifs}
+          setGifs={setGifs}
+          showGifs={showGifs}
+          setShowGifs={setShowGifs}
+          showPopup={showPopup}
+          setShowPopup={setShowPopup}
+        />
         <form 
           className="upload-container" 
           onSubmit={(e) => e.preventDefault()}
@@ -76,6 +93,7 @@ export default function Upload({ open, onClose }) {
           style={{
             "height" : `${media.length > 0 ? "min-content" : "288px"}`,
             "width" : `${media.length > 0 ? "644px" : "552px"}`,
+            "z-index" : `${showGifs ? "10" : "20"}`,
           }}
         >
           <div className="upload">
@@ -101,6 +119,8 @@ export default function Upload({ open, onClose }) {
                 setMedia={setMedia}
                 gifs={gifs}
                 setGifs={setGifs} 
+                showGifs={showGifs}
+                setShowGifs={setShowGifs}
               />
             </div>
             <div className="upload-utilities-left-section">
@@ -116,14 +136,20 @@ export default function Upload({ open, onClose }) {
                   alt="Mic logo" 
                 />
               </button>
-              <button className="upload-utilities">
-                <Image
-                  src="/Gif Icon.svg"
-                  width={28}
-                  height={0}
-                  alt="Gif logo" 
-                />
-              </button>
+              {/* <Link 
+                href="/upload/giphy"
+                // gifs={gifs}
+                // setGifs={setGifs}
+                // showGifs={showGifs}
+                // setShowGifs={setShowGifs}
+              >  */}
+              <GiphyButton 
+                showGifs={showGifs}
+                setShowGifs={setShowGifs}
+                showPopup={showPopup}
+                setShowPopup={setShowPopup}
+              />
+              {/* </Link> */}
             </div>
             <div className="upload-utilities-right-section">
               <button 

@@ -10,7 +10,7 @@
     border-solid
     border-primary/50
     rounded-2xl
-    z-20
+    /* z-20 */
     bg-third
     /* w-138 */
     /* w-161 */
@@ -135,6 +135,21 @@
     cursor-pointer;
 }
 
+
+.scrollbar::-webkit-scrollbar {
+  width: 1vw;
+  margin-left: 1vw;
+}
+
+.scrollbar::-webkit-scrollbar-thumb {
+  background-color: #888;
+  border-radius: 100vw;
+}
+
+.scrollbar::-webkit-scrollbar-track {
+  background-color: #1E1E1E;;
+  border-radius: 100vw;
+}
 
 .upload-overlay {
   @apply
