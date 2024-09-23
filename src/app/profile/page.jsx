@@ -2,20 +2,21 @@
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
-import { Roboto } from 'next/font/google'
+import { Roboto } from "next/font/google";
 
 import { signOut } from "@/lib/auth";
-import { Button } from "@/components/ui/button"
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
+import { Button } from "@/components/ui/button";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { SkeletonProfile } from "@/components/SkeletonComponents";
-import PostCard from "@/components/post-card"
-  
+import Popup from "./Popup";
+import PostCard from "@/components/post-card";
+
 const roboto = Roboto({
-  weight: ['100', '300', '400', '700'],
-  style: ['normal', 'italic'],
-  subsets: ['latin'],
-  display: 'swap',
-})
+  weight: ["100", "300", "400", "700"],
+  style: ["normal", "italic"],
+  subsets: ["latin"],
+  display: "swap",
+});
 
 export default function Profile() {
   // {
@@ -35,7 +36,6 @@ export default function Profile() {
     num_of_followers: 0,
   });
 
-  
   /*
   {
     user_id: null,
@@ -50,16 +50,18 @@ export default function Profile() {
   */
 
   // Generate 20 posts at a time
-  const [posts, setPosts] = useState([{
-    user_id: null,
-    post_id: null,
-    title: "",
-    text_content: "",
-    like_count: "",
-    dislike_count: "",
-    comments: "",
-    created_at: "",
-  }]);
+  const [posts, setPosts] = useState([
+    {
+      user_id: null,
+      post_id: null,
+      title: "",
+      text_content: "",
+      like_count: "",
+      dislike_count: "",
+      comments: "",
+      created_at: "",
+    },
+  ]);
 
   const [loading, setLoading] = useState(false);
 
@@ -67,30 +69,29 @@ export default function Profile() {
 
   const handleLogout = () => {
     signOut(router);
-  }
+  };
 
   function formatNumber(num) {
     if (Math.abs(num) >= 1_000_000) {
-      return (num / 1_000_000).toFixed(1) + 'M';  // Converts to millions (M)
+      return (num / 1_000_000).toFixed(1) + "M"; // Converts to millions (M)
     } else if (Math.abs(num) >= 1_000) {
-      return (num / 1_000).toFixed(1) + 'K';  // Converts to thousands (K)
+      return (num / 1_000).toFixed(1) + "K"; // Converts to thousands (K)
     } else {
-      return num.toString();  // Less than 1,000 stays as is
+      return num.toString(); // Less than 1,000 stays as is
     }
   }
 
   let backgroundStyle = {
-    backgroundImage: user.profile_background !== "" ? `url('${user.profile_background}')`: "",
+    backgroundImage:
+      user.profile_background !== "" ? `url('${user.profile_background}')` : "",
     backgroundSize: "cover",
     backgroundPosition: "center",
-    backgroundRepeat: 'no-repeat',
-  }
+    backgroundRepeat: "no-repeat",
+  };
 
   const [isPopupOpen, setIsPopupOpen] = useState(false);
 
-
-
-return(
+  return (
     <>
       <div className="w-full h-full flex flex-col relative">
         <div

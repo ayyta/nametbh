@@ -4,8 +4,6 @@ import "../styles/globals.css";
 // components
 import NavbarWrapper from "@/components/wrappers/NavbarWrapper.jsx";
 import AuthCheckWrapper from "@/components/wrappers/AuthCheckWrapper.jsx";
-import NavbarWrapper from "@/components/wrappers/NavbarWrapper.jsx";
-import AuthCheckWrapper from "@/components/wrappers/AuthCheckWrapper.jsx";
 
 const inter = Inter({ subsets: ["latin"] });
 

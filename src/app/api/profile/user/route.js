@@ -1,6 +1,6 @@
 // app/api/profile/route.js
 
-import supabaseService from "../../../lib/supabaseServiceClient";
+import supabaseService from "../../../../lib/supabaseServiceClient";
 
 export async function GET(req) {
   // Extract userId from the query parameters
@@ -51,14 +51,14 @@ export async function PUT(req) {
         .from("user")
         .select("user_id")
         .eq(field, value)
-        .single();
+        .maybeSingle();  // Use maybeSingle to handle no rows gracefully
   
       // Handle fetch error
       if (fetchError) {
         throw new Error(`Error fetching user: ${fetchError.message}`);
       }
   
-      // If another user already has this field (username or email), return a conflict, this is in console
+      // If another user already has this field (username or email), return a conflict
       if (existingUser && existingUser.user_id !== userId) {
         return new Response(
           JSON.stringify({
@@ -81,7 +81,6 @@ export async function PUT(req) {
   
       // Return the updated data
       return new Response(JSON.stringify(data), { status: 200 });
-      
     } catch (err) {
       // Log the error and return a generic 500 response for any other issues
       console.error("Server Error:", err.message);
@@ -90,3 +89,4 @@ export async function PUT(req) {
       });
     }
   }
+  

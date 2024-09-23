@@ -73,7 +73,7 @@ export function PopupForm({ userID, user, initialValues }) {
   async function updateUserInfo(field, value, userID) {
     try {
       const response = await fetch(
-        `/api/profile?userId=${userID}&field=${field}&value=${value}`,
+        `/api/profile/user?userId=${userID}&field=${field}&value=${value}`,
         {
           method: "PUT",
         }
