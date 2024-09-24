@@ -136,17 +136,17 @@
 }
 
 
-.scrollbar::-webkit-scrollbar {
+.gif-scrollbar::-webkit-scrollbar {
   width: 1vw;
   margin-left: 1vw;
 }
 
-.scrollbar::-webkit-scrollbar-thumb {
+.gif-scrollbar::-webkit-scrollbar-thumb {
   background-color: #888;
   border-radius: 100vw;
 }
 
-.scrollbar::-webkit-scrollbar-track {
+.gif-scrollbar::-webkit-scrollbar-track {
   background-color: #1E1E1E;;
   border-radius: 100vw;
 }
