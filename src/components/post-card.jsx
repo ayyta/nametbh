@@ -11,6 +11,7 @@ import {
   CarouselNext,
   CarouselPrevious,
 } from "@/components/ui/carousel"
+import useEmblaCarousel from 'embla-carousel-react'
 import { Heart, ThumbsDown, MessageCircle, Share2, X } from "lucide-react"
 import Image from "next/image"
 
@@ -25,25 +26,9 @@ export default function Component({
 }) {
   const [isCarouselOpen, setIsCarouselOpen] = useState(false);
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
-  const carouselRef = useRef(null)
-
-  useEffect(() => {
-    console.log(isCarouselOpen, currentImageIndex, carouselRef.current)
-    if (isCarouselOpen && carouselRef.current) {
-      const scrollPosition = currentImageIndex * carouselRef.current.offsetWidth
-      carouselRef.current.scrollTo({
-        left: scrollPosition,
-        behavior: 'instant'
-      })
-    }
-  }, [isCarouselOpen, currentImageIndex])
 
   const handleLike = (isActive, count) => {
     console.log(`Like is now ${isActive ? "active": "inactive"} with count: ${count}`);
-  }
-
-  const handleDislike = (isActive, count) => {
-    console.log(`Dislikes is now ${isActive ? "active": "inactive"} with count: ${count}`);
   }
 
   const handleShare = () => {
@@ -79,12 +64,12 @@ export default function Component({
         <CardContent className="space-y-4">
           <p>{content}</p>
           {images.length > 0 && (
-            <div className={`grid gap-0.5 ${images.length > 1 ? 'grid-cols-2' : 'grid-cols-1'} rounded-2xl border overflow-hidden`}>
+            <div className={`grid gap-0.5 ${images.length > 1 ? 'grid-cols-2' : 'grid-cols-1'} rounded-2xl border overflow-hidden cursor-pointer active:scale-95 transition-all duration-150 ease-in-out`}>
               {images.map((src, index) => (
                 <div 
                   className={`relative w-full flex justify-center`} 
                   key={index} 
-                  onClick={() => openCarousel(index)}
+                  onClick={() => {openCarousel(index);}}
                 >
                   <Image
                     src={src}
@@ -128,7 +113,6 @@ export default function Component({
         isCarouselOpen={isCarouselOpen} 
         currentImageIndex={currentImageIndex}
         closeCarousel={closeCarousel}
-        carouselRef={carouselRef}
       />
     </>
 
@@ -288,15 +272,13 @@ const PostCardActionButton = forwardRef(function PostCardActionButton({
 
 })
 
+
 const PostCardCarousel = forwardRef(function PostCardCarousel({
   images = [],
   currentImageIndex = 0,
   isCarouselOpen = false,
   closeCarousel = () => {},
-  carouselRef={carouselRef}
-
 }, ref) {
-
 
   return (
     <>
@@ -307,13 +289,11 @@ const PostCardCarousel = forwardRef(function PostCardCarousel({
             size="icon"
             className="absolute top-4 right-4 z-10 text-white hover:bg-white/20 hover:text-white rounded-full"
             onClick={closeCarousel}
-            
           >
             <X className="w-5 h-5" />
             <span className="sr-only">Close</span>
           </Button>
           <Carousel 
-            ref={carouselRef} 
             className="w-screen h-screen"
           >
               
@@ -325,6 +305,13 @@ const PostCardCarousel = forwardRef(function PostCardCarousel({
                     alt={`Image ${index}`}
                     layout="fill"
                     objectFit="contain"
+                  /> */}
+                  {/* <Image
+                    src={image}
+                    alt={`Image ${index + 1}`}
+                    fill
+                    style={{ objectFit: 'contain' }}
+                    sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
                   /> */}
                   <img className="w-fit" src={image} alt={`Image ${index}`} />
                 </CarouselItem>
