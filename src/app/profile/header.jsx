@@ -2,7 +2,7 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import { Button } from "@/components/ui/button"
 import { signOut } from "@/lib/auth";
 
-export default function Component ({ user, roboto }) {
+export default function Component ({ user, roboto, router }) {
   const handleLogout = () => {
     signOut(router);
   }

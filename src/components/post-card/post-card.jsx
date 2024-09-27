@@ -73,6 +73,7 @@ export default function Component({
                 >
                   <Image
                     src={src}
+                    quality={images.length > 1 ? 50 : 100}
                     alt={`Image ${index + 1}`}
                     layout="intrinsic" // Let the image control the container's size
                     width={images.length > 1 ? 400 : 700} // Example width based on media length
@@ -299,25 +300,18 @@ const PostCardCarousel = forwardRef(function PostCardCarousel({
               
             <CarouselContent className="">
               {images.map((image, index) => (
-                <CarouselItem key={index} className="w-90 h-screen flex justify-center items-center">
-                  {/* <Image
-                    src={image}
-                    alt={`Image ${index}`}
-                    layout="fill"
-                    objectFit="contain"
-                  /> */}
-                  {/* <Image
+                <CarouselItem key={index} className="w-fit h-screen flex justify-center items-center relative">
+                  <Image
                     src={image}
                     alt={`Image ${index + 1}`}
-                    fill
-                    style={{ objectFit: 'contain' }}
-                    sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
-                  /> */}
-                  <img className="w-fit" src={image} alt={`Image ${index}`} />
+                    width={500}
+                    height={300}
+                    quality={100}
+                  />
                 </CarouselItem>
               ))}
             </CarouselContent>
-            <CarouselPrevious className="absolute top-1/2 left-6 transform -translate-y-1/2 -translate-x-1/2 z-10" />
+            <CarouselPrevious className="absolute top-1/2 left-8 transform -translate-y-1/2 -translate-x-1/2 z-10" />
             <CarouselNext className="absolute top-1/2 right-0 transform -translate-y-1/2 -translate-x-1/2 z-10" />
           </Carousel>
         </div>

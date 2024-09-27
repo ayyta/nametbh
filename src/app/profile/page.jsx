@@ -6,7 +6,7 @@ import { Roboto } from 'next/font/google'
 
 import { Button } from "@/components/ui/button"
 import { SkeletonProfile } from "@/components/SkeletonComponents";
-import PostCard from "@/components/post-card"
+import PostCard from "@/components/post-card/post-card"
 import Header from "./header"
 const roboto = Roboto({
   weight: ['100', '300', '400', '700'],
@@ -15,7 +15,7 @@ const roboto = Roboto({
   display: 'swap',
 })
 
-export default function Profile() {
+export default function Component() {
 
   const [user, setUser] = useState({
     name: "John Doe",
