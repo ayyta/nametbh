@@ -25,7 +25,6 @@ export default function Component({
   // "/haircut2.jpg", "/massageServices.jpg", "/Plus square.svg", "/Upload Icon.svg", "/Home Icon.svg", "/Generic avatar.svg"
 }) {
   const [isCarouselOpen, setIsCarouselOpen] = useState(false);
-  const [currentImageIndex, setCurrentImageIndex] = useState(0);
 
   const handleLike = (isActive, count) => {
     console.log(`Like is now ${isActive ? "active": "inactive"} with count: ${count}`);
@@ -39,7 +38,6 @@ export default function Component({
     console.log("Pressed comment button");
   }
   const openCarousel = (index) => {
-    setCurrentImageIndex(index)
     setIsCarouselOpen(true)
   }
 
@@ -112,7 +110,6 @@ export default function Component({
       <PostCardCarousel 
         images={images} 
         isCarouselOpen={isCarouselOpen} 
-        currentImageIndex={currentImageIndex}
         closeCarousel={closeCarousel}
       />
     </>
@@ -276,7 +273,6 @@ const PostCardActionButton = forwardRef(function PostCardActionButton({
 
 const PostCardCarousel = forwardRef(function PostCardCarousel({
   images = [],
-  currentImageIndex = 0,
   isCarouselOpen = false,
   closeCarousel = () => {},
 }, ref) {
