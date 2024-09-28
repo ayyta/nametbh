@@ -65,7 +65,7 @@ export function PopupForm({ userID, user, initialValues }) {
       try {
         await updateUserInfo(fieldName, data[fieldName], userID);
       } catch (error) {
-          setError(fieldName, { message: `${error.message}.` });
+        setError(fieldName, { message: `${error.message}.` });
       }
     }
   };
@@ -81,10 +81,10 @@ export function PopupForm({ userID, user, initialValues }) {
       if (!response) {
         throw new Error("No response from server");
       }
-  
+
       const data = await response.json(); // Parse the JSON response
       if (response.status === 409) {
-        throw new Error(data.error);  // Handle "already taken" errors
+        throw new Error(data.error); // Handle "already taken" errors
       }
       if (!response.ok) {
         throw new Error("Failed to update user info");
@@ -94,11 +94,18 @@ export function PopupForm({ userID, user, initialValues }) {
       throw new Error(error.message);
     }
   }
-  
 
-  const FormField = ({ label, table_name, input_name, placeholder, buttonText }) => (
+  const FormField = ({
+    label,
+    table_name,
+    input_name,
+    placeholder,
+    buttonText,
+  }) => (
     <form
-      onSubmit={handleSubmit((data) => handleFormSubmit(data, table_name, input_name))}
+      onSubmit={handleSubmit((data) =>
+        handleFormSubmit(data, table_name, input_name)
+      )}
       className="w-full flex flex-col gap-4"
     >
       <div className="flex flex-col flex-grow">
@@ -115,7 +122,9 @@ export function PopupForm({ userID, user, initialValues }) {
             render={({ field }) => (
               <Input
                 {...field}
-                placeholder={user && user[table_name] ? user[table_name] : placeholder}
+                placeholder={
+                  user && user[table_name] ? user[table_name] : placeholder
+                }
                 className="flex-grow text-lg text-white h-12 border-none"
               />
             )}

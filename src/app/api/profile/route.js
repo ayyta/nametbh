@@ -1,6 +1,6 @@
 // app/api/profile/route.js
 
-import supabaseService from "../../../lib/supabaseServiceClient";
+import supabaseService from "../../../../lib/supabaseServiceClient";
 
 export async function GET(req) {
   // Extract userId from the query parameters
@@ -22,7 +22,6 @@ export async function GET(req) {
     if (error) {
       throw new Error(`Error fetching user data: ${error.message}`);
     }
-
     return new Response(JSON.stringify(data), { status: 200 });
   } catch (error) {
     console.error(error.message);
@@ -47,25 +46,28 @@ export async function PUT(req) {
   
     try {
       // Check if the field already exists for another user
-      const { data: existingUser, error: fetchError } = await supabaseService
-        .from("user")
-        .select("user_id")
-        .eq(field, value)
-        .single();
-  
-      // Handle fetch error
-      if (fetchError) {
-        throw new Error(`Error fetching user: ${fetchError.message}`);
-      }
-  
-      // If another user already has this field (username or email), return a conflict, this is in console
-      if (existingUser && existingUser.user_id !== userId) {
-        return new Response(
-          JSON.stringify({
-            error: `${field === "username" ? "Username" : "Email"} is already taken`,
-          }),
-          { status: 409 } // Conflict
-        );
+      if (field === "username") {
+        // Check if the field already exists for another user
+        const { data: existingUser, error: fetchError } = await supabaseService
+          .from("user")
+          .select("user_id")
+          .eq(field, value)
+          .maybeSingle();  // Use maybeSingle to handle no rows gracefully
+      
+        // Handle fetch error
+        if (fetchError) {
+          throw new Error(`Error fetching user: ${fetchError.message}`);
+        }
+      
+        // If another user already has this username, return a conflict
+        if (existingUser && existingUser.user_id !== userId) {
+          return new Response(
+            JSON.stringify({
+              error: "Username is already taken",
+            }),
+            { status: 409 } // Conflict
+          );
+        }
       }
   
       // Proceed with the update if the field is available
@@ -81,7 +83,6 @@ export async function PUT(req) {
   
       // Return the updated data
       return new Response(JSON.stringify(data), { status: 200 });
-      
     } catch (err) {
       // Log the error and return a generic 500 response for any other issues
       console.error("Server Error:", err.message);

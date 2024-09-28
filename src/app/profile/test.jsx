@@ -1,6 +1,6 @@
 "use client";
 import { useEffect, useState, useRef } from "react";
-import { set, useForm } from "react-hook-form";
+import { useForm } from "react-hook-form";
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
 import { Cross2Icon } from "@radix-ui/react-icons";
 import Image from "next/image";
@@ -10,11 +10,6 @@ import { PopupForm } from "./PopupForm";
 export default function Popup({ setIsPopupOpen }) {
   const { user } = useAuth();
   const [userProfile, setUserProfile] = useState(null);
-  const [pfpPath, setPfpPath] = useState(null);
-  const [bannerPath, setBannerPath] = useState(null);
-  const [pfpLink, setPfpLink] = useState(null);
-  const [bannerLink, setBannerLink] = useState(null);
-
   const { control, setValue } = useForm({
     defaultValues: {
       username: "",
@@ -25,7 +20,6 @@ export default function Popup({ setIsPopupOpen }) {
 
   const fileUploadRef = useRef();
 
-  //   make another helper function to call the fetch the media paths by ids by passing in the pfpid and bannerid from this get request below and then instead of calling the getMediaPathsbyids later one we can just call it up here and then store it in a state variable
   async function fetchUserProfile(userId) {
     try {
       const response = await fetch(`/api/profile/user?userId=${userId}`, {
@@ -34,63 +28,10 @@ export default function Popup({ setIsPopupOpen }) {
       if (!response.ok) throw new Error("Failed to fetch user profile");
       const data = await response.json();
       setUserProfile(data[0]);
-      const { pfpPath, bannerPath } = await fetchMediaPathByIds(
-        data[0].pfp,
-        data[0].profile_background
-      );
-      setPfpPath(pfpPath);
-      setBannerPath(bannerPath);
-      const mediaLinks = await gets3Images(pfpPath, bannerPath);
-
-      setPfpLink(mediaLinks[0]);
-      setBannerLink(mediaLinks[1]);
     } catch (error) {
       console.error(error.message);
     }
   }
-
-  const gets3Images = async (pfpId, bannerId) => {
-    const params = new URLSearchParams();
-    const s3Paths = [pfpId, bannerId];
-    s3Paths.forEach((imagePath) => {
-      params.append("paths", imagePath);
-    });
-    try {
-      const response = await fetch(`/api/s3?${params.toString()}`, {
-        method: "GET",
-      });
-      const data = await response.json();
-      return data.data;
-    } catch (error) {
-      console.error("Error using GET on s3 buckets: ", error.message);
-    }
-  };
-
-  const fetchMediaPathByIds = async (pfpId, bannerId) => {
-    try {
-      const urlParams = new URLSearchParams();
-
-      if (pfpId) urlParams.append("pfpId", pfpId);
-      if (bannerId) urlParams.append("bannerId", bannerId);
-
-      const query = urlParams.toString();
-
-      const response = await fetch(`/api/profile/media?${query}`, {
-        method: "GET",
-      });
-
-      if (!response.ok) {
-        throw new Error("Failed to fetch media path");
-      }
-
-      const result = await response.json();
-      //   console.log("Got media path from user:", result);
-      return result.data; // Safely access the media path
-    } catch (error) {
-      console.error("Error fetching media path:", error.message);
-      throw error;
-    }
-  };
 
   useEffect(() => {
     if (user?.id) {
@@ -98,7 +39,7 @@ export default function Popup({ setIsPopupOpen }) {
     }
   }, [user]);
 
-  const handleEdit = async (dataType, pfpPath, bannerPath) => {
+  const handleEdit = async (dataType) => {
     fileUploadRef.current.click(); // Trigger file input
 
     const uploadMedia = async (e) => {
@@ -106,29 +47,19 @@ export default function Popup({ setIsPopupOpen }) {
       if (!selectedFile) return;
 
       const apiCall = dataType === "pfp" ? "pfp" : "banner";
-      const mediaId =
+      const currentMediaPath =
         userProfile[dataType === "pfp" ? "pfp" : "profile_background"]; // Current media path (S3 path)
-      let currentMediaPath;
-      let pathToDelete;
-      try {
-        // Delete the current file from S3 if it exists
-        if (mediaId) {
-          const pfpId = dataType === "pfp" ? mediaId : null;
-          const bannerId = dataType === "banner" ? mediaId : null;
 
-          // Fetch the current media path using the updated fetchMediaPathByIds function
-          currentMediaPath = await fetchMediaPathByIds(pfpId, bannerId);
-          pathToDelete =
-            dataType === "pfp"
-              ? currentMediaPath.pfpPath
-              : currentMediaPath.bannerPath;
-          await deleteCurrentFile(pathToDelete);
+      try {
+        // Step 1: Delete the current file from S3 if it exists
+        if (currentMediaPath) {
+          await deleteCurrentFile(currentMediaPath);
         }
 
-        const uploadedPath = await s3UploadNewFile(selectedFile, dataType);
+        // Step 2: Upload the new file to S3
+        const uploadedPath = await uploadNewFile(selectedFile, dataType);
 
-        await createNewMedia(uploadedPath, user.id, apiCall);
-
+        // Step 3: Optionally, update the UI state with the new file (for preview purposes)
         console.log(`${dataType} updated successfully: ${uploadedPath}`);
       } catch (error) {
         console.error(`Error updating ${apiCall}:`, error.message);
@@ -136,30 +67,27 @@ export default function Popup({ setIsPopupOpen }) {
 
       // Clean up file input
       fileUploadRef.current.value = null;
-      //   window.location.reload();
     };
 
     fileUploadRef.current.onchange = uploadMedia; // Attach onchange handler
   };
 
-  const deleteCurrentFile = async (currentMediaPath) => {
-    const params = new URLSearchParams();
-    params.append("paths", currentMediaPath);
-
-    const response = await fetch(`/api/s3?${params.toString()}`, {
+  // Helper function to delete the current file from S3
+  const deleteCurrentFile = async (path) => {
+    const response = await fetch(`/api/s3`, {
       method: "DELETE",
+      body: JSON.stringify({ paths: [path] }),
     });
     const result = await response.json();
-
     if (response.ok) {
       console.log("Deleted current file from S3:", result);
     } else {
-      console.error("Error in deleting:", result.error);
       throw new Error(result.error || "Failed to delete the file from S3");
     }
   };
 
-  const s3UploadNewFile = async (file, dataType) => {
+  // Helper function to upload the new file to S3
+  const uploadNewFile = async (file, dataType) => {
     const formData = new FormData();
     formData.append("files", file);
     formData.append("path", "media"); // Define your S3 upload path here
@@ -170,56 +98,65 @@ export default function Popup({ setIsPopupOpen }) {
     });
 
     const result = await response.json();
-    if (!response.ok) {
+
+    if (response.ok) {
+      try {
+        const path = result.path;
+        await updateUserInfo(dataType, path, user.id);
+      } catch (err) {
+        console.error("Error updating user info:", err);
+      }
+    } else {
       throw new Error(result.error || "Failed to upload the new file to S3");
     }
-
-    return result.data?.[0]; // Return the uploaded path from the S3 upload result
   };
 
-  async function createNewMedia(data, userID, apiCall) {
-    const mediaType = "s3";
+  async function updateUserInfo(field, value, userID) {
     try {
-      const response = await fetch(`/api/profile/media`, {
-        method: "POST",
-        body: JSON.stringify({
-          userId: userID,
-          mediaPath: data,
-          mediaType: mediaType,
-          apiCall: apiCall,
-        }),
-      });
-      if (!response.ok) {
-        throw new Error("Failed to upload media");
+      const response = await fetch(
+        `/api/profile/user?userId=${userID}&field=${field}&value=${value}`,
+        {
+          method: "PUT",
+        }
+      );
+      if (!response) {
+        throw new Error("No response from server");
       }
-      const result = await response.json();
-      console.log("Media uploaded successfully:", result);
+
+      const data = await response.json(); // Parse the JSON response
+      if (response.status === 409) {
+        throw new Error(data.error); // Handle "already taken" errors
+      }
+      if (!response.ok) {
+        throw new Error("Failed to update user info");
+      }
+      return data;
     } catch (error) {
-      console.error("Error uploading media:", error.message);
+      throw new Error(error.message);
     }
   }
 
   return (
     <div className="flex flex-col w-3/5 items-center justify-center">
       <Card className="w-full h-auto border-none flex flex-col rounded-t-3xl bg-[#313131]">
-      <CardHeader
-  className="relative rounded-t-3xl flex items-end h-[150px]"
-  style={{
-    backgroundImage: bannerLink
-      ? `url(${bannerLink})`
-      : "none",
-    backgroundColor: bannerLink
-      ? "transparent"
-      : "rgb(55 65 81)", // bg-gray-700 as a fallback if no banner
-    backgroundSize: "cover",
-    backgroundPosition: "center",
-  }}
->
+        <CardHeader
+          className="relative rounded-t-3xl flex items-end h-[150px]"
+          style={{
+            backgroundImage: userProfile?.profile_background
+              ? `url(${userProfile.profile_background})`
+              : "none",
+            backgroundColor: userProfile?.profile_background
+              ? "transparent"
+              : "rgb(55 65 81)", // bg-gray-700
+            backgroundSize: "cover",
+            backgroundPosition: "center",
+          }}
+        >
           <div className="absolute inset-0 bg-black bg-opacity-40 rounded-t-3xl flex justify-center items-center">
             {/* Inner gray*/}
             <button
               className="bg-black bg-opacity-65 rounded-full p-4 hover:cursor-pointer hover:opacity-75 transition duration-200 ease-in"
-              onClick={() => handleEdit("banner", pfpPath, bannerPath)}
+              onClick={() => handleEdit("banner")}
             >
               <Image
                 src="/Close Icon.svg" // Replace with Edit Icon
@@ -245,22 +182,23 @@ export default function Popup({ setIsPopupOpen }) {
         <div className="relative flex gap-2 mt-[-75px] p-6">
           {/* This is the avatar */}
           <div className="relative">
-            <div className="w-[120px] h-[120px] rounded-full overflow-hidden">
-              <Image
-                src={pfpLink ? pfpLink : "/Generic avatar.svg"}
-                width={120}
-                height={120} // Ensure width and height are equal
-                alt="Avatar logo"
-                className="object-cover w-full h-full" // Make sure the image covers its container
-              />
-            </div>
-
+            <Image
+              src={
+                userProfile && userProfile.pfp
+                  ? userProfile.pfp
+                  : "/Generic avatar.svg"
+              }
+              width={120}
+              height={120}
+              alt="Avatar logo"
+              className="object-cover rounded-full"
+            />
             {/* This is the graying affect  */}
             <div className="absolute inset-0 flex justify-center items-center bg-black bg-opacity-45 rounded-full">
               {/* This is the inner gray  */}
               <button
                 className="bg-black bg-opacity-65 rounded-full p-4 hover:cursor-pointer hover:opacity-75 transition duration-200 ease-in"
-                onClick={() => handleEdit("pfp", pfpPath, bannerPath)}
+                onClick={() => handleEdit("pfp")}
               >
                 <Image
                   src="/Close Icon.svg" // Replace with Edit Icon
