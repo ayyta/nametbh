@@ -72,7 +72,7 @@ export default function Component({
           )}
         </CardContent>
 
-        <CardFooter className="flex justify-between">
+        <CardFooter className="flex gap-5">
           <PostCardInteractionButton 
             initialCount={0}
             activeColor="#f91980"
