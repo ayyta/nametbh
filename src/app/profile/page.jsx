@@ -1,41 +1,46 @@
-"use client";
+'use client';
 
-import { useEffect, useState } from "react";
-import { useRouter } from "next/navigation";
-import { Roboto } from "next/font/google";
-
-import { signOut } from "@/lib/auth";
-import { Button } from "@/components/ui/button";
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { SkeletonProfile } from "@/components/SkeletonComponents";
-import Popup from "./Popup";
-import PostCard from "@/components/post-card";
-import { useAuth } from "@/components/wrappers/AuthCheckWrapper";
+import { useEffect, useState } from 'react';
+import { useRouter } from 'next/navigation';
+import { Roboto } from 'next/font/google';
+import { signOut } from '@/lib/auth';
+import { Button } from '@/components/ui/button';
+import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
+import { SkeletonProfile } from '@/components/SkeletonComponents';
+import Popup from './Popup';
+import PostCard from '@/components/post-card';
+import { useAuth } from '@/components/wrappers/AuthCheckWrapper';
+import { fetchMediaPathByIds, gets3Images } from './utils.js';
 
 const roboto = Roboto({
-  weight: ["100", "300", "400", "700"],
-  style: ["normal", "italic"],
-  subsets: ["latin"],
-  display: "swap",
+  weight: ['100', '300', '400', '700'],
+  style: ['normal', 'italic'],
+  subsets: ['latin'],
+  display: 'swap',
 });
 
 export default function Profile() {
   const { user } = useAuth();
+  const router = useRouter();
   const [userProfile, setUserProfile] = useState(null);
   const [pfpPath, setPfpPath] = useState(null);
   const [bannerPath, setBannerPath] = useState(null);
   const [pfpLink, setPfpLink] = useState(null);
   const [bannerLink, setBannerLink] = useState(null);
-//   Setting temp values while it's loading
+  const [loading, setLoading] = useState(false);
+  const [isPopupOpen, setIsPopupOpen] = useState(false);
+
+  //   Setting temp values while it's loading
   const [userCurr, setUserCurr] = useState({
-    name: "Loading...",
-    username: "Loading...",
-    bio: "",
-    pfp: "/Generic avatar.svg", 
-    profile_background: "",
+    name: 'Loading...',
+    username: 'Loading...',
+    bio: '',
+    pfp: '/Generic avatar.svg',
+    profile_background: '',
     num_of_followers: 0,
   });
-// This is to update the information after fetching 
+
+  // This is to update the information after fetching
   useEffect(() => {
     if (userProfile) {
       setUserCurr((prev) => ({
@@ -53,26 +58,27 @@ export default function Profile() {
       fetchUserProfile(user.id);
     }
   }, [user]);
-// This is to update whenever a user changes their pfp or banner
+
+  // This is to update whenever a user changes their pfp or banner
   useEffect(() => {
     setUserCurr((prev) => ({
       ...prev,
-      pfp: pfpLink ? pfpLink : "/Generic avatar.svg",
-      profile_background: bannerLink ? `url(${bannerLink})` : "",
+      pfp: pfpLink ? pfpLink : '/Generic avatar.svg',
+      profile_background: bannerLink ? `url(${bannerLink})` : '',
     }));
   }, [pfpLink, bannerLink]);
 
   async function fetchUserProfile(userId) {
     try {
       const response = await fetch(`/api/profile/user?userId=${userId}`, {
-        method: "GET",
+        method: 'GET',
       });
-      if (!response.ok) throw new Error("Failed to fetch user profile");
+      if (!response.ok) throw new Error('Failed to fetch user profile');
       const data = await response.json();
       setUserProfile(data[0]);
       const { pfpPath, bannerPath } = await fetchMediaPathByIds(
         data[0].pfp,
-        data[0].profile_background
+        data[0].profile_background,
       );
       setPfpPath(pfpPath);
       setBannerPath(bannerPath);
@@ -85,66 +91,19 @@ export default function Profile() {
     }
   }
 
-  const gets3Images = async (pfpId, bannerId) => {
-    const params = new URLSearchParams();
-    const s3Paths = [pfpId, bannerId];
-    s3Paths.forEach((imagePath) => {
-      params.append("paths", imagePath);
-    });
-    try {
-      const response = await fetch(`/api/s3?${params.toString()}`, {
-        method: "GET",
-      });
-      const data = await response.json();
-      return data.data;
-    } catch (error) {
-      console.error("Error using GET on s3 buckets: ", error.message);
-    }
-  };
-
-  const fetchMediaPathByIds = async (pfpId, bannerId) => {
-    try {
-      const urlParams = new URLSearchParams();
-
-      if (pfpId) urlParams.append("pfpId", pfpId);
-      if (bannerId) urlParams.append("bannerId", bannerId);
-
-      const query = urlParams.toString();
-
-      const response = await fetch(`/api/profile/media?${query}`, {
-        method: "GET",
-      });
-
-      if (!response.ok) {
-        throw new Error("Failed to fetch media path");
-      }
-
-      const result = await response.json();
-      //   console.log("Got media path from user:", result);
-      return result.data; // Safely access the media path
-    } catch (error) {
-      console.error("Error fetching media path:", error.message);
-      throw error;
-    }
-  };
-
   // Generate 20 posts at a time
   const [posts, setPosts] = useState([
     {
       user_id: null,
       post_id: null,
-      title: "",
-      text_content: "",
-      like_count: "",
-      dislike_count: "",
-      comments: "",
-      created_at: "",
+      title: '',
+      text_content: '',
+      like_count: '',
+      dislike_count: '',
+      comments: '',
+      created_at: '',
     },
   ]);
-
-  const [loading, setLoading] = useState(false);
-
-  const router = useRouter();
 
   const handleLogout = () => {
     signOut(router);
@@ -152,9 +111,9 @@ export default function Profile() {
 
   function formatNumber(num) {
     if (Math.abs(num) >= 1_000_000) {
-      return (num / 1_000_000).toFixed(1) + "M"; // Converts to millions (M)
+      return (num / 1_000_000).toFixed(1) + 'M'; // Converts to millions (M)
     } else if (Math.abs(num) >= 1_000) {
-      return (num / 1_000).toFixed(1) + "K"; // Converts to thousands (K)
+      return (num / 1_000).toFixed(1) + 'K'; // Converts to thousands (K)
     } else {
       return num.toString(); // Less than 1,000 stays as is
     }
@@ -162,20 +121,18 @@ export default function Profile() {
 
   let backgroundStyle = {
     backgroundImage:
-      userCurr.profile_background !== "" ? `url(${bannerLink})` : "",
-    backgroundSize: "cover",
-    backgroundPosition: "center",
-    backgroundRepeat: "no-repeat",
+      userCurr.profile_background !== '' ? `url(${bannerLink})` : '',
+    backgroundSize: 'cover',
+    backgroundPosition: 'center',
+    backgroundRepeat: 'no-repeat',
   };
-
-  const [isPopupOpen, setIsPopupOpen] = useState(false);
 
   return (
     <>
       <div className="w-full h-full flex flex-col relative">
         <div
-          className={`w-full h-64   p-10 flex ${
-            userCurr.profile_background === "" ? "bg-gray-700" : ""
+          className={`w-full h-64 mb-6 p-10 flex ${
+            userCurr.profile_background === '' ? 'bg-gray-700' : ''
           }`}
           style={backgroundStyle}
         >

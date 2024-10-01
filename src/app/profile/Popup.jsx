@@ -1,10 +1,11 @@
-"use client";
-import { useRef } from "react";
-import { Card, CardContent, CardHeader } from "@/components/ui/card";
-import { Cross2Icon } from "@radix-ui/react-icons";
-import { CameraIcon } from "lucide-react";
-import Image from "next/image";
-import { PopupForm } from "./PopupForm";
+'use client';
+import { useRef } from 'react';
+import { Card, CardContent, CardHeader } from '@/components/ui/card';
+import { Cross2Icon } from '@radix-ui/react-icons';
+import { CameraIcon } from 'lucide-react';
+import Image from 'next/image';
+import { PopupForm } from './PopupForm';
+import { deleteCurrentFile, s3UploadNewFile, createNewMedia } from './utils.js';
 
 export default function Popup({
   fetchUserProfile,
@@ -24,21 +25,21 @@ export default function Popup({
       const selectedFile = e.target.files[0]; // Get the selected file
       if (!selectedFile) return;
 
-      const apiCall = dataType === "pfp" ? "pfp" : "banner";
+      const apiCall = dataType === 'pfp' ? 'pfp' : 'banner';
       const mediaId =
-        userProfile[dataType === "pfp" ? "pfp" : "profile_background"]; // Current media path (S3 path)
+        userProfile[dataType === 'pfp' ? 'pfp' : 'profile_background']; // Current media path (S3 path)
       let currentMediaPath;
       let pathToDelete;
       try {
         // Delete the current file from S3 if it exists
         if (mediaId) {
-          const pfpId = dataType === "pfp" ? mediaId : null;
-          const bannerId = dataType === "banner" ? mediaId : null;
+          const pfpId = dataType === 'pfp' ? mediaId : null;
+          const bannerId = dataType === 'banner' ? mediaId : null;
 
           // Fetch the current media path using the updated fetchMediaPathByIds function
           currentMediaPath = await fetchMediaPathByIds(pfpId, bannerId);
           pathToDelete =
-            dataType === "pfp"
+            dataType === 'pfp'
               ? currentMediaPath.pfpPath
               : currentMediaPath.bannerPath;
           await deleteCurrentFile(pathToDelete);
@@ -46,8 +47,6 @@ export default function Popup({
 
         const uploadedPath = await s3UploadNewFile(selectedFile, dataType);
         await createNewMedia(uploadedPath, user.id, apiCall);
-
-        console.log(`${dataType} updated successfully: ${uploadedPath}`);
 
         // Refetch the user profile after the update
         await fetchUserProfile(user.id);
@@ -62,63 +61,6 @@ export default function Popup({
     fileUploadRef.current.onchange = uploadMedia;
   };
 
-  const deleteCurrentFile = async (currentMediaPath) => {
-    const params = new URLSearchParams();
-    params.append("paths", currentMediaPath);
-
-    const response = await fetch(`/api/s3?${params.toString()}`, {
-      method: "DELETE",
-    });
-    const result = await response.json();
-
-    if (response.ok) {
-      console.log("Deleted current file from S3:", result);
-    } else {
-      console.error("Error in deleting:", result.error);
-      throw new Error(result.error || "Failed to delete the file from S3");
-    }
-  };
-
-  const s3UploadNewFile = async (file) => {
-    const formData = new FormData();
-    formData.append("files", file);
-    formData.append("path", "media"); // Define your S3 upload path here
-
-    const response = await fetch(`/api/s3`, {
-      method: "POST",
-      body: formData,
-    });
-
-    const result = await response.json();
-    if (!response.ok) {
-      throw new Error(result.error || "Failed to upload the new file to S3");
-    }
-
-    return result.data?.[0]; // Return the uploaded path from the S3 upload result
-  };
-
-  async function createNewMedia(data, userID, apiCall) {
-    const mediaType = "s3";
-    try {
-      const response = await fetch(`/api/profile/media`, {
-        method: "POST",
-        body: JSON.stringify({
-          userId: userID,
-          mediaPath: data,
-          mediaType: mediaType,
-          apiCall: apiCall,
-        }),
-      });
-      if (!response.ok) {
-        throw new Error("Failed to upload media");
-      }
-      const result = await response.json();
-      console.log("Media uploaded successfully:", result);
-    } catch (error) {
-      console.error("Error uploading media:", error.message);
-    }
-  }
-
   return (
     <div className="flex flex-col w-3/5 items-center justify-center">
       <Card className="w-4/6 min-w-[534px] h-auto border-none flex flex-col rounded-t-3xl bg-[#313131]">
@@ -126,19 +68,23 @@ export default function Popup({
         <CardHeader
           className="relative rounded-t-3xl flex items-end h-[150px]"
           style={{
-            backgroundImage: bannerLink ? `url(${bannerLink})` : "none",
-            backgroundColor: bannerLink ? "transparent" : "rgb(55 65 81)", // bg-gray-700 as a fallback if no banner
-            backgroundSize: "cover",
-            backgroundPosition: "center",
+            backgroundImage: bannerLink ? `url(${bannerLink})` : 'none',
+            backgroundColor: bannerLink ? 'transparent' : 'rgb(55 65 81)', // bg-gray-700 as a fallback if no banner
+            backgroundSize: 'cover',
+            backgroundPosition: 'center',
           }}
         >
           <div className="absolute inset-0 bg-black bg-opacity-40 rounded-t-3xl flex justify-center items-center z-10">
             {/* Inner gray*/}
             <button
               className="bg-black bg-opacity-65 rounded-full p-4 hover:cursor-pointer hover:opacity-75 transition duration-200 ease-in"
-              onClick={() => handleEdit("banner")}
+              onClick={() => handleEdit('banner')}
             >
-              <CameraIcon width={20} height={20} className="text-gray-300 object-contain" />
+              <CameraIcon
+                width={20}
+                height={20}
+                className="text-gray-300 object-contain"
+              />
             </button>
             <input
               type="file"
@@ -158,7 +104,7 @@ export default function Popup({
           <div className="relative z-20">
             <div className="w-[120px] h-[120px] rounded-full overflow-hidden">
               <Image
-                src={pfpLink ? pfpLink : "/Generic avatar.svg"}
+                src={pfpLink ? pfpLink : '/Generic avatar.svg'}
                 width={120}
                 height={120}
                 alt="Avatar logo"
@@ -170,9 +116,13 @@ export default function Popup({
               {/* This is the inner gray  */}
               <button
                 className="bg-black bg-opacity-65 rounded-full p-4 hover:cursor-pointer hover:opacity-75 transition duration-200 ease-in"
-                onClick={() => handleEdit("pfp")}
+                onClick={() => handleEdit('pfp')}
               >
-                <CameraIcon width={20} height={20} className="text-gray-300 object-contain" />
+                <CameraIcon
+                  width={20}
+                  height={20}
+                  className="text-gray-300 object-contain"
+                />
               </button>
             </div>
           </div>
@@ -183,10 +133,10 @@ export default function Popup({
             <PopupForm
               userID={user.id}
               user={userProfile}
-              initialValues={{ username: "", email: "", password: "" }}
+              initialValues={{ username: '', email: '', password: '' }}
             />
           </main>
-        </CardContent>{" "}
+        </CardContent>{' '}
       </Card>
     </div>
   );
