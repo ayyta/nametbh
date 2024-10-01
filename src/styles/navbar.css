@@ -1,8 +1,6 @@
-
 /* Navbar Styles */
 .sidebar {
-  @apply 
-    text-secondary
+  @apply text-secondary
     bg-primary
     sm:relative
     sm:left-0
@@ -32,8 +30,7 @@
 }
 
 .sidebar-container {
-  @apply
-    sm:float-right
+  @apply sm:float-right
     sm:w-auto
     sm:block
     w-full
@@ -45,8 +42,7 @@
 }
 
 .sidebar-link-container {
-  @apply
-    md:px-10
+  @apply md:px-10
     sm:py-4
     sm:px-3
 
@@ -59,19 +55,16 @@
 }
 
 .sidebar-link {
-  @apply
-    flex
+  @apply flex
     items-center;
 }
 
 .sidebar-link-image {
-  @apply
-    sm:mr-3;
+  @apply sm:mr-3;
 }
 
 .sidebar-link-title {
-  @apply
-    text-lg
+  @apply text-lg
     md:flex
     hidden
     w-20;
@@ -79,16 +72,14 @@
 
 /* Sidebar Sections */
 .sidebar-upper-section {
-  @apply
-    sm:block
+  @apply sm:block
     flex
     sm:gap-0
     gap-7;
 }
 
 .sidebar-lower-section {
-  @apply
-    sm:absolute
+  @apply sm:absolute
     sm:bottom-0
     sm:mb-8
     sm:block
@@ -98,26 +89,22 @@
 }
 
 .avatar-container {
-  @apply
-    flex;
+  @apply flex;
 }
 
 .avatar-logo {
-  @apply
-    flex
+  @apply flex
     sm:mr-3;
 }
 
 .avatar-name-container {
-  @apply
-    md:w-20
+  @apply md:w-20
     w-0
     select-text;
 }
 
 .avatar-name {
-  @apply
-    text-nowrap
+  @apply text-nowrap
     text-base
     
     md:flex
@@ -125,8 +112,7 @@
 }
 
 .avatar-handle {
-  @apply
-    mt-1
+  @apply mt-1
     text-slate-400
     text-xs
     
@@ -134,11 +120,9 @@
     hidden;
 }
 
-
 /* Upload Page */
 .upload {
-  @apply
-    fixed
+  @apply fixed
     top-1/2
     left-1/2
     -translate-y-2/4
@@ -156,32 +140,25 @@
 }
 
 .upload-container {
-  @apply
-    m-2
-    w-96
-    ;
+  @apply m-2
+    w-96;
 }
 
 .upload-header {
-  @apply
-    flex
+  @apply flex
     px-2
     pt-2
     pb-2
     justify-between
-    items-center
-    ;
+    items-center;
 }
 
 .upload-avatar {
-  @apply
-    p-2
-    ;
+  @apply p-2;
 }
 
 .upload-close-button {
-  @apply
-    p-1.5
+  @apply p-1.5
     absolute
     top-2
     right-2
@@ -197,8 +174,7 @@
 } */
 
 .upload-body {
-  @apply
-    flex
+  @apply flex
     w-full
     h-36
     p-2.5
@@ -207,13 +183,11 @@
     bg-third
     focus:border-primary
     focus:border
-    focus:rounded-md
-    ;
+    focus:rounded-md;
 }
 
 .upload-utilities-left-section {
-  @apply
-    flex
+  @apply flex
     p-px
     absolute
     bottom-0
@@ -221,8 +195,7 @@
 }
 
 .upload-utilities {
-  @apply
-    p-1.5
+  @apply p-1.5
     hover:opacity-80
     hover:rounded-full
     hover:bg-primary
@@ -231,8 +204,7 @@
 }
 
 .upload-utilities-right-section {
-  @apply
-    flex
+  @apply flex
     p-px
     absolute
     bottom-0
@@ -240,8 +212,7 @@
 }
 
 .upload-button {
-  @apply
-    py-px
+  @apply py-px
     px-8
     m-1.5
     border-2
@@ -254,18 +225,15 @@
     cursor-pointer;
 }
 
-
 .upload-overlay {
-  @apply
-    absolute
+  @apply absolute
     w-full
     h-full
     z-10;
 }
 
 .upload-popup-container {
-  @apply
-    fixed
+  @apply fixed
     w-screen
     h-screen
     top-0
