@@ -1,5 +1,5 @@
 'use client';
-import { useEffect, useState } from "react";
+import { useEffect, useState, useCallback } from "react";
 import Image from "next/image";
 import axios from "axios";
 
@@ -15,6 +15,7 @@ export default function GiphySelector({
 {
   const [searchGif, setSearchGif] = useState("");
   const [isLoading, setIsLoading] = useState(false);
+  // const [isTyping, setIsTyping] = useState(false);
 
   // Closes the Giphy popup
   const closePopup = () => {
@@ -22,10 +23,18 @@ export default function GiphySelector({
     setShowGifs(false);
   };
 
+  function debounce(func, delay) {
+    let timer;
+    return (...args) => {
+      if (timer) clearTimeout(timer);
+      timer = setTimeout(() => {
+        func.apply(this, args);
+      }, delay);
+    };
+  }
+
   // Fetches the gifs from the Giphy API
   const fetchData = async (searchVal = '') => {
-    setIsLoading(true);
-
     try {
       const endpoint = searchVal ? `https://api.giphy.com/v1/gifs/search` : 'https://api.giphy.com/v1/gifs/trending';
 
@@ -38,19 +47,30 @@ export default function GiphySelector({
       setGifs(results.data.data);
     } catch (error) {
       console.error("Error fetching gifs", error);
-    }
+    } 
   };
 
+  const debouncedFetch = useCallback(debounce(async (searchVal) => {
+    setIsLoading(true);
+    await fetchData(searchVal); // Fetch the GIFS
+    setIsLoading(false);
+  }, 600), []);
+
   // Handles the user search change
-  const handleSearchChange = (e) => {
+  const handleSearchChange = async (e) => {
     const searchVal = e.target.value;
     setSearchGif(searchVal);
-    fetchData(searchVal);
+
+    debouncedFetch(searchVal);
   };
 
   // Whenever the user searches for a gif, it will fetch the data
   useEffect(() => {
-    fetchData();
+    (async () => {
+      setIsLoading(true);
+      await fetchData();
+      setIsLoading(false);
+    })();
   }, []);
 
   // Handles the user search submission and gets the data they searched for
@@ -68,19 +88,13 @@ export default function GiphySelector({
       setGifs(results.data.data);
     } catch (error) {
       console.error("Error fetching gifs", error);
+    } finally {
+      setIsLoading(false);
     }
   };
 
   // Renders the gifs
   const renderGifs = () => {
-    if (isLoading) {
-      return (
-        <div>
-          <p>Loading...</p>
-        </div>
-      );
-    }
-
     return gifs.map(giphy => {
       return (
         <div className="flex" key={giphy.id}>
@@ -147,6 +161,11 @@ export default function GiphySelector({
           />
         </button>
       </div>
+      {isLoading && (
+        <div className="flex fixed top-1/2 left-1/2 -translate-y-2/4 -translate-x-2/4 border-solid border-primary/50 rounded-2xl bg-third z-30 w-96 h-14 bg-white">
+          <p>Loading...</p>
+        </div>
+      )}
       <div className="gif-scrollbar grid grid-cols-3 relative overflow-y-hidden overflow-y-scroll scroll-smooth">
         {showGifs && renderGifs()}
       </div>
