@@ -1,5 +1,6 @@
-import supabaseAnon from './supabaseAnonClient';
 import { NextResponse } from 'next/server';
+
+import supabaseAnon from './supabaseAnonClient';
 
 export const login = async (email, password, router) => {
   const { error } = await supabaseAnon.auth.signInWithPassword({

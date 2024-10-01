@@ -1,9 +1,10 @@
+import { NextResponse } from 'next/server';
+
 import {
   uploadFilesToS3,
   getPresignedUrl,
   deleteFilesFromS3,
 } from '@/lib/s3Functions';
-import { NextResponse } from 'next/server';
 
 // Send file to S3 bucket
 export async function POST(req, res) {
