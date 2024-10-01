@@ -53,7 +53,10 @@ export default function GiphySelector({
   const debouncedFetch = useCallback(debounce(async (searchVal) => {
     setIsLoading(true);
     await fetchData(searchVal); // Fetch the GIFS
-    setIsLoading(false);
+
+    if (searchVal.length === 0) {
+      setIsLoading(false);
+    }
   }, 600), []);
 
   // Handles the user search change
