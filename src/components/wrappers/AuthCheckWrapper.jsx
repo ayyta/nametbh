@@ -1,8 +1,8 @@
-"use client";
+'use client';
 
-import React, { createContext, useContext, useState, useEffect } from "react";
-import { useRouter, usePathname } from "next/navigation";
-import supabaseAnon from "@/lib/supabaseAnonClient";
+import React, { createContext, useContext, useState, useEffect } from 'react';
+import { useRouter, usePathname } from 'next/navigation';
+import supabaseAnon from '@/lib/supabaseAnonClient';
 
 const AuthContext = createContext();
 
@@ -20,14 +20,14 @@ export default function AuthCheckWrapper({ children }) {
       } = await supabaseAnon.auth.getSession();
 
       // Skip redirect if user is on login or register page
-      if (!session && pathname !== "/login" && pathname !== "/register") {
-        router.push("/login");
+      if (!session && pathname !== '/login' && pathname !== '/register') {
+        router.push('/login');
         setLoading(true);
       } else if (
         session &&
-        (pathname === "/login" || pathname === "/register")
+        (pathname === '/login' || pathname === '/register')
       ) {
-        router.push("/home");
+        router.push('/home');
         setLoading(true);
       } else {
         setUser(session?.user || null);

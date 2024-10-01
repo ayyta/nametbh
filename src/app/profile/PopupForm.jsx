@@ -1,39 +1,39 @@
-import { Controller, useForm } from "react-hook-form";
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { z } from "zod";
+import { Controller, useForm } from 'react-hook-form';
+import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
+import { z } from 'zod';
 
 const formSchema = z.object({
   username: z
     .string()
-    .min(2, { message: "Username must be at least 2 characters." }),
-  email: z.string().email({ message: "Invalid email address." }),
+    .min(2, { message: 'Username must be at least 2 characters.' }),
+  email: z.string().email({ message: 'Invalid email address.' }),
   password: z
     .string()
-    .min(8, { message: "Password must be at least 8 characters." }),
+    .min(8, { message: 'Password must be at least 8 characters.' }),
 });
 
 const formFields = [
   {
-    label: "USERNAME",
-    table_name: "username",
-    input_name: "Username",
-    placeholder: "Loading...",
-    buttonText: "Edit",
+    label: 'USERNAME',
+    table_name: 'username',
+    input_name: 'Username',
+    placeholder: 'Loading...',
+    buttonText: 'Edit',
   },
   {
-    label: "EMAIL",
-    table_name: "email",
-    input_name: "Email",
-    placeholder: "Loading...",
-    buttonText: "Edit",
+    label: 'EMAIL',
+    table_name: 'email',
+    input_name: 'Email',
+    placeholder: 'Loading...',
+    buttonText: 'Edit',
   },
   {
-    label: "PASSWORD",
-    table_name: "password",
-    input_name: "Password",
-    placeholder: "Enter password",
-    buttonText: "Edit",
+    label: 'PASSWORD',
+    table_name: 'password',
+    input_name: 'Password',
+    placeholder: 'Enter password',
+    buttonText: 'Edit',
   },
 ];
 
@@ -46,9 +46,9 @@ export function PopupForm({ userID, user, initialValues }) {
     formState: { errors },
   } = useForm({
     defaultValues: {
-      username: initialValues?.username || user?.username || "",
-      email: initialValues?.email || user?.email || "",
-      password: "", // password should likely start empty
+      username: initialValues?.username || user?.username || '',
+      email: initialValues?.email || user?.email || '',
+      password: '', // password should likely start empty
     },
   });
 
@@ -75,11 +75,11 @@ export function PopupForm({ userID, user, initialValues }) {
       const response = await fetch(
         `/api/profile/user?userId=${userID}&field=${field}&value=${value}`,
         {
-          method: "PUT",
-        }
+          method: 'PUT',
+        },
       );
       if (!response) {
-        throw new Error("No response from server");
+        throw new Error('No response from server');
       }
 
       const data = await response.json(); // Parse the JSON response
@@ -87,7 +87,7 @@ export function PopupForm({ userID, user, initialValues }) {
         throw new Error(data.error); // Handle "already taken" errors
       }
       if (!response.ok) {
-        throw new Error("Failed to update user info");
+        throw new Error('Failed to update user info');
       }
       return data;
     } catch (error) {
@@ -104,7 +104,7 @@ export function PopupForm({ userID, user, initialValues }) {
   }) => (
     <form
       onSubmit={handleSubmit((data) =>
-        handleFormSubmit(data, table_name, input_name)
+        handleFormSubmit(data, table_name, input_name),
       )}
       className="w-full flex flex-col gap-4"
     >
