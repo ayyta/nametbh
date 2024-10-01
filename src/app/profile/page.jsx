@@ -11,7 +11,6 @@ import { SkeletonProfile } from "@/components/SkeletonComponents";
 import Popup from "./Popup";
 import PostCard from "@/components/post-card";
 import { useAuth } from "@/components/wrappers/AuthCheckWrapper";
-import { set } from "zod";
 
 const roboto = Roboto({
   weight: ["100", "300", "400", "700"],

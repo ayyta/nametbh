@@ -1,10 +1,9 @@
 "use client";
-import { useEffect, useState, useRef } from "react";
-import { set, useForm } from "react-hook-form";
+import { useRef } from "react";
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
 import { Cross2Icon } from "@radix-ui/react-icons";
+import { CameraIcon } from "lucide-react";
 import Image from "next/image";
-import { useAuth } from "@/components/wrappers/AuthCheckWrapper";
 import { PopupForm } from "./PopupForm";
 
 export default function Popup({
@@ -12,31 +11,19 @@ export default function Popup({
   setIsPopupOpen,
   user,
   userProfile,
-  pfpPath,
-  bannerPath,
   pfpLink,
   bannerLink,
   fetchMediaPathByIds,
-  setBannerLink,
-  setPfpLink,
 }) {
-  const { control, setValue } = useForm({
-    defaultValues: {
-      username: "",
-      email: "",
-      password: "",
-    },
-  });
-
   const fileUploadRef = useRef();
 
   const handleEdit = async (dataType) => {
-    fileUploadRef.current.click(); 
-  
+    fileUploadRef.current.click();
+
     const uploadMedia = async (e) => {
       const selectedFile = e.target.files[0]; // Get the selected file
       if (!selectedFile) return;
-  
+
       const apiCall = dataType === "pfp" ? "pfp" : "banner";
       const mediaId =
         userProfile[dataType === "pfp" ? "pfp" : "profile_background"]; // Current media path (S3 path)
@@ -47,7 +34,7 @@ export default function Popup({
         if (mediaId) {
           const pfpId = dataType === "pfp" ? mediaId : null;
           const bannerId = dataType === "banner" ? mediaId : null;
-  
+
           // Fetch the current media path using the updated fetchMediaPathByIds function
           currentMediaPath = await fetchMediaPathByIds(pfpId, bannerId);
           pathToDelete =
@@ -56,26 +43,24 @@ export default function Popup({
               : currentMediaPath.bannerPath;
           await deleteCurrentFile(pathToDelete);
         }
-  
+
         const uploadedPath = await s3UploadNewFile(selectedFile, dataType);
         await createNewMedia(uploadedPath, user.id, apiCall);
-  
+
         console.log(`${dataType} updated successfully: ${uploadedPath}`);
-  
+
         // Refetch the user profile after the update
         await fetchUserProfile(user.id);
-        
       } catch (error) {
         console.error(`Error updating ${apiCall}:`, error.message);
       }
-  
+
       // Clean up file input
       fileUploadRef.current.value = null;
     };
-  
-    fileUploadRef.current.onchange = uploadMedia; // Attach onchange handler
+
+    fileUploadRef.current.onchange = uploadMedia;
   };
-  
 
   const deleteCurrentFile = async (currentMediaPath) => {
     const params = new URLSearchParams();
@@ -94,7 +79,7 @@ export default function Popup({
     }
   };
 
-  const s3UploadNewFile = async (file, dataType) => {
+  const s3UploadNewFile = async (file) => {
     const formData = new FormData();
     formData.append("files", file);
     formData.append("path", "media"); // Define your S3 upload path here
@@ -136,7 +121,7 @@ export default function Popup({
 
   return (
     <div className="flex flex-col w-3/5 items-center justify-center">
-      <Card className="w-full h-auto border-none flex flex-col rounded-t-3xl bg-[#313131]">
+      <Card className="w-4/6 min-w-[534px] h-auto border-none flex flex-col rounded-t-3xl bg-[#313131]">
         {/* This is the header */}
         <CardHeader
           className="relative rounded-t-3xl flex items-end h-[150px]"
@@ -147,19 +132,13 @@ export default function Popup({
             backgroundPosition: "center",
           }}
         >
-          <div className="absolute inset-0 bg-black bg-opacity-40 rounded-t-3xl flex justify-center items-center">
+          <div className="absolute inset-0 bg-black bg-opacity-40 rounded-t-3xl flex justify-center items-center z-10">
             {/* Inner gray*/}
             <button
               className="bg-black bg-opacity-65 rounded-full p-4 hover:cursor-pointer hover:opacity-75 transition duration-200 ease-in"
-              onClick={() => handleEdit("banner", pfpPath, bannerPath)}
+              onClick={() => handleEdit("banner")}
             >
-              <Image
-                src="/Close Icon.svg" // Replace with Edit Icon
-                width={20}
-                height={20}
-                alt="Edit icon"
-                className="object-contain"
-              />
+              <CameraIcon width={20} height={20} className="text-gray-300 object-contain" />
             </button>
             <input
               type="file"
@@ -176,7 +155,7 @@ export default function Popup({
         </CardHeader>
         {/* This is the Avatar code */}
         <div className="relative flex gap-2 mt-[-75px] p-6">
-          <div className="relative">
+          <div className="relative z-20">
             <div className="w-[120px] h-[120px] rounded-full overflow-hidden">
               <Image
                 src={pfpLink ? pfpLink : "/Generic avatar.svg"}
@@ -191,15 +170,9 @@ export default function Popup({
               {/* This is the inner gray  */}
               <button
                 className="bg-black bg-opacity-65 rounded-full p-4 hover:cursor-pointer hover:opacity-75 transition duration-200 ease-in"
-                onClick={() => handleEdit("pfp", pfpPath, bannerPath)}
+                onClick={() => handleEdit("pfp")}
               >
-                <Image
-                  src="/Close Icon.svg" // Replace with Edit Icon
-                  width={20}
-                  height={20}
-                  alt="Edit icon"
-                  className="object-contain"
-                />
+                <CameraIcon width={20} height={20} className="text-gray-300 object-contain" />
               </button>
             </div>
           </div>
