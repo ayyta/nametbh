@@ -6,7 +6,7 @@ import { Roboto } from 'next/font/google'
 
 import { Button } from "@/components/ui/button"
 import { SkeletonProfile } from "@/components/SkeletonComponents";
-import PostCard from "@/components/post-card/post-card"
+import PostCardPreview from "@/components/post-card/post-card-preview"
 import Header from "./header"
 const roboto = Roboto({
   weight: ['100', '300', '400', '700'],
@@ -64,7 +64,7 @@ export default function Component() {
         {loading ? <SkeletonProfile/> : <Header user={user} roboto={roboto} router={router}/>}
 
         <div className="w-full h-full flex justify-center">
-          <PostCard/>
+          <PostCardPreview/>
         </div>
 
       </div>
