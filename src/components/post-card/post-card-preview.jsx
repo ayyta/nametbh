@@ -9,8 +9,11 @@ import Image from "next/image"
 import PostCardCarousel from "@/components/post-card/post-card-carousel"
 
 import { PostCardActionButton, PostCardInteractionButton } from "@/components/post-card/post-card-buttons"
+import { comment } from "postcss"
 
 export default function Component({
+  postId=null,
+  userId=null,
   pfp = "/placeholder-avatar.jpg",
   name = "John Doe",
   username = "@johndoe",
@@ -22,7 +25,10 @@ export default function Component({
   friends=false,
   creationDate = "2h ago",
   content = "This is a sample post content. It can be much longer and will wrap to multiple lines if needed. ",
-  images = ["/massageServices.jpg", "/haircut2.jpg", "/massageServices.jpg", "/haircut2.jpg"], 
+  images = ["/massageServices.jpg", "/haircut2.jpg", "/massageServices.jpg", "/haircut2.jpg"],
+  likeCount = 0,
+  commentCount = 0,
+  shareCount = 0,
 }) {
   const [isCarouselOpen, setIsCarouselOpen] = useState(false);
 
@@ -64,7 +70,7 @@ export default function Component({
         <CardContent className="space-y-4">
           <p>{content}</p>
           {images.length > 0 && (
-            <div className={`grid gap-0.5 ${images.length > 1 ? 'grid-cols-2' : 'grid-cols-1'} rounded-2xl border overflow-hidden cursor-pointer active:scale-95 transition-all duration-150 ease-in-out`}>
+            <div className={`grid gap-0.5 ${images.length > 1 ? 'grid-cols-2' : 'grid-cols-1'} rounded-2xl border border-white/30 overflow-hidden cursor-pointer active:scale-95 transition-all duration-150 ease-in-out`}>
               {images.map((src, index) => (
                 <div 
                   className={`relative w-full flex justify-center`} 
@@ -87,7 +93,7 @@ export default function Component({
         </CardContent>
         <CardFooter className="flex gap-5">
           <PostCardInteractionButton 
-            initialCount={0}
+            initialCount={abbreviateNumber(likeCount)}
             activeColor="#f91980"
             inactiveColor=""
             color="pink"
@@ -95,13 +101,13 @@ export default function Component({
             Icon={Heart} 
           />
           <PostCardActionButton
-            initialCount={2}
+            initialCount={abbreviateNumber(commentCount)}
             color="blue"
             callBack={handleComment}
             Icon={MessageCircle}
           />
           <PostCardActionButton
-            initialCount={5}
+            initialCount={abbreviateNumber(shareCount)}
             color="green"
             callBack={handleShare}
             Icon={Share2}
@@ -119,3 +125,14 @@ export default function Component({
 
 }
 
+function abbreviateNumber(number) {
+  if (number >= 1_000_000_000) {
+    return (number / 1_000_000_000).toFixed(1).replace(/\.0$/, '') + 'B';
+  } else if (number >= 1_000_000) {
+    return (number / 1_000_000).toFixed(1).replace(/\.0$/, '') + 'M';
+  } else if (number >= 1_000) {
+    return (number / 1_000).toFixed(1).replace(/\.0$/, '') + 'k';
+  } else {
+    return number.toString();
+  }
+}

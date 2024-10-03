@@ -127,7 +127,7 @@ const PostCardInteractionButton = forwardRef(function PostCardButton({
   return (
     <Button 
       ref={ref} 
-      className={`rounded-3xl ${colorVariants[color].buttonBackgroundHover} group hover:text-white w-16 active:scale-90 transition-all duration-150 ease-in-out`}
+      className={`rounded-3xl ${colorVariants[color].buttonBackgroundHover} group hover:text-white w-fit active:scale-90 transition-all duration-150 ease-in-out`}
       variant="ghost" 
       size="sm"
       onClick={handleClick}
