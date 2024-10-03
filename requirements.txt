@@ -3,5 +3,6 @@ npm install @supabase/supabase-js
 npm i @aws-sdk/client-s3
 npm install @aws-sdk/s3-request-presigner
 npm i embla-carousel-react
+npm install @radix-ui/react-dropdown-menu
 
 

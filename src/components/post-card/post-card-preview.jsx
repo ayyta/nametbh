@@ -4,6 +4,8 @@
 import React, { useState } from "react"
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import { Card, CardContent, CardFooter, CardHeader } from "@/components/ui/card"
+import { Separator } from "@/components/ui/separator"
+
 import { Heart, MessageCircle, Share2, X } from "lucide-react"
 import Image from "next/image"
 import PostCardCarousel from "@/components/post-card/post-card-carousel"
@@ -29,6 +31,8 @@ export default function Component({
   likeCount = 0,
   commentCount = 0,
   shareCount = 0,
+  hasReplies=false,
+
 }) {
   const [isCarouselOpen, setIsCarouselOpen] = useState(false);
 
@@ -67,52 +71,58 @@ export default function Component({
             <p className="text-sm text-gray-500">{username} • {creationDate}</p>
           </div>
         </CardHeader>
-        <CardContent className="space-y-4">
-          <p>{content}</p>
-          {images.length > 0 && (
-            <div className={`grid gap-0.5 ${images.length > 1 ? 'grid-cols-2' : 'grid-cols-1'} rounded-2xl border border-white/30 overflow-hidden cursor-pointer active:scale-95 transition-all duration-150 ease-in-out w-fit`}>
-              {images.map((src, index) => (
-                <div 
-                  className={`relative w-fit flex`} 
-                  key={index} 
-                  onClick={() => {openCarousel(index);}}
-                >
-                  <Image
-                    src={src}
-                    quality={images.length > 1 ? 50 : 100}
-                    alt={`Image ${index + 1}`}
-                    layout="intrinsic" // Let the image control the container's size
-                    width={images.length > 1 ? 400 : 700} // Example width based on media length
-                    height={images.length > 1 ? 300 : 500} // Example height based on media length
-                    className={`${images.length > 1 ? "object-cover max-h-52" : "object-contain"} max-h-161`}
-                  />
+        <div className="flex">
+          {hasReplies ? <Separator orientation="vertical" className="h-auto ml-11 bg-white/40" />: null}
+          <div className="">
+            <CardContent className="space-y-4">
+              <p>{content}</p>
+              {images.length > 0 && (
+                <div className={`grid gap-0.5 ${images.length > 1 ? 'grid-cols-2' : 'grid-cols-1'} rounded-2xl border border-white/30 overflow-hidden cursor-pointer active:scale-95 transition-all duration-150 ease-in-out w-fit`}>
+                  {images.map((src, index) => (
+                    <div 
+                      className={`relative w-fit flex`} 
+                      key={index} 
+                      onClick={() => {openCarousel(index);}}
+                    >
+                      <Image
+                        src={src}
+                        quality={images.length > 1 ? 50 : 100}
+                        alt={`Image ${index + 1}`}
+                        layout="intrinsic" // Let the image control the container's size
+                        width={images.length > 1 ? 400 : 700} // Example width based on media length
+                        height={images.length > 1 ? 300 : 500} // Example height based on media length
+                        className={`${images.length > 1 ? "object-cover max-h-52" : "object-contain"} max-h-161`}
+                      />
+                    </div>
+                  ))}
                 </div>
-              ))}
-            </div>
-          )}
-        </CardContent>
-        <CardFooter className="flex gap-1">
-          <PostCardInteractionButton 
-            initialCount={likeCount}
-            activeColor="#f91980"
-            inactiveColor=""
-            color="pink"
-            callBack={handleLike} 
-            Icon={Heart} 
-          />
-          <PostCardActionButton
-            initialCount={commentCount}
-            color="blue"
-            callBack={handleComment}
-            Icon={MessageCircle}
-          />
-          <PostCardActionButton
-            initialCount={shareCount}
-            color="green"
-            callBack={handleShare}
-            Icon={Share2}
-          />
-        </CardFooter>
+              )}
+            </CardContent>
+            <CardFooter className="flex gap-1">
+              <PostCardInteractionButton 
+                initialCount={likeCount}
+                activeColor="#f91980"
+                inactiveColor=""
+                color="pink"
+                callBack={handleLike} 
+                Icon={Heart} 
+              />
+              <PostCardActionButton
+                initialCount={commentCount}
+                color="blue"
+                callBack={handleComment}
+                Icon={MessageCircle}
+              />
+              <PostCardActionButton
+                initialCount={shareCount}
+                color="green"
+                callBack={handleShare}
+                Icon={Share2}
+              />
+            </CardFooter>
+          </div>
+        </div>
+
       </Card>
       <PostCardCarousel 
         images={images} 

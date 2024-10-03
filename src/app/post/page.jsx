@@ -196,9 +196,8 @@ const Replies = ({
               likeCount={reply.likeCount}
               commentCount={reply.commentCount}
               shareCount={reply.shareCount}
+              hasReplies={reply.replies && reply.replies.length > 0}
             />
-            <Separator orientation="vertical" className="h-28 ml-11 bg-white/40" />
-
             {reply.replies && (
               reply.replies.map((nestedReply, index) => (
                 <>
@@ -220,11 +219,8 @@ const Replies = ({
                     likeCount={reply.likeCount}
                     commentCount={reply.commentCount}
                     shareCount={reply.shareCount}
+                    hasReplies={reply.replies && reply.replies.length-1 > index}
                   />
-                  {index !== reply.replies.length - 1 && (
-                    <Separator orientation="vertical" className={`h-28 ml-12 bg-white/40`} />
-
-                  )}
                 </>
               ))
             )}
