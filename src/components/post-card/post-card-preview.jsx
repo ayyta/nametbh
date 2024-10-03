@@ -70,10 +70,10 @@ export default function Component({
         <CardContent className="space-y-4">
           <p>{content}</p>
           {images.length > 0 && (
-            <div className={`grid gap-0.5 ${images.length > 1 ? 'grid-cols-2' : 'grid-cols-1'} rounded-2xl border border-white/30 overflow-hidden cursor-pointer active:scale-95 transition-all duration-150 ease-in-out`}>
+            <div className={`grid gap-0.5 ${images.length > 1 ? 'grid-cols-2' : 'grid-cols-1'} rounded-2xl border border-white/30 overflow-hidden cursor-pointer active:scale-95 transition-all duration-150 ease-in-out w-fit`}>
               {images.map((src, index) => (
                 <div 
-                  className={`relative w-full flex justify-center`} 
+                  className={`relative w-fit flex`} 
                   key={index} 
                   onClick={() => {openCarousel(index);}}
                 >
@@ -91,9 +91,9 @@ export default function Component({
             </div>
           )}
         </CardContent>
-        <CardFooter className="flex gap-5">
+        <CardFooter className="flex gap-1">
           <PostCardInteractionButton 
-            initialCount={abbreviateNumber(likeCount)}
+            initialCount={likeCount}
             activeColor="#f91980"
             inactiveColor=""
             color="pink"
@@ -101,13 +101,13 @@ export default function Component({
             Icon={Heart} 
           />
           <PostCardActionButton
-            initialCount={abbreviateNumber(commentCount)}
+            initialCount={commentCount}
             color="blue"
             callBack={handleComment}
             Icon={MessageCircle}
           />
           <PostCardActionButton
-            initialCount={abbreviateNumber(shareCount)}
+            initialCount={shareCount}
             color="green"
             callBack={handleShare}
             Icon={Share2}
@@ -123,16 +123,4 @@ export default function Component({
 
   )
 
-}
-
-function abbreviateNumber(number) {
-  if (number >= 1_000_000_000) {
-    return (number / 1_000_000_000).toFixed(1).replace(/\.0$/, '') + 'B';
-  } else if (number >= 1_000_000) {
-    return (number / 1_000_000).toFixed(1).replace(/\.0$/, '') + 'M';
-  } else if (number >= 1_000) {
-    return (number / 1_000).toFixed(1).replace(/\.0$/, '') + 'k';
-  } else {
-    return number.toString();
-  }
 }

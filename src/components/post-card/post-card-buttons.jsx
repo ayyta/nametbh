@@ -91,7 +91,7 @@ const PostCardActionButton = forwardRef(function PostCardActionButton({
         text-sm 
         text-white 
         ${colorVariants[color].countGroupHover} 
-      `}>{count}</span>
+      `}>{abbreviateNumber(count)}</span>
     </Button>
   )
 
@@ -147,10 +147,22 @@ const PostCardInteractionButton = forwardRef(function PostCardButton({
           transition-colors 
           duration-150`}
       >      
-        {count}
+        {abbreviateNumber(count)}
       </span>
     </Button>
   )
 })
+
+function abbreviateNumber(number) {
+  if (number >= 1_000_000_000) {
+    return (number / 1_000_000_000).toFixed(1).replace(/\.0$/, '') + 'B';
+  } else if (number >= 1_000_000) {
+    return (number / 1_000_000).toFixed(1).replace(/\.0$/, '') + 'M';
+  } else if (number >= 1_000) {
+    return (number / 1_000).toFixed(1).replace(/\.0$/, '') + 'k';
+  } else {
+    return number.toString();
+  }
+}
 
 export { PostCardActionButton, PostCardInteractionButton }
