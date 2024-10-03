@@ -1,6 +1,9 @@
 
 
-const Component = () => {
+const Component = ({
+  
+}) => {
+
   return (
     <div>
        

@@ -6,19 +6,33 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import { Card, CardContent, CardFooter, CardHeader } from "@/components/ui/card"
 import { Heart, MessageCircle, Share2, X } from "lucide-react"
 import Image from "next/image"
+import PostCardCarousel from "@/components/post-card/post-card-carousel"
 
 import { PostCardActionButton, PostCardInteractionButton } from "@/components/post-card/post-card-buttons"
 
 export default function Component({
-  avatar = "/placeholder-avatar.jpg",
+  pfp = "/placeholder-avatar.jpg",
   name = "John Doe",
   username = "@johndoe",
+  bio="some bio",
+  following_count=0,
+  follower_count=0,
+  followsYou=false,
+  following=bool, 
+  friends=bool,
   creationDate = "2h ago",
   content = "This is a sample post content. It can be much longer and will wrap to multiple lines if needed. ",
   images = ["/massageServices.jpg", "/haircut2.jpg", "/massageServices.jpg", "/haircut2.jpg"], 
-  openCarousel,
-  // "/haircut2.jpg", "/massageServices.jpg", "/Plus square.svg", "/Upload Icon.svg", "/Home Icon.svg", "/Generic avatar.svg"
 }) {
+  const [isCarouselOpen, setIsCarouselOpen] = useState(false);
+
+  const openCarousel = () => {
+    setIsCarouselOpen(true)
+  }
+
+  const closeCarousel = () => {
+    setIsCarouselOpen(false)
+  }
 
   const handleLike = (isActive, count) => {
     console.log(`Like is now ${isActive ? "active": "inactive"} with count: ${count}`);
@@ -39,7 +53,7 @@ export default function Component({
       <Card className="w-192 h-fit bg-transparent border-none text-white">
         <CardHeader className="flex flex-row items-center gap-4">
           <Avatar>
-            <AvatarImage src={avatar} alt={name} />
+            <AvatarImage src={pfp} alt={name} />
             <AvatarFallback>{name.charAt(0)}</AvatarFallback>
           </Avatar>
           <div className="flex flex-col">
@@ -71,7 +85,6 @@ export default function Component({
             </div>
           )}
         </CardContent>
-
         <CardFooter className="flex gap-5">
           <PostCardInteractionButton 
             initialCount={0}
@@ -95,7 +108,11 @@ export default function Component({
           />
         </CardFooter>
       </Card>
-
+      <PostCardCarousel 
+        images={images} 
+        isCarouselOpen={isCarouselOpen} 
+        closeCarousel={closeCarousel}
+      />
     </>
 
   )
