@@ -1,7 +1,7 @@
 import Image from "next/image";
 import { useRef } from "react";
 
-export default function MediaButton({ media, setMedia }) {
+export default function MediaButton({ setMedia }) {
 
   /**
    * The useRef hook creates a reference to the upload button
@@ -13,17 +13,7 @@ export default function MediaButton({ media, setMedia }) {
 
   const uploadMediaDisplay = (e) => {
     const selectedFiles = e.target.files;
-    // console.log(selectedFiles);
     const selectedFilesArray = Array.from(selectedFiles);
-
-    // Get the current length of media
-    const currentMediaLength = media.length;
-    // console.log(currentMediaLength);
-    if (currentMediaLength + selectedFilesArray.length > 4) {
-      alert("You can only upload a maximum of 4 media files");
-      return;
-    }
-    // console.log(selectedFilesArray.length);
 
     // Create an array to store media objects with URL and type(image/video)
     const mediaArray = selectedFilesArray.map((file) => ({
@@ -31,11 +21,8 @@ export default function MediaButton({ media, setMedia }) {
       type : file.type,
       file : file,
     }));
-    // console.log(mediaArray);
 
-    setMedia((prevImages) => {
-      return prevImages.concat(mediaArray);
-    });
+    setMedia(mediaArray);
 
     // Reset the input value
     fileUploadRef.current.value = null;

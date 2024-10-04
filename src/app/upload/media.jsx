@@ -1,8 +1,6 @@
 'use client'
 
 import Image from 'next/image'
-import { useEffect } from 'react';
-import axios from "axios";
 import {
   Carousel,
   CarouselContent,
@@ -16,8 +14,6 @@ export default function Media( {
   setMedia, 
   // gifs, 
   // setGifs, 
-  // showGifs,
-  // setShowGifs,
 }) 
 
 {
@@ -27,15 +23,19 @@ export default function Media( {
    */
   if (images.length === 1) {
     return images.map((mediaFile) => {
+      const url = mediaFile.url;
+
       const isImage = mediaFile.type.startsWith("image/");
-      const isVideo = mediaFile.type.startsWith("video/");    
+      const isVideo = mediaFile.type.startsWith("video/");
+      const isGif = mediaFile.type === "image/gif";
+      // console.log(url);
 
       return (
         <div className='relative m-2 w-full'>
-          {isImage && (
+          {(isImage || isGif) && (
             <>
               <Image 
-                src={mediaFile.url}
+                src={url}
                 width={0}
                 height={0}
                 sizes='100vw'
@@ -62,7 +62,7 @@ export default function Media( {
           {isVideo && (
             <>
               <video width="100%" className='rounded-lg' controls muted>
-                <source src={mediaFile.url} type={mediaFile.type} />
+                <source src={url} type={url.type} />
                 Your browser does not support the video tag.
               </video>
               <button 
@@ -88,8 +88,11 @@ export default function Media( {
       <Carousel className="relative w-full m-2">
         <CarouselContent className="m-0">
           {images.map((mediaFile, index) => {
+            const url = mediaFile.url;
+
             const isImage = mediaFile.type.startsWith("image/");
             const isVideo = mediaFile.type.startsWith("video/");
+            const isGif = mediaFile.type === "image/gif";
             // console.log(mediaFile);
 
             return (
@@ -101,10 +104,10 @@ export default function Media( {
                   "flex-basis" : `${mediaFile.type.startsWith("image/") ? "50%" : "100%"}` 
                 }}
               >
-                {isImage && (
+                {(isImage || isGif) && (
                   <>
                     <Image 
-                      src={mediaFile.url}
+                      src={url}
                       alt='Media'
                       fill
                       className='rounded-lg object-cover'
@@ -128,7 +131,7 @@ export default function Media( {
                 {isVideo && (
                   <>
                     <video width="100%" className='rounded-lg object-cover' controls muted>
-                      <source src={mediaFile.url} type={mediaFile.type} />
+                      <source src={url} type={url.type} />
                       Your browser does not support the video tag.
                     </video>
                     <button 
@@ -158,44 +161,5 @@ export default function Media( {
       </Carousel>
     )
   }
-
-
-  // useEffect(() => {
-  //   const fetchData = async () => {
-  //     const results = await axios("https://api.giphy.com/v1/gifs/trending", {
-  //       params: {
-  //         api_key : '7VGHs9vybY2b6EcUZtVi3ay9pVVlFOxu',
-  //         limit : 4,
-  //       }
-  //     });
-  //     console.log(results);
-  //     setGifs(results.data.data);
-  //   }
-  //   fetchData();
-  // }, []);
-
-  // const renderGifs = () => {
-  //   return gifs.map(giphy => {
-  //     return (
-  //       <div className="" key={giphy.id}>
-  //         <Image 
-  //           src={giphy.images.fixed_height.url}
-  //           width={0}
-  //           height={0}
-  //           sizes='100vw'
-  //           style={{ "width" : "100%" }}
-  //           alt='Gif'
-  //           className='rounded-lg'
-  //         />
-  //       </div>
-  //     )
-  //   });
-  // }
-
-  // return (
-  //   <>
-  //     {showGifs && renderGifs()}
-  //   </>
-  // );
 
 }

@@ -10,12 +10,12 @@ export default function GiphySelector({
   setShowGifs,
   showPopup,
   setShowPopup,
+  setMedia,
 })
 
 {
   const [searchGif, setSearchGif] = useState("");
   const [isLoading, setIsLoading] = useState(false);
-  // const [isTyping, setIsTyping] = useState(false);
 
   // Closes the Giphy popup
   const closePopup = () => {
@@ -96,11 +96,28 @@ export default function GiphySelector({
     }
   };
 
+  // Handles the selected gif
+  const selectedGif = (giphyURL) => {
+    // Creates a new media object for the selected GIF
+    const newMedia = [{
+      url : giphyURL,
+      type : "image/gif",
+    }]
+
+    setMedia(newMedia);
+
+    closePopup();
+  };
+
   // Renders the gifs
   const renderGifs = () => {
     return gifs.map(giphy => {
       return (
-        <div className="flex" key={giphy.id}>
+        <div 
+          className="flex cursor-pointer hover:opacity-50 active:opacity-25" 
+          key={giphy.id}
+          onClick={() => selectedGif(giphy.images.fixed_height.url)}
+        >
           <Image 
             src={giphy.images.fixed_height.url}
             width={0}

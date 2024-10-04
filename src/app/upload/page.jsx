@@ -74,6 +74,18 @@ export default function Upload({ open, onClose }) {
     // console.log(post);
   }
 
+  // Create a function to handle the addition of media due to the issue of having multiple alerts when the media limit is reached in the image/video vs gif upload
+  const handleAddMedia = (newMediaArray) => {
+    // Check the media limit which is 4
+    if (media.length + newMediaArray.length > 4) {
+      alert("You can only upload a maximum of 4 media files");
+      return;
+    }
+
+    // Upload the media state
+    setMedia((prevMedia) => [...prevMedia, ...newMediaArray]);
+  }
+
   return (
     <>
       <div className="upload-popup-container">
@@ -85,6 +97,8 @@ export default function Upload({ open, onClose }) {
           setShowGifs={setShowGifs}
           showPopup={showPopup}
           setShowPopup={setShowPopup}
+          images={media}
+          setMedia={handleAddMedia}
         />
         <form 
           className="upload-container" 
@@ -119,14 +133,12 @@ export default function Upload({ open, onClose }) {
                 setMedia={setMedia}
                 gifs={gifs}
                 setGifs={setGifs} 
-                showGifs={showGifs}
-                setShowGifs={setShowGifs}
               />
             </div>
             <div className="upload-utilities-left-section">
               <MediaButton
                 media={media} 
-                setMedia={setMedia} 
+                setMedia={handleAddMedia} 
               />
               <button className="upload-utilities">
                 <Image
@@ -136,20 +148,12 @@ export default function Upload({ open, onClose }) {
                   alt="Mic logo" 
                 />
               </button>
-              {/* <Link 
-                href="/upload/giphy"
-                // gifs={gifs}
-                // setGifs={setGifs}
-                // showGifs={showGifs}
-                // setShowGifs={setShowGifs}
-              >  */}
               <GiphyButton 
                 showGifs={showGifs}
                 setShowGifs={setShowGifs}
                 showPopup={showPopup}
                 setShowPopup={setShowPopup}
               />
-              {/* </Link> */}
             </div>
             <div className="upload-utilities-right-section">
               <button 
