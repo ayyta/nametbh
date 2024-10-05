@@ -35,6 +35,7 @@ const Component = ({
   useEffect(() => {
     console.log("Selected sort: ", selectedSort);
   }, [selectedSort]);
+  
   return (
     <div className="w-full h-full relative flex flex-col items-center overflow-y-scroll	">
       <div className="w-192 ">
@@ -51,7 +52,7 @@ const Component = ({
           />
         </div>
         <Replies/>
-        
+
       </div>
 
     </div>
