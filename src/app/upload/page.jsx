@@ -31,15 +31,57 @@ export default function Upload({ open, onClose }) {
     console.log("media", media);
   }, [media]);
 
-  /**
-   * Handles the POST request to the server(S3 Bucket)
-   */
-  const handlePOSTButton = async () => {
-    // console.log(e.target);
-    // e.preventDefault();
 
+  const handlePost = async () => {
+    const mediaPaths = await uploadToS3();
+
+    if (!mediaPaths) {
+      console.error("Error uploading media to S3");
+      return;
+    }
+
+    const post = { 
+      text, 
+      media: mediaPaths, 
+    };
+
+    try {
+      const response = await fetch("/api/upload", {
+        method: "POST",
+        body: JSON.stringify(post),
+      });
+
+      const result = await response.json();
+      console.log("Post successful", result);
+    } catch (error) {
+      console.error("Error posting", error);
+    }
+
+    // const formData = new FormData();
+    // const path = "media/";
+
+    // formData.append("text", text);
+
+    // // Append file to form data object
+    // media.forEach((m) => {
+    //   formData.append("files", m.file);
+    // });
+
+    // // Append path to form data object
+    // formData.append("path", path);
+
+    // const post = { text, media }
+    // console.log(post);
+  }
+
+  /**
+  * Handles the POST request to the server(S3 Bucket)
+  */
+  const uploadToS3 = async () => {
     const formData = new FormData();
     const path = "media/";
+
+    formData.append("text", text);
 
     // Append file to form data object
     media.forEach((m) => {
@@ -64,15 +106,81 @@ export default function Upload({ open, onClose }) {
   
       // data.data is the array of image paths in s3
       console.log(data.data);
+      return data.data;
 
     } catch (error) {
       //indicated frontend error
       console.error(error);
+      return null;
     }
-
-    // const post = { text, media }
-    // console.log(post);
   }
+
+
+  // const uploadToS3 = async (files) => {
+  //   const mediaPaths = [];
+
+  //   for (const file of files) {
+  //     if (file.type !== 'image/gif') {
+  //       const formData = new FormData();
+  //       formData.append("file", file);
+  //       formData.append("path", "media/");
+
+  //       try {
+  //         const response = await fetch("/api/s3", {
+  //           method: "POST",
+  //           body: formData,
+  //         });
+
+  //         const data = await response.json();
+
+  //         if (data.url) {
+  //           mediaPaths.push(data.url);
+  //         } else {
+  //           console.error("Error uploading file to S3");
+  //         }
+  //       } catch (error) {
+  //         console.error("Error uploading to S3:", error);
+  //       }
+  //     }
+  //   }
+
+  //   return mediaPaths
+  // }
+
+  // const handlePost = async () => {
+  //   const mediaWithFile = media.filter((m) => m.file && m.file.type);
+
+  //   const mediaPaths = await uploadToS3(media.filter((m) => m.file.type !== "image/gif"));
+
+  //   if (!mediaPaths.length && !media.some(m => m.file.type === 'image/gif')) {
+  //     console.error("Error uploading media to S3");
+  //     return;
+  //   }
+
+  //   const gifURLS = media
+  //     .filter((m) => m.file.type === "image/gif")
+  //     .map((m) => m.url);
+
+  //   const post = {
+  //     text,
+  //     media: [...mediaPaths, ...gifURLS],
+  //   }
+
+  //   try {
+  //     const response = await fetch("/api/upload", {
+  //       method: "POST",
+  //       headers: { "Content-Type": "application/json" },
+  //       body: JSON.stringify(post),
+  //     });
+
+  //     const result = await response.json();
+  //     console.log("Post successful", result);
+  //   } catch (error) {
+  //     console.error("Error posting", error);
+  //   }
+  // }
+
+
 
   // Create a function to handle the addition of media due to the issue of having multiple alerts when the media limit is reached in the image/video vs gif upload
   const handleAddMedia = (newMediaArray) => {
@@ -158,7 +266,7 @@ export default function Upload({ open, onClose }) {
             <div className="upload-utilities-right-section">
               <button 
                 className="upload-button"
-                onClick={handlePOSTButton}
+                onClick={handlePost}
               >
                 Post
               </button>
