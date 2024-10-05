@@ -40,18 +40,38 @@ export default function Upload({ open, onClose }) {
       return;
     }
 
-    const post = { 
-      text, 
-      media: mediaPaths, 
-    };
+    // const post = { 
+    //   text, 
+    //   media: mediaPaths, 
+    // };
+
+    // const formData = new FormData();
+    // formData.append("text", text);
+    // formData.append("media", JSON.stringify(mediaPaths));
+    // formData.append("user_id", 1);
 
     try {
       const response = await fetch("/api/upload", {
         method: "POST",
-        body: JSON.stringify(post),
+        body: mediaPaths,
       });
 
-      const result = await response.json();
+      if (!response.ok) {
+        const errorDetails = await response.text();
+        throw new Error(`Error posting to server: ${response.statusText}. Details: ${errorDetails}`);
+      }
+
+      const resultText = await response.text();
+      let result = {};
+      if (resultText) {
+        try {
+          result = JSON.parse(resultText);
+        } catch (error) {
+          console.error("Error parsing JSON", error);
+        }
+      }
+
+      // const result = await response.json();
       console.log("Post successful", result);
     } catch (error) {
       console.error("Error posting", error);

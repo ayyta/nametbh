@@ -9,6 +9,8 @@ export async function POST(request, response) {
     const text = data.get("text");
     const user_id = data.get("user_id");
 
+    console.log("Received data", text, media, user_id);
+
     // Insert text content into the post table
     const { data: postData, error: postError } = await supabaseService
       .from("post")
@@ -22,6 +24,7 @@ export async function POST(request, response) {
       .select("post_id");
 
     if (postError) {
+      console.error("Error inserting post into Supabase", postError.message);
       throw new Error(postError.message);
     }
 
@@ -54,6 +57,7 @@ export async function POST(request, response) {
         ]);
 
       if (mediaError) {
+        console.error("Error inserting media into Supabase", mediaError.message);
         throw new Error(mediaError.message);
       }
     }
@@ -64,3 +68,24 @@ export async function POST(request, response) {
     return NextResponse.json({ error: error.message }, { status: 500 });
   }
 }
+
+// export async function POST(request, response) {
+//   try {
+//     console.log("API route hit!");
+
+//     // Attempt to read form data
+//     const data = await request.formData();
+//     const text = data.get("text");
+//     const media = data.getAll("media");
+//     const user_id = data.get("user_id");
+
+//     console.log("Text:", text);
+//     console.log("Media:", media);
+//     console.log("User ID:", user_id);
+
+//     return NextResponse.status(200).json({ message: "API route hit!" });
+//   } catch (error) {
+//     console.error("Error in API route:" ,error);
+//     return NextResponse.status(500).json({ error: "Internal Server Error", details: error.message });
+//   }
+// }
