@@ -40,6 +40,18 @@ export default function Profile() {
     num_of_followers: 0,
   });
 
+  const [otherUser, setOtherUser] = useState({
+    name: 'Loading...',
+    username: 'Loading...',
+    bio: '',
+    pfp: '/Generic avatar.svg',
+    profile_background: '',
+    num_of_followers: 0,
+    followYou: false,
+    following: true,
+    friends: false,
+  });
+
   // This is to update the information after fetching
   useEffect(() => {
     if (userProfile) {
@@ -168,7 +180,6 @@ export default function Profile() {
           </Button>
         </div>
         {loading ? <SkeletonProfile /> : null}
-
         <div className="w-full h-full flex justify-center">
           <PostCard />
         </div>
@@ -176,7 +187,6 @@ export default function Profile() {
           <>
             {/* Backdrop overlay */}
             <div className="fixed inset-0 bg-black bg-opacity-50 z-40"></div>
-
             {/* Popup*/}
             <div className="absolute inset-0 flex items-center justify-center z-50">
               <Popup
