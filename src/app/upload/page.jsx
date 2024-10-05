@@ -8,6 +8,7 @@ import MediaButton from "./mediabutton";
 import Media from "./media";
 import GiphyButton from "./giphybutton";
 import GiphySelector from "./giphyselector";
+import supabaseAnon from "@/lib/supabaseAnonClient";
 
 export default function Upload({ open, onClose }) {
   if (!open) return null
@@ -33,65 +34,36 @@ export default function Upload({ open, onClose }) {
 
 
   const handlePost = async () => {
-    const mediaPaths = await uploadToS3();
+    const { data: { session } } = await supabaseAnon.auth.getSession();
+    // console.log(session);
+    const mediaPaths = await uploadToS3(); // ["media/as234234"]
+    console.log(mediaPaths);
 
     if (!mediaPaths) {
       console.error("Error uploading media to S3");
       return;
     }
 
-    // const post = { 
-    //   text, 
-    //   media: mediaPaths, 
-    // };
-
-    // const formData = new FormData();
-    // formData.append("text", text);
-    // formData.append("media", JSON.stringify(mediaPaths));
-    // formData.append("user_id", 1);
+    const formData = new FormData();
+    formData.append("text", text);
+    formData.append("media", JSON.stringify(mediaPaths));
+    formData.append("user_id", session.user.id);
 
     try {
       const response = await fetch("/api/upload", {
         method: "POST",
-        body: mediaPaths,
+        body: formData,
       });
 
       if (!response.ok) {
         const errorDetails = await response.text();
-        throw new Error(`Error posting to server: ${response.statusText}. Details: ${errorDetails}`);
-      }
-
-      const resultText = await response.text();
-      let result = {};
-      if (resultText) {
-        try {
-          result = JSON.parse(resultText);
-        } catch (error) {
-          console.error("Error parsing JSON", error);
-        }
       }
 
       // const result = await response.json();
-      console.log("Post successful", result);
+      console.log("Post successful");
     } catch (error) {
       console.error("Error posting", error);
     }
-
-    // const formData = new FormData();
-    // const path = "media/";
-
-    // formData.append("text", text);
-
-    // // Append file to form data object
-    // media.forEach((m) => {
-    //   formData.append("files", m.file);
-    // });
-
-    // // Append path to form data object
-    // formData.append("path", path);
-
-    // const post = { text, media }
-    // console.log(post);
   }
 
   /**
@@ -134,73 +106,6 @@ export default function Upload({ open, onClose }) {
       return null;
     }
   }
-
-
-  // const uploadToS3 = async (files) => {
-  //   const mediaPaths = [];
-
-  //   for (const file of files) {
-  //     if (file.type !== 'image/gif') {
-  //       const formData = new FormData();
-  //       formData.append("file", file);
-  //       formData.append("path", "media/");
-
-  //       try {
-  //         const response = await fetch("/api/s3", {
-  //           method: "POST",
-  //           body: formData,
-  //         });
-
-  //         const data = await response.json();
-
-  //         if (data.url) {
-  //           mediaPaths.push(data.url);
-  //         } else {
-  //           console.error("Error uploading file to S3");
-  //         }
-  //       } catch (error) {
-  //         console.error("Error uploading to S3:", error);
-  //       }
-  //     }
-  //   }
-
-  //   return mediaPaths
-  // }
-
-  // const handlePost = async () => {
-  //   const mediaWithFile = media.filter((m) => m.file && m.file.type);
-
-  //   const mediaPaths = await uploadToS3(media.filter((m) => m.file.type !== "image/gif"));
-
-  //   if (!mediaPaths.length && !media.some(m => m.file.type === 'image/gif')) {
-  //     console.error("Error uploading media to S3");
-  //     return;
-  //   }
-
-  //   const gifURLS = media
-  //     .filter((m) => m.file.type === "image/gif")
-  //     .map((m) => m.url);
-
-  //   const post = {
-  //     text,
-  //     media: [...mediaPaths, ...gifURLS],
-  //   }
-
-  //   try {
-  //     const response = await fetch("/api/upload", {
-  //       method: "POST",
-  //       headers: { "Content-Type": "application/json" },
-  //       body: JSON.stringify(post),
-  //     });
-
-  //     const result = await response.json();
-  //     console.log("Post successful", result);
-  //   } catch (error) {
-  //     console.error("Error posting", error);
-  //   }
-  // }
-
-
 
   // Create a function to handle the addition of media due to the issue of having multiple alerts when the media limit is reached in the image/video vs gif upload
   const handleAddMedia = (newMediaArray) => {

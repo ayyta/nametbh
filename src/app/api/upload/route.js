@@ -2,15 +2,15 @@ import { NextResponse } from "next/server";
 import supabaseService from '../../../lib/supabaseServiceClient';
 
 export async function POST(request, response) {
+  // UNPACKAGE THE DATA
+  const data = await request.formData();
+  const media = data.getAll("media"); // [media/"ddfa31"] 
+  const text = data.get("text");  // "sometext"
+  const user_id = data.get("user_id"); 
+
+  console.log("Media length:", media.length);
+  console.log("Media:", media);
   try {
-    // UNPACKAGE THE DATA
-    const data = await request.formData();
-    const media = data.getAll("media"); // this is media 
-    const text = data.get("text");
-    const user_id = data.get("user_id");
-
-    console.log("Received data", text, media, user_id);
-
     // Insert text content into the post table
     const { data: postData, error: postError } = await supabaseService
       .from("post")
@@ -30,35 +30,41 @@ export async function POST(request, response) {
 
     const post_id = postData[0].post_id;
 
+
+    console.log("Media length:", media.length);
     // Loop through the each media path and create media objects
     for (let i = 0; i < media.length; i++) {
       let mediaFile = media[i];
-      let mediaType = "";
 
-      // Determine the media type based on the file type
-      if (mediaFile.type === "image/gif") {
-        mediaType = "gif";
-      } else if (mediaFile.type.startsWith("image/")) {
-        mediaType = "s3";
-      } else if (mediaFile.type.startsWith("video/")) {
-        mediaType = "s3";
-      }
-
-      // Insert media object into the media table
-      const { error: mediaError } = await supabaseService
+      if (mediaFile.type.startsWith("image/") || mediaFile.type.startsWith("video/")) {
+        console.log("Media file:", mediaFile.type);
+        // Insert media object into the media table
+        const { error: mediaError } = await supabaseService
         .from("media")
         .insert([
           {
             media_path: mediaFile.url,
             post_id: post_id,
-            media_type: mediaType,
+            media_type: "s3",
             created_at: new Date(),
           },
         ]);
+      } else if (mediaFile.type === "image/gif") {
+        // Insert media object into the media table
+        const { error: mediaError } = await supabaseService
+        .from("media")
+        .insert([
+          {
+            gif_url: mediaFile.url,
+            post_id: post_id,
+            media_type: "gif",
+            created_at: new Date(),
+          },
+        ]);
+      }
 
       if (mediaError) {
         console.error("Error inserting media into Supabase", mediaError.message);
-        throw new Error(mediaError.message);
       }
     }
  
