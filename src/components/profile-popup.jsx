@@ -48,7 +48,7 @@ export default function ProfilePopup({}) {
   return (
     <div className="rounded-2xl bg-red-300 w-[430px] h-auto flex flex-col p-2">
       <div className="flex justify-between">
-        <div className="flex">
+        <div className="flex items-center">
           <Image
             src="/Generic avatar.svg"
             width={40}
@@ -56,7 +56,7 @@ export default function ProfilePopup({}) {
             alt="Avatar logo"
             className="object-cover mr-3"
           />
-          <div className="flex flex-col ml-4">
+          <div className="flex flex-col">
             <p>{tempUser.name}</p>
             <p>@{tempUser.username}</p>
           </div>
