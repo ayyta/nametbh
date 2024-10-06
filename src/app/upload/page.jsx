@@ -9,8 +9,16 @@ import Media from "./media";
 import GiphyButton from "./giphybutton";
 import GiphySelector from "./giphyselector";
 import supabaseAnon from "@/lib/supabaseAnonClient";
+import { useRouter } from "next/navigation";
 
 export default function Upload({ open, onClose }) {
+  const [text, setText] = useState("");
+  const [media, setMedia] = useState([]);
+  const [gifs, setGifs] = useState([]);
+  const [showGifs, setShowGifs] = useState(false);
+  const [showPopup, setShowPopup] = useState(false);
+  const Router = useRouter();
+
   if (!open) return null
 
   const handler = () => {
@@ -19,35 +27,48 @@ export default function Upload({ open, onClose }) {
     }
   }
 
-  const [text, setText] = useState("");
-  const [media, setMedia] = useState([]);
-  const [gifs, setGifs] = useState([]);
-  const [showGifs, setShowGifs] = useState(false);
-  const [showPopup, setShowPopup] = useState(false);
-
   /**
    * useEffect hook to log the current media state, it only triggers whenever the media state changes
    */
-  useEffect(() => {
-    console.log("media", media);
-  }, [media]);
+  // useEffect(() => {
+  //   // console.log("media", media);
+  //   console.log(media);
+  //   media.map((mediaFile) => {
+  //     console.log(mediaFile.type);
+  //     // Append file to form data object
+  //     if (mediaFile.type === "image/gif") {
+  //       console.log("GIF URL", mediaFile.url);
+  //     } else {
+  //       console.log("Media File", mediaFile.file);
+  //     }
+  //   })
+  // }, [media]);
 
 
   const handlePost = async () => {
     const { data: { session } } = await supabaseAnon.auth.getSession();
     // console.log(session);
+
     const mediaPaths = await uploadToS3(); // ["media/as234234"]
-    console.log(mediaPaths);
+    // console.log(JSON.stringify(mediaPaths));
 
     if (!mediaPaths) {
       console.error("Error uploading media to S3");
       return;
     }
 
+    // Create the form data
     const formData = new FormData();
     formData.append("text", text);
-    formData.append("media", JSON.stringify(mediaPaths));
+    formData.append("media_path", JSON.stringify(mediaPaths));
     formData.append("user_id", session.user.id);
+    
+    // Access the url for the GIFS
+    media.forEach((mediaFile) => {
+      if (mediaFile.type === "image/gif") {
+        formData.append("url", mediaFile.url);
+      }
+    })
 
     try {
       const response = await fetch("/api/upload", {
@@ -56,7 +77,7 @@ export default function Upload({ open, onClose }) {
       });
 
       if (!response.ok) {
-        const errorDetails = await response.text();
+        console.error("Error posting");
       }
 
       // const result = await response.json();
@@ -64,21 +85,21 @@ export default function Upload({ open, onClose }) {
     } catch (error) {
       console.error("Error posting", error);
     }
+
+    // Redirect to the home page and close the popup
+    Router.push('/home');
+    onClose();
   }
 
-  /**
-  * Handles the POST request to the server(S3 Bucket)
-  */
+  // Handles the POST request to the server(S3 Bucket)
   const uploadToS3 = async () => {
     const formData = new FormData();
     const path = "media/";
 
-    formData.append("text", text);
-
-    // Append file to form data object
-    media.forEach((m) => {
-      formData.append("files", m.file);
-    });
+    media.map((mediaFile) => {
+      // Append file to form data object
+      formData.append("files", mediaFile.file);
+    })
 
     // Append path to form data object
     formData.append("path", path);
