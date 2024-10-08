@@ -32,7 +32,7 @@ export default function Component({
   commentCount = 0,
   shareCount = 0,
   hasReplies=false,
-
+  hasButtons=true,
 }) {
   const [isCarouselOpen, setIsCarouselOpen] = useState(false);
   const [isReplyOpen, setIsReplyOpen] = useState(false);
@@ -66,7 +66,7 @@ export default function Component({
   return (
     <>
       <Card className="w-192 h-fit bg-transparent border-none text-white">
-        <CardHeader className="flex flex-row items-center gap-4">
+        <CardHeader className="flex flex-row items-center gap-4 py-2">
           <Avatar>
             <AvatarImage src={pfp} alt={name} />
             <AvatarFallback>{name.charAt(0)}</AvatarFallback>
@@ -103,28 +103,30 @@ export default function Component({
                 </div>
               )}
             </CardContent>
-            <CardFooter className="flex gap-1">
-              <PostCardInteractionButton 
-                initialCount={likeCount}
-                activeColor="#f91980"
-                inactiveColor=""
-                color="pink"
-                callBack={handleLike} 
-                Icon={Heart} 
-              />
-              <PostCardActionButton
-                initialCount={commentCount}
-                color="blue"
-                callBack={handleComment}
-                Icon={MessageCircle}
-              />
-              <PostCardActionButton
-                initialCount={shareCount}
-                color="green"
-                callBack={handleShare}
-                Icon={Share2}
-              />
-            </CardFooter>
+            {hasButtons && (
+              <CardFooter className="flex gap-1">
+                <PostCardInteractionButton 
+                  initialCount={likeCount}
+                  activeColor="#f91980"
+                  inactiveColor=""
+                  color="pink"
+                  callBack={handleLike} 
+                  Icon={Heart} 
+                />
+                <PostCardActionButton
+                  initialCount={commentCount}
+                  color="blue"
+                  callBack={handleComment}
+                  Icon={MessageCircle}
+                />
+                <PostCardActionButton
+                  initialCount={shareCount}
+                  color="green"
+                  callBack={handleShare}
+                  Icon={Share2}
+                />
+              </CardFooter>
+            )}
           </div>
         </div>
 

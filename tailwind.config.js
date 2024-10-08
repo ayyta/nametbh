@@ -74,6 +74,7 @@ module.exports = {
   			loginPopup: '#CCD6DD',
   			loginButton: '#55ACEE',
   			projectLightGrey: '#373f45',
+				replyBackground: '#191B1C',
   		},
   		textColor: {
   			projectGrey: '#66757F',

@@ -19,7 +19,7 @@ const Component = forwardRef(function PostCardCarousel({
   return (
     <>
       {isCarouselOpen &&  (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/90">
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/90" >
           <Button
             variant="ghost"
             size="icon"
@@ -30,10 +30,10 @@ const Component = forwardRef(function PostCardCarousel({
             <span className="sr-only">Close</span>
           </Button>
           <Carousel 
-            className="w-screen h-screen"
+            className="w-screen h-screen"  
           >
-              
-            <CarouselContent className="">
+
+            <CarouselContent className="" onClick={closeCarousel}>
               {images.map((image, index) => (
                 <CarouselItem key={index} className="w-fit h-screen flex justify-center items-center relative">
                   <Image
@@ -42,12 +42,13 @@ const Component = forwardRef(function PostCardCarousel({
                     width={500}
                     height={300}
                     quality={100}
+                    onClick={(e) => {e.stopPropagation()}}
                   />
                 </CarouselItem>
               ))}
             </CarouselContent>
-            {images.length > 1 ? <CarouselPrevious className="absolute top-1/2 left-8 transform -translate-y-1/2 -translate-x-1/2 z-10" /> : null}
-            {images.length > 1 ? <CarouselNext className="absolute top-1/2 right-0 transform -translate-y-1/2 -translate-x-1/2 z-10" /> : null}
+            {images.length > 1 ? <CarouselPrevious className="absolute top-1/2 left-8 transform -translate-y-1/2 -translate-x-1/2 z-10"/> : null}
+            {images.length > 1 ? <CarouselNext className="absolute top-1/2 right-0 transform -translate-y-1/2 -translate-x-1/2 z-10"/> : null}
           </Carousel>
         </div>
       )}
