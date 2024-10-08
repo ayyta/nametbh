@@ -11,7 +11,7 @@ import Image from "next/image"
 import PostCardCarousel from "@/components/post-card/post-card-carousel"
 
 import { PostCardActionButton, PostCardInteractionButton } from "@/components/post-card/post-card-buttons"
-import { comment } from "postcss"
+import ReplyPopup from "@/components/post-card/reply";
 
 export default function Component({
   postId=null,
@@ -35,6 +35,7 @@ export default function Component({
 
 }) {
   const [isCarouselOpen, setIsCarouselOpen] = useState(false);
+  const [isReplyOpen, setIsReplyOpen] = useState(false);
 
   const openCarousel = () => {
     setIsCarouselOpen(true)
@@ -44,6 +45,9 @@ export default function Component({
     setIsCarouselOpen(false)
   }
 
+  const openReply = () => {
+    setIsReplyOpen(true)
+  }
   const handleLike = (isActive, count) => {
     console.log(`Like is now ${isActive ? "active": "inactive"} with count: ${count}`);
   }
@@ -53,6 +57,7 @@ export default function Component({
   }
 
   const handleComment = () => {
+    openReply();
     console.log("Pressed comment button");
   }
 
@@ -129,6 +134,7 @@ export default function Component({
         isCarouselOpen={isCarouselOpen} 
         closeCarousel={closeCarousel}
       />
+      <ReplyPopup isOpen={isReplyOpen} setIsOpen={setIsReplyOpen} />
     </>
 
   )
