@@ -15,12 +15,23 @@ export default function MediaButton({ setMedia }) {
     const selectedFiles = e.target.files;
     const selectedFilesArray = Array.from(selectedFiles);
 
+    // File size limit is 200MB
+    const maxFileSize = 200 * 1024 * 1024; // 200MB
+
     // Create an array to store media objects with URL and type(image/video)
-    const mediaArray = selectedFilesArray.map((file) => ({
-      url : URL.createObjectURL(file),
-      type : file.type,
-      file : file,
-    }));
+    const mediaArray = selectedFilesArray
+      .filter((file) => {
+        if (file.size > maxFileSize) {
+          alert("File size is too large. Max file size is 200MB");
+          return false;
+        }
+        return true;
+      })
+      .map((file) => ({
+        url : URL.createObjectURL(file),
+        type : file.type,
+        file : file,
+      }));
 
     setMedia(mediaArray);
 

@@ -1,7 +1,13 @@
 'use client';
 import Image from "next/image";
 
-export default function Header({ close }) {
+export default function Header({ close, router }) {
+
+  const closeButton = () => {
+    router.push("/home");
+    close();
+  };
+
   return (
     <>
       <div className="upload-header">
@@ -15,7 +21,7 @@ export default function Header({ close }) {
         </div>
         <button 
           className="upload-close-button"
-          onClick={close}
+          onClick={closeButton}
         >
           <Image
             src="/Close Icon.svg"

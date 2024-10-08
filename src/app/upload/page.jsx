@@ -23,6 +23,7 @@ export default function Upload({ open, onClose }) {
 
   const handler = () => {
     if (open) {
+      Router.push('/home');
       onClose();
     }
   }
@@ -45,6 +46,7 @@ export default function Upload({ open, onClose }) {
   // }, [media]);
 
 
+  // Sends a POST request to the server
   const handlePost = async () => {
     const { data: { session } } = await supabaseAnon.auth.getSession();
     // console.log(session);
@@ -155,23 +157,18 @@ export default function Upload({ open, onClose }) {
           setMedia={handleAddMedia}
         />
         <form 
-          className="upload-container" 
+          className={`upload-container ${media.length > 0 ? 'media-present' : 'media-absent'}`} 
           onSubmit={(e) => e.preventDefault()}
           // The height of the form is set to min-content if there is media else it is set to 288px
           style={{
-            "height" : `${media.length > 0 ? "min-content" : "288px"}`,
-            "width" : `${media.length > 0 ? "644px" : "552px"}`,
+            // "height" : `${media.length > 0 ? "min-content" : "288px"}`,
+            // "width" : `${media.length > 0 ? "644px" : "552px"}`,
             "z-index" : `${showGifs ? "10" : "20"}`,
           }}
         >
           <div className="upload">
-            <Header close={onClose} />
-            <div 
-              className="upload-body-container"
-              style={{
-                "width" : `${media.length > 0 ? "608px" : "516px"}`,
-              }}
-            >
+            <Header close={onClose} router={Router} />
+            <div className={`upload-body-container ${media.length > 0 ? 'upload-body-container-present' : 'upload-body-container-absent'}`}>
               <TextareaAutosize
                 className="upload-body"
                 minRows={1}

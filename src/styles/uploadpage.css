@@ -2,7 +2,7 @@
 .upload-container {
   @apply
     fixed
-    top-1/2
+    sm:top-1/2
     left-1/2
     -translate-y-2/4
     -translate-x-2/4
@@ -17,7 +17,31 @@
     /* h-72 */
     /* max-h-161 */
     flex
-    text-secondary;
+    text-secondary
+    
+    top-96
+    ;
+}
+
+.media-present {
+  @apply
+    h-min
+    sm:w-161
+    w-full
+    ;
+    /* height: min-content;
+    width: 644px; */
+}
+
+.media-absent {
+  @apply
+    sm:h-72
+    sm:w-138
+    h-96
+    w-full
+    ;
+    /* height: 288px;
+    width: 552px; */
 }
 
 .upload {
@@ -64,7 +88,23 @@
     /* w-full
     max-h-161 */
     /* overflow-x-scroll */
-    ml-1.5;
+    ml-1.5
+
+    sm:pr-0
+    pr-9
+    ;
+}
+
+.upload-body-container-present {
+  @apply
+    sm:w-152
+    w-screen;
+}
+
+.upload-body-container-absent {
+  @apply
+    sm:w-129
+    w-screen;
 }
 
 .upload-body {
@@ -88,6 +128,9 @@
     relative
     mt-2
     mb-10
+
+    sm:mr-0
+    mr-7
     ;
 }
 
