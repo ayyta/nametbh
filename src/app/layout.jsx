@@ -4,6 +4,7 @@ import "../styles/globals.css";
 // components
 import NavbarWrapper from "@/components/wrappers/NavbarWrapper.jsx";
 import AuthCheckWrapper from "@/components/wrappers/AuthCheckWrapper.jsx";
+import { Toaster } from "@/components/ui/toaster"
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -21,8 +22,11 @@ export default function RootLayout({ children }) {
           {<NavbarWrapper/>}
           <div className="flex-1">
             {children}
+            
           </div>
         </AuthCheckWrapper>
+        <Toaster/>
+
       </body>
     </html>
   );

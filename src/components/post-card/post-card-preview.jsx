@@ -5,6 +5,8 @@ import React, { useState } from "react"
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import { Card, CardContent, CardFooter, CardHeader } from "@/components/ui/card"
 import { Separator } from "@/components/ui/separator"
+import { useToast } from "@/components/hooks/use-toast"
+import { Toaster } from "@/components/ui/toaster"
 
 import { Heart, MessageCircle, Share2, X } from "lucide-react"
 import Image from "next/image"
@@ -36,7 +38,7 @@ export default function Component({
 }) {
   const [isCarouselOpen, setIsCarouselOpen] = useState(false);
   const [isReplyOpen, setIsReplyOpen] = useState(false);
-
+  const { toast } = useToast()
   const openCarousel = () => {
     setIsCarouselOpen(true)
   }
@@ -54,6 +56,11 @@ export default function Component({
 
   const handleShare = () => {
     console.log("Pressed share button");
+    // copy some linked to copy board
+
+    toast({
+      title: "Link Copied to Clipboard",
+    })
   }
 
   const handleComment = () => {

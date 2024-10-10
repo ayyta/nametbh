@@ -46,7 +46,7 @@ const Component = ({
         <Header router={router} title={"Note"}/>
 
         {/* Content */}
-        <PostCardPreview/>
+        <PostCardPreview images={[]}/>
         <div className="w-full flex flex-row items-center justify-between p-4 border-y border-white/50">
           <p className="text-white font-bold text-lg ">Replies</p>
           <SortByDropDown 
