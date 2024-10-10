@@ -7,14 +7,22 @@ import {
 import { Input } from "@/components/ui/input"
 import { Button } from '@/components/ui/button'
 import { Reply, X } from 'lucide-react'
-import PostCardPreview from "@/components/post-card/post-card-preview"
+import PostCardPreview from "@/components/post-card/post-card-preview/page"
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import { cn } from "@/lib/utils"
 const Component = ({
   isOpen=false,
   setIsOpen=()=>{},
+  user={
+    pfp: "/placeholder-avatar.jpg",
+    name: "John Doe",
+  },
+  replier={
+    pfp: "/placeholder-avatar.jpg",
+    name: "John Doe",
+  },
 }) => {
-  
+  const { pfp, name, username } = user
   const closeReply = () => {
     setIsOpen(false)
   }
@@ -37,10 +45,13 @@ const Component = ({
 
         <CardContent className="p-4 pt-0.5">
           <PostCardPreview 
+            pfp={pfp}
+            name={name}
+            username={username}
             hasButtons={false}
             hasReplies={true}
           />
-          <ReplyCard />
+          <ReplyCard user={replier} />
 
         </CardContent>
 
@@ -51,13 +62,16 @@ const Component = ({
 }
 
 const ReplyCard = ({
-  pfp = "/placeholder-avatar.jpg",
-  name = "John Doe",
-  images = ["/massageServices.jpg", "/haircut2.jpg", "/massageServices.jpg", "/haircut2.jpg"],
+  user={
+    pfp: "/placeholder-avatar.jpg",
+    name: "John Doe",
+  },
 }) => {
   const handleReply = () => {
     console.log("Replying to post");
   }
+
+  const { pfp, name } = user
   return (
     <Card className="w-192 h-fit bg-transparent border-none text-white">
       <CardHeader className="flex flex-row items-center gap-4 py-2">

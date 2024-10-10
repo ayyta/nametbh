@@ -2,16 +2,13 @@
 "use client"
 
 import React, { useState, useEffect } from "react"
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
-import { Card, CardContent, CardFooter, CardHeader } from "@/components/ui/card"
+import { Card, CardContent } from "@/components/ui/card"
 import { Separator } from "@/components/ui/separator"
-import { useToast } from "@/components/hooks/use-toast"
-
-import { Heart, MessageCircle, Share2 } from "lucide-react"
 import Image from "next/image"
+import PostCardPreviewHeader from "@/components/post-card/post-card-preview/header"
+import PostCardPreviewFooter from "@/components/post-card/post-card-preview/footer"
 import PostCardCarousel from "@/components/post-card/post-card-carousel"
 
-import { PostCardActionButton, PostCardInteractionButton } from "@/components/post-card/post-card-buttons"
 import ReplyPopup from "@/components/post-card/reply";
 
 export default function Component({
@@ -37,14 +34,7 @@ export default function Component({
 }) {
   const [isCarouselOpen, setIsCarouselOpen] = useState(false);
   const [isReplyOpen, setIsReplyOpen] = useState(false);
-  const [postLink, setPostLink] = useState("")
-  const { toast } = useToast()
 
-  useEffect(() => {
-    // set postlink
-    // fetch photos
-    setPostLink("google.com")
-  }, [])
   const openCarousel = () => {
     setIsCarouselOpen(true)
   }
@@ -56,47 +46,20 @@ export default function Component({
   const openReply = () => {
     setIsReplyOpen(true)
   }
-  const handleLike = (isActive, count) => {
-    console.log(`Like is now ${isActive ? "active": "inactive"} with count: ${count}`);
-  }
 
-  const handleShare = () => {
-    console.log("Pressed share button");
-
-    // Copy post link to clipboard, then show toast
-    navigator.clipboard.writeText(postLink).then(()=> {
-      toast({
-        title: "Link Copied to Clipboard",
-      })
-    }).catch(err => {
-      console.error("Failed to copy link to clipboard", err);
-      toast({
-        title: "Failed to copy link to clipboard",
-        status: "error",
-      })
-    })
-  }
-
-  const handleComment = () => {
-    openReply();
-    console.log("Pressed comment button");
-  }
 
 
   // optimize image loading by allowing optimization from s3 bucket in next.config.js remotePatterns
   return (
     <>
+    
       <Card className="w-192 h-fit bg-transparent border-none text-white">
-        <CardHeader className="flex flex-row items-center gap-4 py-2">
-          <Avatar>
-            <AvatarImage src={pfp} alt={name} />
-            <AvatarFallback>{name.charAt(0)}</AvatarFallback>
-          </Avatar>
-          <div className="flex flex-col">
-            <p className="text-lg font-semibold">{name}</p>
-            <p className="text-sm text-gray-500">{username} • {creationDate}</p>
-          </div>
-        </CardHeader>
+        <PostCardPreviewHeader
+          pfp={pfp}
+          name={name}
+          username={username}
+          creationDate={creationDate}
+        />
         <div className="flex">
           {hasReplies ? <Separator orientation="vertical" className="h-auto ml-11 bg-white/40" />: null}
           <div className="">
@@ -124,30 +87,15 @@ export default function Component({
                 </div>
               )}
             </CardContent>
-            {hasButtons && (
-              <CardFooter className="flex gap-1">
-                <PostCardInteractionButton 
-                  initialCount={likeCount}
-                  activeColor="#f91980"
-                  inactiveColor=""
-                  color="pink"
-                  callBack={handleLike} 
-                  Icon={Heart} 
-                />
-                <PostCardActionButton
-                  initialCount={commentCount}
-                  color="blue"
-                  callBack={handleComment}
-                  Icon={MessageCircle}
-                />
-                <PostCardActionButton
-                  initialCount={shareCount}
-                  color="green"
-                  callBack={handleShare}
-                  Icon={Share2}
-                />
-              </CardFooter>
-            )}
+            <PostCardPreviewFooter
+              hasButtons={hasButtons}
+              likeCount={likeCount}
+              commentCount={commentCount}
+              shareCount={shareCount}
+              postId={postId}
+              userId={userId}
+              openReply={openReply}
+            />
           </div>
         </div>
 
@@ -163,3 +111,6 @@ export default function Component({
   )
 
 }
+
+
+

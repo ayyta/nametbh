@@ -4,7 +4,7 @@ import { useState, useEffect, useRef } from "react";
 import { useRouter } from "next/navigation";
 
 import Header from "@/app/post/header";
-import PostCardPreview from "@/components/post-card/post-card-preview";
+import PostCardPreview from "@/components/post-card/post-card-preview/page";
 import SortByDropDown from "@/app/post/sort-by-dropdown";
 import Loading from "@/components/Loading";
 
