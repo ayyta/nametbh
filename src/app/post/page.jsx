@@ -73,7 +73,6 @@ const Replies = ({
   const [replies, setReplies] = useState([]);
   
   useEffect(() => {
-    console.log("fetching replies with postId: ", postId, "and selected sort: ", selectedSort);
     setReplies([
       {
         postId: 1,
