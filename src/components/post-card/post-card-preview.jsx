@@ -1,14 +1,13 @@
 
 "use client"
 
-import React, { useState } from "react"
+import React, { useState, useEffect } from "react"
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import { Card, CardContent, CardFooter, CardHeader } from "@/components/ui/card"
 import { Separator } from "@/components/ui/separator"
 import { useToast } from "@/components/hooks/use-toast"
-import { Toaster } from "@/components/ui/toaster"
 
-import { Heart, MessageCircle, Share2, X } from "lucide-react"
+import { Heart, MessageCircle, Share2 } from "lucide-react"
 import Image from "next/image"
 import PostCardCarousel from "@/components/post-card/post-card-carousel"
 
@@ -38,7 +37,14 @@ export default function Component({
 }) {
   const [isCarouselOpen, setIsCarouselOpen] = useState(false);
   const [isReplyOpen, setIsReplyOpen] = useState(false);
+  const [postLink, setPostLink] = useState("")
   const { toast } = useToast()
+
+  useEffect(() => {
+    // set postlink
+    // fetch photos
+    setPostLink("google.com")
+  }, [])
   const openCarousel = () => {
     setIsCarouselOpen(true)
   }
@@ -56,10 +62,18 @@ export default function Component({
 
   const handleShare = () => {
     console.log("Pressed share button");
-    // copy some linked to copy board
 
-    toast({
-      title: "Link Copied to Clipboard",
+    // Copy post link to clipboard, then show toast
+    navigator.clipboard.writeText(postLink).then(()=> {
+      toast({
+        title: "Link Copied to Clipboard",
+      })
+    }).catch(err => {
+      console.error("Failed to copy link to clipboard", err);
+      toast({
+        title: "Failed to copy link to clipboard",
+        status: "error",
+      })
     })
   }
 
