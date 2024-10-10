@@ -6,7 +6,9 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint"
+    "lint": "next lint",
+    "lint:fix": "eslint --fix .",
+    "format": "prettier --write ."
   },
   "dependencies": {
     "@aws-sdk/client-s3": "^3.654.0",
@@ -29,11 +31,19 @@
     "npm": "^10.9.0",
     "react": "^18",
     "react-dom": "^18",
+    "react-hook-form": "^7.53.0",
     "tailwind-merge": "^2.5.2",
-    "tailwindcss-animate": "^1.0.7"
+    "tailwindcss-animate": "^1.0.7",
+    "zod": "^3.23.8"
   },
   "devDependencies": {
+    "eslint": "^8.57.1",
+    "eslint-config-next": "^14.2.13",
+    "eslint-config-prettier": "^9.1.0",
+    "eslint-plugin-import": "^2.30.0",
+    "eslint-plugin-prettier": "^5.2.1",
     "postcss": "^8",
+    "prettier": "^3.3.3",
     "tailwindcss": "^3.4.1"
   }
 }

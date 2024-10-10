@@ -16,12 +16,13 @@ export async function GET(req) {
   try {
     const { data, error } = await supabaseService
       .from('user')
-      .select('profile_background, pfp, username, email')
+      .select('profile_background, pfp, username, email, name')
       .eq('user_id', userId);
 
     if (error) {
       throw new Error(`Error fetching user data: ${error.message}`);
     }
+
     return new Response(JSON.stringify(data), { status: 200 });
   } catch (error) {
     console.error(error.message);
@@ -46,28 +47,25 @@ export async function PUT(req) {
 
   try {
     // Check if the field already exists for another user
-    if (field === 'username') {
-      // Check if the field already exists for another user
-      const { data: existingUser, error: fetchError } = await supabaseService
-        .from('user')
-        .select('user_id')
-        .eq(field, value)
-        .maybeSingle(); // Use maybeSingle to handle no rows gracefully
+    const { data: existingUser, error: fetchError } = await supabaseService
+      .from('user')
+      .select('user_id')
+      .eq(field, value)
+      .maybeSingle(); // Use maybeSingle to handle no rows gracefully
 
-      // Handle fetch error
-      if (fetchError) {
-        throw new Error(`Error fetching user: ${fetchError.message}`);
-      }
+    // Handle fetch error
+    if (fetchError) {
+      throw new Error(`Error fetching user: ${fetchError.message}`);
+    }
 
-      // If another user already has this username, return a conflict
-      if (existingUser && existingUser.user_id !== userId) {
-        return new Response(
-          JSON.stringify({
-            error: 'Username is already taken',
-          }),
-          { status: 409 }, // Conflict
-        );
-      }
+    // If another user already has this field (username or email), return a conflict
+    if (existingUser && existingUser.user_id !== userId) {
+      return new Response(
+        JSON.stringify({
+          error: `${field === 'username' ? 'Username' : 'Email'} is already taken`,
+        }),
+        { status: 409 }, // Conflict
+      );
     }
 
     // Proceed with the update if the field is available

@@ -1,25 +1,30 @@
-import { PutObjectCommand, GetObjectCommand, DeleteObjectCommand, S3Client, HeadObjectCommand } from "@aws-sdk/client-s3";
-import { getSignedUrl } from "@aws-sdk/s3-request-presigner";
+import {
+  PutObjectCommand,
+  GetObjectCommand,
+  DeleteObjectCommand,
+  S3Client,
+  HeadObjectCommand,
+} from '@aws-sdk/client-s3';
+import { getSignedUrl } from '@aws-sdk/s3-request-presigner';
 import { NextResponse } from 'next/server';
 
 const client = new S3Client({
   region: process.env.BUCKET_REGION,
   credentials: {
-    accessKeyId: process.env.BUCKET_ACCESS_KEY  ,
-    secretAccessKey: process.env.BUCKET_SECRET_ACCESS_KEY, 
-  }
+    accessKeyId: process.env.BUCKET_ACCESS_KEY,
+    secretAccessKey: process.env.BUCKET_SECRET_ACCESS_KEY,
+  },
 });
 
-
 // Upload file to S3 bucket given file and path
-const uploadFilesToS3 = async (file, path="") => {
+const uploadFilesToS3 = async (file, path = '') => {
   // Convert file to ArrayBuffer, then to Buffer
-  const arrayBuffer = await file.arrayBuffer();  // Convert file to ArrayBuffer
-  const buffer = Buffer.from(arrayBuffer);  // Convert ArrayBuffer to Buffer
+  const arrayBuffer = await file.arrayBuffer(); // Convert file to ArrayBuffer
+  const buffer = Buffer.from(arrayBuffer); // Convert ArrayBuffer to Buffer
 
   // Make path for file
   const objectKey = createHexPath(path);
-  
+
   const command = new PutObjectCommand({
     Bucket: process.env.BUCKET_NAME,
     Key: objectKey,
@@ -29,11 +34,14 @@ const uploadFilesToS3 = async (file, path="") => {
 
   try {
     const response = await client.send(command);
-    return NextResponse.json({objectKey: objectKey}, { status: 200 });
+    return NextResponse.json({ objectKey: objectKey }, { status: 200 });
   } catch (error) {
-    return NextResponse.json({error: "Failed to upload file"}, { status: 500 });
+    return NextResponse.json(
+      { error: 'Failed to upload file' },
+      { status: 500 },
+    );
   }
-}
+};
 
 // Given path to file, get image link from S3 bucket
 const getPresignedUrl = async (objectKey) => {
@@ -43,7 +51,7 @@ const getPresignedUrl = async (objectKey) => {
   });
 
   if (!(await checkS3ObjectExists(objectKey))) {
-    return "";
+    return '';
   }
   // Generate the signed URL (valid for 60 minutes)
   const signedUrl = await getSignedUrl(client, command, { expiresIn: 3600 });
@@ -61,13 +69,13 @@ const getFilesFromS3 = async (objectKey) => {
   try {
     const response = await client.send(command);
     const str = await response.Body.transformToWebStream();
-    return NextResponse.json({data: str}, { status: 200 });
+    return NextResponse.json({ data: str }, { status: 200 });
   } catch (error) {
-    return NextResponse.json({ error: "Failed to get file" }, { status: 500 });
+    return NextResponse.json({ error: 'Failed to get file' }, { status: 500 });
   }
-}
+};
 
-const deleteFilesFromS3 = async(objectKey) => {
+const deleteFilesFromS3 = async (objectKey) => {
   const command = new DeleteObjectCommand({
     Bucket: process.env.BUCKET_NAME,
     Key: objectKey,
@@ -75,20 +83,22 @@ const deleteFilesFromS3 = async(objectKey) => {
 
   try {
     const response = await client.send(command);
-    return NextResponse.json({data: "File deleted"}, { status: 200 });
+    return NextResponse.json({ data: 'File deleted' }, { status: 200 });
   } catch (error) {
-    return NextResponse.json({error: "Failed to delete file"}, { status: 500 });
+    return NextResponse.json(
+      { error: 'Failed to delete file' },
+      { status: 500 },
+    );
   }
-}
+};
 
 // Create random path for file
-const createHexPath = (path="") => {
-  if (path[path.length - 1] !== "/" && path.length > 0) {
-    path += "/";
+const createHexPath = (path = '') => {
+  if (path[path.length - 1] !== '/' && path.length > 0) {
+    path += '/';
   }
   return path + Math.random().toString(16).slice(2);
-
-} 
+};
 
 async function checkS3ObjectExists(objectKey) {
   const command = new HeadObjectCommand({
