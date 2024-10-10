@@ -25,6 +25,10 @@ const Component = ({
   content = "This is a sample post content. It can be much longer and will wrap to multiple lines if needed. ",
   images = ["/massageServices.jpg", "/haircut2.jpg", "/massageServices.jpg", "/haircut2.jpg"]
 }) => {
+  // post table: post_id, created_at, user_id, like_count, comment_count, share_count, text_content
+  // user_table: name, email, username, pfp, profile_background, bio
+  // backend: given pfp media_id from user_table, get media_url from media_table
+  // match media id with post_id in media_post table to get all media urls for post
 
   const sortOptions = [
     { label: "Relevance", value: "relevance" },
@@ -58,7 +62,7 @@ const Component = ({
           />
         </div>
 
-        <Replies postId={""} selectedSort={selectedSort}/>
+        <Replies postId={postId} selectedSort={selectedSort}/>
 
       </div>
 

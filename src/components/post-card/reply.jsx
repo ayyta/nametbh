@@ -10,6 +10,7 @@ import { Reply, X } from 'lucide-react'
 import PostCardPreview from "@/components/post-card/post-card-preview/page"
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import { cn } from "@/lib/utils"
+
 const Component = ({
   isOpen=false,
   setIsOpen=()=>{},
@@ -42,7 +43,6 @@ const Component = ({
             <X className="w-5 h-5 text-white" />
           </Button>
         </CardHeader>
-
         <CardContent className="p-4 pt-0.5">
           <PostCardPreview 
             pfp={pfp}
@@ -52,10 +52,7 @@ const Component = ({
             hasReplies={true}
           />
           <ReplyCard user={replier} />
-
         </CardContent>
-
-
       </Card>
     </div>
   )

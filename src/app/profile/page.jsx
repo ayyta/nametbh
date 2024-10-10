@@ -129,7 +129,7 @@ export default function Profile() {
 
   return (
     <>
-      <div className="w-full h-full flex flex-col relative">
+      <div className="w-full h-full flex flex-col relative overflow-y-scroll">
         <div
           className={`w-full h-64 mb-6 p-10 flex ${
             userCurr.profile_background === '' ? 'bg-gray-700' : ''
