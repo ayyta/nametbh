@@ -55,6 +55,9 @@ const ReplyCard = ({
   name = "John Doe",
   images = ["/massageServices.jpg", "/haircut2.jpg", "/massageServices.jpg", "/haircut2.jpg"],
 }) => {
+  const handleReply = () => {
+    console.log("Replying to post");
+  }
   return (
     <Card className="w-192 h-fit bg-transparent border-none text-white">
       <CardHeader className="flex flex-row items-center gap-4 py-2">
@@ -77,7 +80,7 @@ const ReplyCard = ({
         />
       </CardContent>
       <CardFooter className="flex justify-end">
-        <Button variant="primary" size="sm">Reply</Button>
+        <Button variant="outline" className="text-black font-bold" size="lg" onClick={handleReply}>Reply</Button>
       </CardFooter>
     </Card>
   )
