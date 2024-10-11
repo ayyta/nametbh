@@ -3,9 +3,9 @@
 import { useState, useEffect, useRef } from "react";
 import { useRouter } from "next/navigation";
 
-import Header from "@/app/post/[postid]/header";
+import Header from "@/app/[username]/post/[postid]/header";
 import PostCardPreview from "@/components/post-card/post-card-preview/page";
-import SortByDropDown from "@/app/post/[postid]/sort-by-dropdown";
+import SortByDropDown from "@/app/[username]/post/[postid]/sort-by-dropdown";
 import Loading from "@/components/Loading";
 
 const Component = ({  
@@ -14,7 +14,7 @@ const Component = ({
   userId=null,
   pfp = "/placeholder-avatar.jpg",
   name = "John Doe",
-  username = "@johndoe",
+  username = params.username,
   bio="some bio",
   following_count=0,
   follower_count=0,
@@ -94,7 +94,7 @@ const Replies = ({
         userId: "122",
         pfp: "/placeholder-avatar.jpg",
         name: "John Doe",
-        username: "@johndoe",
+        username: "johndoe",
         bio: "some bio",
         following_count: 0,
         follower_count: 0,
@@ -103,7 +103,7 @@ const Replies = ({
         friends: false,
         creationDate : "2h ago",
         content : "This is a sample post content. It can be much longer and will wrap to multiple lines if needed. ",
-        images : [],
+        imagesProp : [],
         likeCount: 1700,
         commentCount: 2500,
         shareCount: 1000000,
@@ -112,7 +112,7 @@ const Replies = ({
           userId: "123",
           pfp: "/placeholder-avatar.jpg",
           name: "John Doe",
-          username: "@johndoe",
+          username: "johndoe",
           bio: "some bio",
           following_count: 0,
           follower_count: 0,
@@ -121,7 +121,7 @@ const Replies = ({
           friends: false,
           creationDate : "2h ago",
           content : "This is a sample post content. second post ",
-          images : ["/massageServices.jpg", "/haircut2.jpg"],
+          imagesProp : ["/massageServices.jpg", "/haircut2.jpg"],
           likeCount: 1000,
           commentCount: 2000,
           shareCount: 5000,
@@ -130,7 +130,7 @@ const Replies = ({
           userId: "123",
           pfp: "/placeholder-avatar.jpg",
           name: "John Doe",
-          username: "@johndoe",
+          username: "johndoe",
           bio: "some bio",
           following_count: 0,
           follower_count: 0,
@@ -139,7 +139,7 @@ const Replies = ({
           friends: false,
           creationDate : "2h ago",
           content : "This is a sample post content. second post ",
-          images : ["/massageServices.jpg"],
+          imagesProp : ["/massageServices.jpg"],
           likeCount: 1000,
           commentCount: 2000,
           shareCount: 5000,
@@ -149,7 +149,7 @@ const Replies = ({
         userId: "122",
         pfp: "/placeholder-avatar.jpg",
         name: "John Doe",
-        username: "@johndoe",
+        username: "johndoe",
         bio: "some bio",
         following_count: 0,
         follower_count: 0,
@@ -158,7 +158,7 @@ const Replies = ({
         friends: false,
         creationDate : "2h ago",
         content : "This is a sample post content. It can be much longer and will wrap to multiple lines if needed. ",
-        images : [],
+        imagesProp : [],
         likeCount: 1700,
         commentCount: 2500,
         shareCount: 1000000,
@@ -177,9 +177,6 @@ const Replies = ({
     )
   }
 
-  const handleRedirect = () => {
-    router.push(`/post/${postId}`);
-  }
   // If replies, show replies
   return (
     <>
@@ -205,7 +202,7 @@ const Replies = ({
               friends={reply.friends}
               creationDate={reply.creationDate}
               content={reply.content}
-              images={reply.images}
+              imagesProp={reply.imagesProp}
               likeCount={reply.likeCount}
               commentCount={reply.commentCount}
               shareCount={reply.shareCount}
@@ -229,7 +226,7 @@ const Replies = ({
                   friends={nestedReply.friends}
                   creationDate={nestedReply.creationDate}
                   content={nestedReply.content}
-                  images={nestedReply.images}
+                  imagesProp={nestedReply.imagesProp}
                   likeCount={reply.likeCount}
                   commentCount={reply.commentCount}
                   shareCount={reply.shareCount}

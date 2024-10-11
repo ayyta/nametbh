@@ -10,22 +10,17 @@ import PostCardPreviewHeader from "@/components/post-card/post-card-preview/head
 import PostCardPreviewFooter from "@/components/post-card/post-card-preview/footer"
 import PostCardCarousel from "@/components/post-card/post-card-carousel"
 import ReplyPopup from "@/components/post-card/reply";
+import { set } from "react-hook-form"
 
 export default function Component({
   postId=null,
   userId=null,
   pfp = "/placeholder-avatar.jpg",
   name = "John Doe",
-  username = "@johndoe",
-  bio="some bio",
-  following_count=0,
-  follower_count=0,
-  followsYou=false,
-  following=false, 
-  friends=false,
+  username = "johndoe",
   creationDate = "2h ago",
   content = "This is a sample post content. It can be much longer and will wrap to multiple lines if needed. ",
-  images = ["/massageServices.jpg", "/haircut2.jpg", "/massageServices.jpg", "/haircut2.jpg"],
+  imagesProp = [],
   likeCount = 0,
   commentCount = 0,
   shareCount = 0,
@@ -35,6 +30,18 @@ export default function Component({
 }) {
   const [isCarouselOpen, setIsCarouselOpen] = useState(false);
   const [isReplyOpen, setIsReplyOpen] = useState(false);
+  const [images, setImages] = useState(imagesProp);
+  const [user, setUser] = useState({
+    pfp: pfp, 
+    name: name, 
+    username: username, 
+    bio: "some bio", 
+    following_count: 0, 
+    follower_count: 0, 
+    followsYou: false, 
+    following: false, 
+    friends: false
+   });
 
   const router = useRouter();
 
@@ -42,6 +49,21 @@ export default function Component({
   const closeCarousel = () => setIsCarouselOpen(false);
   const openReply = () => setIsReplyOpen(true);
 
+  useEffect(() => {
+    // fetch user data
+    setUser({
+      pfp: pfp, 
+      name: name, 
+      username: username, 
+      bio: "some bio", 
+      following_count: 0, 
+      follower_count: 0, 
+      followsYou: false, 
+      following: false, 
+      friends: false
+    });
+    // fetch media data if any
+  }, [])
   const renderImages = () => (
     images.length > 0 && (
       <div className={`grid gap-0.5 ${images.length > 1 ? 'grid-cols-2' : 'grid-cols-1'} rounded-2xl border border-white/30 overflow-hidden cursor-pointer active:scale-95 transition-all duration-150 ease-in-out w-fit`}>
@@ -68,7 +90,7 @@ export default function Component({
 
   const handleRedirect = () => {
     if (isCurrentPost) return;
-    router.push(`/post/${postId}`);
+    router.replace(`/${username}/post/${postId}`);
   }
   // optimize image loading by allowing optimization from s3 bucket in next.config.js remotePatterns
   return (

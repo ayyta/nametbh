@@ -15,7 +15,7 @@ const PostCardPreviewHeader = ({
       </Avatar>
       <div className="flex flex-col">
         <p className="text-lg font-semibold">{name}</p>
-        <p className="text-sm text-gray-500">{username} • {creationDate}</p>
+        <p className="text-sm text-gray-500">@{username} • {creationDate}</p>
       </div>
     </CardHeader>
   )
