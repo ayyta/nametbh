@@ -43,6 +43,7 @@ export async function POST(request, response) {
           {
             media_path: mediaFile,
             media_type: "s3",
+            post_id: post_id,
           }
         ])
 
@@ -59,6 +60,7 @@ export async function POST(request, response) {
           {
             gif_url: gifURL,
             media_type: "gif",
+            post_id: post_id,
           }
         ])
 
