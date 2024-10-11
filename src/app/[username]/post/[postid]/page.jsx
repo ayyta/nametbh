@@ -12,18 +12,15 @@ const Component = ({
   params,
   postId=params.postid,
   userId=null,
-  pfp = "/placeholder-avatar.jpg",
-  name = "John Doe",
+  pfp = "",
+  name = "",
   username = params.username,
-  bio="some bio",
-  following_count=0,
-  follower_count=0,
-  followsYou=false,
-  following=false, 
-  friends=false,
-  creationDate = "2h ago",
-  content = "This is a sample post content. It can be much longer and will wrap to multiple lines if needed. ",
-  images = ["/massageServices.jpg", "/haircut2.jpg", "/massageServices.jpg", "/haircut2.jpg"]
+  creationDate = "",
+  textContent = "",
+  imagesProp = ["/massageServices.jpg", "/haircut2.jpg", "/massageServices.jpg", "/haircut2.jpg"],
+  likeCount = 0,
+  commentCount = 0,
+  shareCount = 0,
 }) => {
   // post table: post_id, created_at, user_id, like_count, comment_count, share_count, text_content
   // user_table: name, email, username, pfp, profile_background, bio
@@ -54,7 +51,16 @@ const Component = ({
         {/* Content */}
         <PostCardPreview 
           postId={postId} 
-          images={[]} 
+          userId={userId}
+          username={username}
+          creationDate={creationDate}
+          pfp={pfp}
+          name={name}
+          textContent={textContent}
+          imagesProp={imagesProp} 
+          likeCount={likeCount}
+          commentCount={commentCount}
+          shareCount={shareCount}
           isCurrentPost={true}
         />
         <div className="w-full flex flex-row items-center justify-between p-4 border-y border-white/50">
@@ -95,12 +101,6 @@ const Replies = ({
         pfp: "/placeholder-avatar.jpg",
         name: "John Doe",
         username: "johndoe",
-        bio: "some bio",
-        following_count: 0,
-        follower_count: 0,
-        followsYou: false,
-        following: false, 
-        friends: false,
         creationDate : "2h ago",
         content : "This is a sample post content. It can be much longer and will wrap to multiple lines if needed. ",
         imagesProp : [],
@@ -113,12 +113,6 @@ const Replies = ({
           pfp: "/placeholder-avatar.jpg",
           name: "John Doe",
           username: "johndoe",
-          bio: "some bio",
-          following_count: 0,
-          follower_count: 0,
-          followsYou: false,
-          following: false, 
-          friends: false,
           creationDate : "2h ago",
           content : "This is a sample post content. second post ",
           imagesProp : ["/massageServices.jpg", "/haircut2.jpg"],
@@ -131,12 +125,6 @@ const Replies = ({
           pfp: "/placeholder-avatar.jpg",
           name: "John Doe",
           username: "johndoe",
-          bio: "some bio",
-          following_count: 0,
-          follower_count: 0,
-          followsYou: false,
-          following: false, 
-          friends: false,
           creationDate : "2h ago",
           content : "This is a sample post content. second post ",
           imagesProp : ["/massageServices.jpg"],
@@ -150,12 +138,6 @@ const Replies = ({
         pfp: "/placeholder-avatar.jpg",
         name: "John Doe",
         username: "johndoe",
-        bio: "some bio",
-        following_count: 0,
-        follower_count: 0,
-        followsYou: false,
-        following: false, 
-        friends: false,
         creationDate : "2h ago",
         content : "This is a sample post content. It can be much longer and will wrap to multiple lines if needed. ",
         imagesProp : [],
@@ -194,14 +176,8 @@ const Replies = ({
               pfp={reply.pfp}
               name={reply.name}
               username={reply.username}
-              bio={reply.bio}
-              following_count={reply.following_count}
-              follower_count={reply.follower_count}
-              followsYou={reply.followsYou}
-              following={reply.following}
-              friends={reply.friends}
               creationDate={reply.creationDate}
-              content={reply.content}
+              textContent={reply.textContent}
               imagesProp={reply.imagesProp}
               likeCount={reply.likeCount}
               commentCount={reply.commentCount}
@@ -218,18 +194,12 @@ const Replies = ({
                   pfp={nestedReply.pfp}
                   name={nestedReply.name}
                   username={nestedReply.username}
-                  bio={nestedReply.bio}
-                  following_count={nestedReply.following_count}
-                  follower_count={nestedReply.follower_count}
-                  followsYou={nestedReply.followsYou}
-                  following={nestedReply.following}
-                  friends={nestedReply.friends}
                   creationDate={nestedReply.creationDate}
-                  content={nestedReply.content}
+                  textContent={nestedReply.textContent}
                   imagesProp={nestedReply.imagesProp}
-                  likeCount={reply.likeCount}
-                  commentCount={reply.commentCount}
-                  shareCount={reply.shareCount}
+                  likeCount={nestedReply.likeCount}
+                  commentCount={nestedReply.commentCount}
+                  shareCount={nestedReply.shareCount}
                   hasReplies={reply.replies && reply.replies.length-1 > index}
                   isCurrentPost={false}
                 />
