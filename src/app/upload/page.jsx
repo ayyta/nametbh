@@ -1,5 +1,5 @@
 "use client";
-import "../../styles/uploadpage.css";
+import "@/styles/uploadpage.css";
 import { useState, useEffect } from "react";
 import Image from "next/image";
 import TextareaAutosize from "react-textarea-autosize";
@@ -193,7 +193,7 @@ export default function Upload({ open, onClose }) {
                   src="/Mic Icon.svg"
                   width={28}
                   height={0}
-                  alt="Mic logo" 
+                  alt="Mic logo"
                 />
               </button>
               <GiphyButton 
