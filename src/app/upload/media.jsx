@@ -39,9 +39,8 @@ export default function Media( {
                 width={0}
                 height={0}
                 sizes='100vw'
-                style={{ "width" : "100%" }}
                 alt='Media'
-                className='rounded-lg'
+                className='rounded-lg max-h-161 h-auto w-full'
               />
               <button 
                 className='absolute top-1.5 right-1.5 z-50 bg-slate-200 rounded-full hover:opacity-80 hover:bg-secondary active:opacity-50 cursor-pointer'
