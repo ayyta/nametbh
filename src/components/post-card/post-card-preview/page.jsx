@@ -2,16 +2,17 @@
 "use client"
 
 import React, { useState, useEffect } from "react"
+import { useRouter } from "next/navigation"
 import { Card, CardContent } from "@/components/ui/card"
 import { Separator } from "@/components/ui/separator"
 import Image from "next/image"
 import PostCardPreviewHeader from "@/components/post-card/post-card-preview/header"
 import PostCardPreviewFooter from "@/components/post-card/post-card-preview/footer"
 import PostCardCarousel from "@/components/post-card/post-card-carousel"
-import Link from "next/link"
 import ReplyPopup from "@/components/post-card/reply";
 
 export default function Component({
+  params,
   postId=null,
   userId=null,
   pfp = "/placeholder-avatar.jpg",
@@ -35,6 +36,9 @@ export default function Component({
   const [isCarouselOpen, setIsCarouselOpen] = useState(false);
   const [isReplyOpen, setIsReplyOpen] = useState(false);
 
+  const router = useRouter();
+  const currentPostId = params; // Get the current postId from the URL
+  console.log('params', params);
   const openCarousel = () => setIsCarouselOpen(true);
   const closeCarousel = () => setIsCarouselOpen(false);
   const openReply = () => setIsReplyOpen(true);
@@ -63,40 +67,46 @@ export default function Component({
     )
   )
 
+  const handleRedirect = (e) => {
+    e.preventDefault();
+    console.log('postId', postId);
+    console.log('currentPostId', currentPostId);
+    if (postId && currentPostId !== postId) {
+      router.push(`/post/${postId}`);
+    }
+  }
   // optimize image loading by allowing optimization from s3 bucket in next.config.js remotePatterns
   return (
     <>
-      <Link href={`/post/${postId}`}>
-        <Card className="w-192 h-fit bg-transparent border-none text-white">
-          <PostCardPreviewHeader
-            pfp={pfp}
-            name={name}
-            username={username}
-            creationDate={creationDate}
-          />
-          <div className="flex">
-            {hasReplies && (
-              <Separator orientation="vertical" className="h-auto ml-11 bg-white/40" />
-            )}
+      <Card className="w-192 h-fit bg-transparent border-none text-white" onClick={handleRedirect}>
+        <PostCardPreviewHeader
+          pfp={pfp}
+          name={name}
+          username={username}
+          creationDate={creationDate}
+        />
+        <div className="flex">
+          {hasReplies && (
+            <Separator orientation="vertical" className="h-auto ml-11 bg-white/40" />
+          )}
 
-            <div className="">
-              <CardContent className="space-y-4">
-                <p>{content}</p>
-                {renderImages()}
-              </CardContent>
-              <PostCardPreviewFooter
-                hasButtons={hasButtons}
-                likeCount={likeCount}
-                commentCount={commentCount}
-                shareCount={shareCount}
-                postId={postId}
-                userId={userId}
-                openReply={openReply}
-              />
-            </div>
+          <div className="">
+            <CardContent className="space-y-4">
+              <p>{content}</p>
+              {renderImages()}
+            </CardContent>
+            <PostCardPreviewFooter
+              hasButtons={hasButtons}
+              likeCount={likeCount}
+              commentCount={commentCount}
+              shareCount={shareCount}
+              postId={postId}
+              userId={userId}
+              openReply={openReply}
+            />
           </div>
-        </Card>
-      </Link>
+        </div>
+      </Card>
       <PostCardCarousel 
         images={images} 
         isCarouselOpen={isCarouselOpen} 

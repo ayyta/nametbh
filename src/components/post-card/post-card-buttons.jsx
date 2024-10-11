@@ -39,7 +39,9 @@ const PostCardActionButton = forwardRef(function PostCardActionButton({
     },
   }
 
-  const handleClick = () => {
+  const handleClick = (e) => {
+    e.preventDefault();
+
     if (callBack) {
       callBack()
     }
@@ -109,7 +111,8 @@ const PostCardInteractionButton = forwardRef(function PostCardButton({
   const [count, setCount] = useState(initialCount);
 
   // Set the active state and count
-  const handleClick = () => {
+  const handleClick = (e) => {
+    e.preventDefault();
     setIsActive(!isActive);
     setCount(prevCount => isActive ? prevCount-1 : prevCount+1)
     if (callBack) {
