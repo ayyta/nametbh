@@ -6,7 +6,7 @@ import PostCardPreview from '@/components/post-card/post-card-preview/page';
 const Component = () => {
   return (
     <div className="flex flex-col">
-      <PostCardPreview postId={70}/>
+      <PostCardPreview postId={10}/>
       <PostCardPreview postId={80}/>
     </div>
 

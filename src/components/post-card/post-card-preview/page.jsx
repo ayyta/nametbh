@@ -12,7 +12,6 @@ import PostCardCarousel from "@/components/post-card/post-card-carousel"
 import ReplyPopup from "@/components/post-card/reply";
 
 export default function Component({
-  params,
   postId=null,
   userId=null,
   pfp = "/placeholder-avatar.jpg",
@@ -32,13 +31,13 @@ export default function Component({
   shareCount = 0,
   hasReplies=false,
   hasButtons=true,
+  isCurrentPost=false,
 }) {
   const [isCarouselOpen, setIsCarouselOpen] = useState(false);
   const [isReplyOpen, setIsReplyOpen] = useState(false);
 
   const router = useRouter();
-  const currentPostId = params; // Get the current postId from the URL
-  console.log('params', params);
+
   const openCarousel = () => setIsCarouselOpen(true);
   const closeCarousel = () => setIsCarouselOpen(false);
   const openReply = () => setIsReplyOpen(true);
@@ -67,18 +66,17 @@ export default function Component({
     )
   )
 
-  const handleRedirect = (e) => {
-    e.preventDefault();
-    console.log('postId', postId);
-    console.log('currentPostId', currentPostId);
-    if (postId && currentPostId !== postId) {
-      router.push(`/post/${postId}`);
-    }
+  const handleRedirect = () => {
+    if (isCurrentPost) return;
+    router.push(`/post/${postId}`);
   }
   // optimize image loading by allowing optimization from s3 bucket in next.config.js remotePatterns
   return (
     <>
-      <Card className="w-192 h-fit bg-transparent border-none text-white" onClick={handleRedirect}>
+      <Card 
+        className={`w-192 h-fit bg-transparent border-none text-white ${!isCurrentPost ? "hover:cursor-pointer": ""}`} 
+        onClick={handleRedirect}
+      >
         <PostCardPreviewHeader
           pfp={pfp}
           name={name}

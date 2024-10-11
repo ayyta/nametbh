@@ -52,7 +52,11 @@ const Component = ({
         <Header router={router} title={"Note"}/>
 
         {/* Content */}
-        <PostCardPreview postId={postId} images={[]}/>
+        <PostCardPreview 
+          postId={postId} 
+          images={[]} 
+          isCurrentPost={true}
+        />
         <div className="w-full flex flex-row items-center justify-between p-4 border-y border-white/50">
           <p className="text-white font-bold text-lg ">Replies</p>
           <SortByDropDown 
@@ -62,7 +66,11 @@ const Component = ({
           />
         </div>
 
-        <Replies postId={postId} selectedSort={selectedSort}/>
+        <Replies 
+          postId={postId} 
+          selectedSort={selectedSort}
+          router={router}
+        />
 
       </div>
 
@@ -72,7 +80,8 @@ const Component = ({
 
 const Replies = ({
   postId="",
-  selectedSort={ label: "Relevance", value: "relevance" }
+  selectedSort={ label: "Relevance", value: "relevance" },
+  router,
 }) => {
 
   const [isLoading, setIsLoading] = useState(true);
@@ -168,6 +177,9 @@ const Replies = ({
     )
   }
 
+  const handleRedirect = () => {
+    router.push(`/post/${postId}`);
+  }
   // If replies, show replies
   return (
     <>
@@ -198,6 +210,7 @@ const Replies = ({
               commentCount={reply.commentCount}
               shareCount={reply.shareCount}
               hasReplies={reply.replies && reply.replies.length > 0}
+              isCurrentPost={false}
             />
             {reply.replies.length > 0 && (
               reply.replies.map((nestedReply, index) => (
@@ -221,6 +234,7 @@ const Replies = ({
                   commentCount={reply.commentCount}
                   shareCount={reply.shareCount}
                   hasReplies={reply.replies && reply.replies.length-1 > index}
+                  isCurrentPost={false}
                 />
               ))
             )}
