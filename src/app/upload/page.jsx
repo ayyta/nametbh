@@ -32,17 +32,7 @@ export default function Upload({ open, onClose }) {
    * useEffect hook to log the current media state, it only triggers whenever the media state changes
    */
   // useEffect(() => {
-  //   // console.log("media", media);
-  //   console.log(media);
-  //   media.map((mediaFile) => {
-  //     console.log(mediaFile.type);
-  //     // Append file to form data object
-  //     if (mediaFile.type === "image/gif") {
-  //       console.log("GIF URL", mediaFile.url);
-  //     } else {
-  //       console.log("Media File", mediaFile.file);
-  //     }
-  //   })
+  //   console.log("media", media);
   // }, [media]);
 
 
@@ -97,38 +87,45 @@ export default function Upload({ open, onClose }) {
   const uploadToS3 = async () => {
     const formData = new FormData();
     const path = "media/";
+    let mediaPaths = [];
 
     media.map((mediaFile) => {
-      // Append file to form data object
-      formData.append("files", mediaFile.file);
-    })
+      if (mediaFile.file) {
+        // Append file to form data object
+        formData.append("files", mediaFile.file);
+      } 
+    });
 
-    // Append path to form data object
-    formData.append("path", path);
+    // Append path to form data only if there are files
+    if (formData.has("files")) {
+      // Append path to form data object
+      formData.append("path", path);
 
-    // Send POST request to S3 Bucket
-    try {
-      const response = await fetch("/api/s3", {
-        method: "POST",
-        body: formData,   // if were sending text it would be JSON.stringify()
-      });
+      // Send POST request to S3 Bucket
+      try {
+        const response = await fetch("/api/s3", {
+          method: "POST",
+          body: formData,   // if were sending text it would be JSON.stringify()
+        });
 
-      if (response.error) {
-        console.error("Error uploading file to S3");
+        if (response.error) {
+          console.error("Error uploading file to S3");
+        }
+    
+        const data = await response.json();
+    
+        // data.data is the array of image paths in s3
+        // console.log(data.data);
+        mediaPaths = [...data.data];
+      } catch (error) {
+        //indicated frontend error
+        console.error(error);
+        return null;
       }
-  
-      const data = await response.json();
-  
-      // data.data is the array of image paths in s3
-      console.log(data.data);
-      return data.data;
-
-    } catch (error) {
-      //indicated frontend error
-      console.error(error);
-      return null;
     }
-  }
+
+    return mediaPaths;
+  };
 
   // Create a function to handle the addition of media due to the issue of having multiple alerts when the media limit is reached in the image/video vs gif upload
   const handleAddMedia = (newMediaArray) => {
