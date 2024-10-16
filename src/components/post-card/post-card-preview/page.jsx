@@ -85,7 +85,7 @@ export default function Component({
           <div 
             className={`relative w-fit flex`} 
             key={index} 
-            onClick={() => {openCarousel(index);}}
+            onClick={(e) => {e.stopPropagation(); openCarousel(index);}}
           >
             <Image
               src={src}
