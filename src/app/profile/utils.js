@@ -4,6 +4,7 @@ export const gets3Images = async (pfpId, bannerId) => {
   s3Paths.forEach((imagePath) => {
     params.append('paths', imagePath);
   });
+  console.log("OVER HERE QUERY", params.toString());
   try {
     const response = await fetch(`/api/s3?${params.toString()}`, {
       method: 'GET',

@@ -44,7 +44,6 @@ export async function GET(req, res) {
     const paths = url.searchParams.getAll('paths');
 
     let pathsList = [];
-
     // Get files from S3
     for (const s3Path of paths) {
       const url = await getPresignedUrl(s3Path);

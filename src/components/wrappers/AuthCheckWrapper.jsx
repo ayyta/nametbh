@@ -2,6 +2,7 @@
 
 import React, { createContext, useContext, useState, useEffect } from 'react';
 import { useRouter, usePathname } from 'next/navigation';
+import { fetchUserProfile } from '@/components/FetchUserProfile';
 import supabaseAnon from '@/lib/supabaseAnonClient';
 
 const AuthContext = createContext();
@@ -18,7 +19,7 @@ export default function AuthCheckWrapper({ children }) {
       const {
         data: { session },
       } = await supabaseAnon.auth.getSession();
-      
+
       // Skip redirect if user is on login or register page
       if (!session && pathname !== '/login' && pathname !== '/register') {
         router.push('/login');
@@ -30,7 +31,9 @@ export default function AuthCheckWrapper({ children }) {
         router.push('/home');
         setLoading(true);
       } else {
-        setUser(session?.user || null);
+        const fetchedUserProfile = await fetchUserProfile(session.user.id);
+        const updatedUser = { ...session.user, ...fetchedUserProfile };
+        setUser(updatedUser);
         setLoading(false);
       }
     };

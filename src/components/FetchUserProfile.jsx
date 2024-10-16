@@ -17,13 +17,7 @@ export async function fetchUserProfile(userId) {
     const userProfile = data[0];
     const pfpLink = mediaLinks[0];
     const bannerLink = mediaLinks[1];
-    console.log("User profile fetched:", { 
-      userProfile: userProfile, 
-      pfpLink: pfpLink, 
-      bannerLink: bannerLink,
-      pfpPath: pfpPath,
-      bannerPath: bannerPath
-    });
+
     return { 
       userProfile: userProfile, 
       pfpLink: pfpLink, 
