@@ -5,6 +5,7 @@ npm install @aws-sdk/s3-request-presigner
 npm i embla-carousel-react
 npm install @radix-ui/react-dropdown-menu
 npm i react-hook-form
+npm install date-fns
 
 # npm install eslint eslint-config-next --save-dev
 # npm install --save-dev prettier eslint-plugin-prettier eslint-config-prettier
