@@ -23,8 +23,13 @@ export default function Upload({ open, onClose }) {
 
   const handler = () => {
     if (open) {
+      // Redirect to the home page and close the popup
       Router.push('/home');
       onClose();
+
+      // Reset the text and media state
+      setText("");
+      setMedia([]);
     }
   }
 
@@ -73,7 +78,7 @@ export default function Upload({ open, onClose }) {
       }
 
       // const result = await response.json();
-      console.log("Post successful");
+      // console.log("Post successful");
     } catch (error) {
       console.error("Error posting", error);
     }
@@ -81,6 +86,10 @@ export default function Upload({ open, onClose }) {
     // Redirect to the home page and close the popup
     Router.push('/home');
     onClose();
+
+    // Reset the text and media state
+    setText("");
+    setMedia([]);
   }
 
   // Handles the POST request to the server(S3 Bucket)
@@ -164,7 +173,12 @@ export default function Upload({ open, onClose }) {
           }}
         >
           <div className="upload">
-            <Header close={onClose} router={Router} />
+            <Header 
+              close={onClose} 
+              router={Router}
+              setMedia={setMedia}
+              setText={setText} 
+            />
             <div className={`upload-body-container ${media.length > 0 ? 'upload-body-container-present' : 'upload-body-container-absent'}`}>
               <TextareaAutosize
                 className="upload-body"

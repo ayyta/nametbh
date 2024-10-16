@@ -1,11 +1,16 @@
 'use client';
 import Image from "next/image";
 
-export default function Header({ close, router }) {
+export default function Header({ close, router, setMedia, setText }) {
 
   const closeButton = () => {
+    // Redirect to the home page and close the popup
     router.push("/home");
     close();
+
+    // Reset the text and media state
+    setMedia([]);
+    setText("");
   };
 
   return (
