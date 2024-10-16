@@ -11,6 +11,7 @@ import Popup from './Popup';
 import PostCard from '@/components/post-card';
 import { useAuth } from '@/components/wrappers/AuthCheckWrapper';
 import { fetchMediaPathByIds, gets3Images } from './utils.js';
+import { fetchUserProfile } from "@/components/FetchUserProfile";
 
 const roboto = Roboto({
   weight: ['100', '300', '400', '700'],
@@ -54,8 +55,16 @@ export default function Profile() {
   }, [userProfile]);
 
   useEffect(() => {
+    const fetchData = async () => {
+      const fetchedUserProfile = await fetchUserProfile(user.id);
+      setUserProfile(fetchedUserProfile.userProfile);
+      setPfpPath(fetchedUserProfile.pfpPath);
+      setBannerPath(fetchedUserProfile.bannerPath);
+      setPfpLink(fetchedUserProfile.pfpLink);
+      setBannerLink(fetchedUserProfile.bannerLink);
+    }
     if (user?.id) {
-      fetchUserProfile(user.id);
+      fetchData();
     }
   }, [user]);
 
@@ -68,28 +77,6 @@ export default function Profile() {
     }));
   }, [pfpLink, bannerLink]);
 
-  async function fetchUserProfile(userId) {
-    try {
-      const response = await fetch(`/api/profile/user?userId=${userId}`, {
-        method: 'GET',
-      });
-      if (!response.ok) throw new Error('Failed to fetch user profile');
-      const data = await response.json();
-      setUserProfile(data[0]);
-      const { pfpPath, bannerPath } = await fetchMediaPathByIds(
-        data[0].pfp,
-        data[0].profile_background,
-      );
-      setPfpPath(pfpPath);
-      setBannerPath(bannerPath);
-      const mediaLinks = await gets3Images(pfpPath, bannerPath);
-
-      setPfpLink(mediaLinks[0]);
-      setBannerLink(mediaLinks[1]);
-    } catch (error) {
-      console.error(error.message);
-    }
-  }
 
   // Generate 20 posts at a time
   const [posts, setPosts] = useState([
@@ -170,7 +157,7 @@ export default function Profile() {
         {loading ? <SkeletonProfile /> : null}
 
         <div className="w-full h-full flex justify-center">
-          <PostCard />
+          <PostCard pageType={"profile"}/>
         </div>
         {isPopupOpen && (
           <>

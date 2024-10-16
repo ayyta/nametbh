@@ -12,7 +12,7 @@ import PostCardCarousel from "@/components/post-card/post-card-carousel";
 import ReplyPopup from "@/components/post-card/reply";
 import supabaseAnon from "@/lib/supabaseAnonClient";
 
-export default async function Component({
+export default function Component({
   postId=null,
   userId=null,
   pfp = "/placeholder-avatar.jpg",
@@ -49,10 +49,7 @@ export default async function Component({
     commentCount: commentCount,
     shareCount: shareCount,
   });
-  const {
-    data: { session },
-  } = await supabaseAnon.auth.getSession();
-  console.log("sessiohn", session);
+
   const router = useRouter();
 
   const openCarousel = () => setIsCarouselOpen(true);
@@ -107,7 +104,12 @@ export default async function Component({
 
   const handleRedirect = () => {
     if (isCurrentPost) return;
-    router.replace(`/${username}/post/${postId}`);
+    console.log("Redirecting to post page");
+    if (postId && username) {
+      router.push(`${username}/post/${postId}`);
+    } else {
+      console.error("Post ID or username not provided");
+    }
   }
   // optimize image loading by allowing optimization from s3 bucket in next.config.js remotePatterns
   return (
