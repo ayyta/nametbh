@@ -1,8 +1,6 @@
-
 /* Navbar Styles */
 .sidebar {
-  @apply 
-    text-secondary
+  @apply text-secondary
     bg-primary
     sm:relative
     sm:left-0
@@ -32,8 +30,7 @@
 }
 
 .sidebar-container {
-  @apply
-    sm:float-right
+  @apply sm:float-right
     sm:w-auto
     sm:block
     w-full
@@ -45,8 +42,7 @@
 }
 
 .sidebar-link-container {
-  @apply
-    md:px-10
+  @apply md:px-10
     sm:py-4
     sm:px-3
 
@@ -59,19 +55,16 @@
 }
 
 .sidebar-link {
-  @apply
-    flex
+  @apply flex
     items-center;
 }
 
 .sidebar-link-image {
-  @apply
-    sm:mr-3;
+  @apply sm:mr-3;
 }
 
 .sidebar-link-title {
-  @apply
-    text-lg
+  @apply text-lg
     md:flex
     hidden
     w-20;
@@ -79,16 +72,14 @@
 
 /* Sidebar Sections */
 .sidebar-upper-section {
-  @apply
-    sm:block
+  @apply sm:block
     flex
     sm:gap-0
     gap-7;
 }
 
 .sidebar-lower-section {
-  @apply
-    sm:absolute
+  @apply sm:absolute
     sm:bottom-0
     sm:mb-8
     sm:block
@@ -98,26 +89,22 @@
 }
 
 .avatar-container {
-  @apply
-    flex;
+  @apply flex;
 }
 
 .avatar-logo {
-  @apply
-    flex
+  @apply flex
     sm:mr-3;
 }
 
 .avatar-name-container {
-  @apply
-    md:w-20
+  @apply md:w-20
     w-0
     select-text;
 }
 
 .avatar-name {
-  @apply
-    text-nowrap
+  @apply text-nowrap
     text-base
     
     md:flex
@@ -125,8 +112,7 @@
 }
 
 .avatar-handle {
-  @apply
-    mt-1
+  @apply mt-1
     text-slate-400
     text-xs
     

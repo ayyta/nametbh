@@ -207,7 +207,7 @@ export default function Upload({ open, onClose }) {
                   src="/Mic Icon.svg"
                   width={28}
                   height={0}
-                  alt="Mic logo" 
+                  alt="Mic logo"
                 />
               </button>
               <GiphyButton 

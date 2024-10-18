@@ -4,6 +4,8 @@ npm i @aws-sdk/client-s3
 npm install @aws-sdk/s3-request-presigner
 npm install react-textarea-autosize
 npm install axios
+npm i react-hook-form
 
-
-
+# npm install eslint eslint-config-next --save-dev
+# npm install --save-dev prettier eslint-plugin-prettier eslint-config-prettier
+# npm install eslint-plugin-import --save-dev
