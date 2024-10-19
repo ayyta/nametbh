@@ -52,7 +52,9 @@ module.exports = {
         },
       },
       width: {
+        129: '32.25rem',
         138: '34.5rem',
+        152: '38rem',
         161: '40.25rem',
         192: '48rem',
       },
@@ -63,6 +65,13 @@ module.exports = {
       },
       minWidth: {
         56: '14rem',
+      },
+      maxWidth: {
+        152: '38rem',
+        161: '40.25rem',
+      },
+      maxHeight: {
+        161: '40.25rem',
       },
       backgroundColor: {
         login: '#292F33',
