@@ -17,7 +17,8 @@ const client = new S3Client({
 });
 
 // Upload file to S3 bucket given file and path
-const uploadFilesToS3 = async (file, path = '') => {
+const uploadFilesToS3 = async (file, path="") => {
+  console.log("Uploading file to S3...", file);
   // Convert file to ArrayBuffer, then to Buffer
   const arrayBuffer = await file.arrayBuffer(); // Convert file to ArrayBuffer
   const buffer = Buffer.from(arrayBuffer); // Convert ArrayBuffer to Buffer
