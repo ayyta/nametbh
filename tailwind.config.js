@@ -71,13 +71,16 @@ module.exports = {
         161: '40.25rem',
       },
       maxHeight: {
+        138: '34.5rem',
         161: '40.25rem',
+        192: '48rem'
       },
       backgroundColor: {
         login: '#292F33',
         loginPopup: '#CCD6DD',
         loginButton: '#55ACEE',
         projectLightGrey: '#373f45',
+        replyBackground: '#191B1C',
       },
       textColor: {
         projectGrey: '#66757F',

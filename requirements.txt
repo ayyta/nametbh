@@ -2,9 +2,12 @@ npm install
 npm install @supabase/supabase-js
 npm i @aws-sdk/client-s3
 npm install @aws-sdk/s3-request-presigner
+npm i embla-carousel-react
+npm install @radix-ui/react-dropdown-menu
 npm install react-textarea-autosize
 npm install axios
 npm i react-hook-form
+npm install date-fns
 
 # npm install eslint eslint-config-next --save-dev
 # npm install --save-dev prettier eslint-plugin-prettier eslint-config-prettier

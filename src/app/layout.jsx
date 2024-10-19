@@ -2,8 +2,9 @@ import { Inter } from 'next/font/google';
 import '../styles/globals.css';
 
 // components
-import NavbarWrapper from '@/components/wrappers/NavbarWrapper.jsx';
-import AuthCheckWrapper from '@/components/wrappers/AuthCheckWrapper.jsx';
+import NavbarWrapper from "@/components/wrappers/NavbarWrapper.jsx";
+import AuthCheckWrapper from "@/components/wrappers/AuthCheckWrapper.jsx";
+import { Toaster } from "@/components/ui/toaster"
 
 const inter = Inter({ subsets: ['latin'] });
 
@@ -17,9 +18,14 @@ export default function RootLayout({ children }) {
     <html lang="en">
       <body className={`${inter.className} w-screen h-screen bg-primary`}>
         <AuthCheckWrapper>
-          {<NavbarWrapper />}
-          {children}
+          {<NavbarWrapper/>}
+          <div className="flex-1">
+            {children}
+            
+          </div>
         </AuthCheckWrapper>
+        <Toaster/>
+
       </body>
     </html>
   );
