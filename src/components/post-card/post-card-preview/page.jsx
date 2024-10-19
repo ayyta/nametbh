@@ -124,6 +124,7 @@ export default function Component({
           username={username}
           creationDate={creationDate}
           user={user}
+          setUser={setUser}
         />
         <div className="flex">
           {hasReplies && (
