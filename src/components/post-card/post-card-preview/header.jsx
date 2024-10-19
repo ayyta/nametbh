@@ -5,7 +5,8 @@ const PostCardPreviewHeader = ({
   pfp,
   name,
   username,
-  creationDate
+  creationDate,
+  user
 }) => {
   return (
     <CardHeader className="flex flex-row items-center gap-4 py-2">
