@@ -10,6 +10,8 @@ import { Reply, X } from 'lucide-react'
 import PostCardPreview from "@/components/post-card/post-card-preview/page"
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import { cn } from "@/lib/utils"
+import TextareaAutosize from "react-textarea-autosize"
+import ReplyUtilities from './post-card-reply-utilities/reply-utilities'
 
 const Component = ({
   isOpen=false,
@@ -81,18 +83,29 @@ const ReplyCard = ({
         </div>
       </CardHeader>
       <CardContent className="space-y-4">
-        <Input className={cn(
+        {/* <Input className={cn(
           "border-input",
           "focus:ring-0 focus:ring-offset-0 focus:border-input focus-visible:ring-0 focus-visible:ring-offset-0",
           "focus-visible:border-input",
           "border-0"
         )}
         placeholder="Reply with ..."
+        /> */}
+        <TextareaAutosize
+          className='w-full p-2.5 overflow-hidden overflow-y-hidden overflow-x-hidden resize-none outline-none bg-transparent focus:border focus:rounded-md'
+          minRows={1}
+          maxRows={5}
+          placeholder='Reply with ...'
         />
       </CardContent>
-      <CardFooter className="flex justify-end">
-        <Button variant="outline" className="text-black font-bold" size="lg" onClick={handleReply}>Reply</Button>
-      </CardFooter>
+      <div className='flex justify-between'>
+        <CardFooter className="flex justify-star">
+          <ReplyUtilities />
+        </CardFooter>
+        <CardFooter className="flex justify-end">
+          <Button variant="outline" className="text-black font-bold" size="lg" onClick={handleReply}>Reply</Button>
+        </CardFooter>
+      </div>
     </Card>
   )
 }
