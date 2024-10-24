@@ -7,7 +7,6 @@ export async function GET(req, res) {
   if (!token) {
     return NextResponse.json({ error: "No token provided" }, { status: 401 });
   }
-  console.log("Token: ", token);
   try {
     const { data: { user } } = await supabaseService.auth.getUser(token); // Get user by token
     const currentUserId = user.id;
