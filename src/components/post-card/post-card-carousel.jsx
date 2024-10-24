@@ -42,9 +42,10 @@ const Component = forwardRef(function PostCardCarousel({
                     {isVideo ? (
                       <video 
                         alt={`Video ${index + 1}`}
-                        width={500} 
-                        height={300} 
+                        width={900} 
+                        height={549} 
                         controls 
+                        onClick={(e) => {e.stopPropagation()}}
                       >
                         <source src={src} type="video/mp4" />
                         Your browser does not support the video tag.
@@ -53,8 +54,8 @@ const Component = forwardRef(function PostCardCarousel({
                       <Image
                         src={src}
                         alt={`Image ${index + 1}`}
-                        width={500}
-                        height={300}
+                        width={900}
+                        height={540}
                         quality={100}
                         onClick={(e) => {e.stopPropagation()}}
                       />
