@@ -21,9 +21,9 @@ export default function AuthCheckWrapper({ children }) {
       } = await supabaseAnon.auth.getSession();
 
       // Skip redirect if user is on login or register page
-      if (!session && pathname !== '/login' && pathname !== '/register') {
+      if (!session && (pathname !== '/login' || pathname !== '/register')) {
         router.push('/login');
-        setLoading(true);
+        setLoading(false);
       } else if (
         session &&
         (pathname === '/login' || pathname === '/register')
